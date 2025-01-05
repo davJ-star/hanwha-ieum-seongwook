@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/README.md",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1736043234947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1736043234947,
+            "name": "Commit-0",
+            "content": "# 작업 리스트\r\n\r\n# 페이지 설명\r\n\r\n# 구성 시스템(디자인)\r\n"
+        }
+    ]
+}
