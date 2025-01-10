@@ -21,7 +21,6 @@ react-redux: 9.2.0
 
 # 구성 시스템(디자인)
 1. React + TypeScript + Redux 프로젝트 구조 (Vite 사용)
-tree
 src/
 ├── assets/
 ├── components/
@@ -42,7 +41,6 @@ tsconfig.json
 
 
 2. Next.js 프로젝트 구조 (Vite 사용)
-tree
 src/
 ├── app/
 │ ├── layout.tsx
