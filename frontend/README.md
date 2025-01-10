@@ -22,19 +22,18 @@ react-redux: 9.2.0
 # 구성 시스템(디자인)
 1. React + TypeScript + Redux 프로젝트 구조 (Vite 사용)
 src/
-
+├── assets/
 ├── components/
+├── features/
+├── hooks/
 ├── pages/
 ├── store/
-│   ├── slices/
-│   ├── hooks.ts
-│   └── index.ts
 ├── styles/
 ├── types/
-
 ├── utils/
 ├── App.tsx
 └── main.tsx
+....
 public/
 vite.config.ts
 package.json
@@ -47,10 +46,14 @@ src/
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/
+├── features/
+├── hooks/
 ├── lib/
+├── pages/
+├── public/
 ├── styles/
+├── types/
 ├── utils/
-public/
-vite.config.ts
-package.json
+├── vite.config.ts
+├── package.json
 tsconfig.json
