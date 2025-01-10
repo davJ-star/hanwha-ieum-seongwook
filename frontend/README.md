@@ -1,5 +1,5 @@
 # 작업 리스트
-1. vite+React 프로젝트 생성 및 Yarn으로 대체 설정 및 Next.js 세팅
+1. vite+React+Redux 프로젝트 생성 및 Yarn으로 대체 설정(my-react-app) 및 Next.js 세팅(my-next-app)
 2. 반응형 웹 세팅
 # 페이지 설명
 *version 기록(react)
