@@ -2,5 +2,21 @@
 1. vite+React 프로젝트 생성 및 Yarn으로 대체 설정 및 Next.js 세팅
 2. 반응형 웹 세팅
 # 페이지 설명
+*version 기록(react)
+nodeJs: v20.18.1
+vite: 6.0.5
+typescript: 5.6.2
+typescript-eslint: 8.18.2
+react: 18.3.1
+react-dom: 18.3.1
+react-redux: 9.2.0
+@reduxjs/toolkit: 2.5.0
+
+*version 기록(NextJS)
+autoprefixer: 10.4.20
+postcss: 8.4.49
+tailwindcss: 3.4.17
+@reduxjs/toolkit: 2.5.0
+react-redux: 9.2.0
 
 # 구성 시스템(디자인)
