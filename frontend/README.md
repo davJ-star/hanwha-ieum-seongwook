@@ -1,5 +1,5 @@
 # 작업 리스트
-vite&yarn&Redux 세팅
+vite+React 프로젝트 생성 및 Yarn으로 대체 설정
 Next.js 세팅
 반응형 웹 세팅
 # 페이지 설명
