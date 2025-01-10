@@ -1,0 +1,14 @@
+@media (max-width: 768px) {
+    .container {
+      font-size: 0.8rem;
+      padding: 0.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .container {
+      font-size: 1.5rem;
+      padding: 2rem;
+    }
+  }
+  

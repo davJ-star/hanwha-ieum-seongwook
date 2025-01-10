@@ -1,0 +1,13 @@
+html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-size: 1rem; /* 16px */
+  }
+  
+  .container {
+    font-size: 1.2em;
+    padding: 1rem;
+  }
+  
