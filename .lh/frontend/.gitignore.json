@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/.gitignore",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1736592463362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1736592463362,
+            "name": "Commit-0",
+            "content": "// node__moudles ignore\r\nnode_modules"
+        }
+    ]
+}
