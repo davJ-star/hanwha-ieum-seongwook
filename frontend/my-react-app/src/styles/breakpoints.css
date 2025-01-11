@@ -1,0 +1,19 @@
+/* 모바일 우선 접근 (기본 상태) */
+/*미디어 쿼리를 적용시킴*/
+
+/* 태블릿 */
+@media (min-width: 768px) {
+    :root {
+      --container-padding: 2rem;
+      --font-size-base: 16px;
+    }
+  }
+  
+  /* 데스크톱 */
+  @media (min-width: 1024px) {
+    :root {
+      --container-padding: 4rem;
+      --font-size-base: 18px;
+    }
+  }
+  

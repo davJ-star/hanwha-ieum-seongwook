@@ -1,0 +1,17 @@
+/*공통 스타일 파일*/
+/*em은 현재 폰트 사이즈를 기준으로 하는 상대 단위*/
+/*예를 들어 1em=16px, 1.5em=24px, 2em=32px*/
+
+html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-size: 1rem; /* 16px */
+  }
+  
+  .container {
+    font-size: 1.2em;
+    padding: 1rem;
+  }
+  

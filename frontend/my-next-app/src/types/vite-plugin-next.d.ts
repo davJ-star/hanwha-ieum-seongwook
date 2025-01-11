@@ -1,0 +1,1 @@
+declare module 'vite-plugin-next'; //vite-plugin-next 모듈을 선언

@@ -1,0 +1,18 @@
+@import './variables.css';
+@import './breakpoints.css';
+
+/* 전역 초기화 예시 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* body 기본 스타일 */
+body {
+  font-size: var(--font-size-base);
+  padding: var(--container-padding, 1rem); /* 미디어 쿼리에 따라 값이 바뀔 수 있음 */
+  font-family: sans-serif;
+}

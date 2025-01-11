@@ -1,0 +1,9 @@
+/* 레이아웃 스타일 파일 */
+/* 그리드 시스템을 사용하여 레이아웃을 구성할 수 있다. */ 
+
+.grid-container { /* 그리드 컨테이너 */
+    display: grid; /* 그리드 레이아웃 사용 */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 그리드 열 생성 */
+    gap: 1rem; /* 그리드 셀 사이의 간격 */
+  }
+  
