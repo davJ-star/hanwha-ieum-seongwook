@@ -1,0 +1,22 @@
+{
+    "sourceFile": "frontend/src/styles/variables.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1736440279789,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1736440289824,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-```css\r\n+\r\n :root {\r\n   /* 브레이크포인트 */\r\n   --breakpoint-mobile: 320px;\r\n   --breakpoint-tablet: 768px;\r\n"
+                }
+            ],
+            "date": 1736440279789,
+            "name": "Commit-0",
+            "content": "```css\r\n:root {\r\n  /* 브레이크포인트 */\r\n  --breakpoint-mobile: 320px;\r\n  --breakpoint-tablet: 768px;\r\n  --breakpoint-desktop: 1024px;\r\n  \r\n  /* 기본 폰트 사이즈 */\r\n  --font-size-base: 16px;\r\n  \r\n  /* 반응형 폰트 사이즈 */\r\n  --font-size-sm: 0.875rem;  /* 14px */\r\n  --font-size-md: 1rem;      /* 16px */\r\n  --font-size-lg: 1.25rem;   /* 20px */\r\n}\r\n"
+        }
+    ]
+}

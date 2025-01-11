@@ -1,0 +1,26 @@
+{
+    "sourceFile": "frontend/src/types/css.d.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1736440493993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1736440514794,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n declare module '*.module.css' {\r\n-    const classes: { [key: string]: string }\r\n-    export default classes\r\n-  }\r\n+    const content: { [key: string]: string }\r\n+    export default content\r\n+}\r\n   \n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1736440527652,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n declare module '*.module.css' {\r\n-    const content: { [key: string]: string }\r\n-    export default content\r\n+    const styles: { [key: string]: string }\r\n+    export default styles\r\n }\r\n   \n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1736440493993,
+            "name": "Commit-0",
+            "content": "declare module '*.module.css' {\r\n    const classes: { [key: string]: string }\r\n    export default classes\r\n  }\r\n  "
+        }
+    ]
+}

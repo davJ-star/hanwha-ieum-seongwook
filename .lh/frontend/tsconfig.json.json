@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/tsconfig.json",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1736440448994,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1736440448994,
+            "name": "Commit-0",
+            "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ESNext\",\n    \"lib\": [\"DOM\", \"DOM.Iterable\", \"ESNext\"],\n    \"moduleResolution\": \"node\",\n    \"jsx\": \"react-jsx\",\n    \"paths\": {\n      \"@/*\": [\"./src/*\"],\n      \"@components/*\": [\"./src/components/*\"],\n      \"@styles/*\": [\"./src/styles/*\"]\n    }\n  },\n  \"include\": [\"src\"]\n}\n"
+        }
+    ]
+}

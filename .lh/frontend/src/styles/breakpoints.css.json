@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/styles/breakpoints.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1736440347695,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1736440347695,
+            "name": "Commit-0",
+            "content": "/* 모바일 우선 접근 */\r\n/* 태블릿 */\r\n@media (min-width: 768px) {\r\n    :root {\r\n      --container-padding: 2rem;\r\n      --font-size-base: 16px;\r\n    }\r\n  }\r\n  \r\n  /* 데스크톱 */\r\n  @media (min-width: 1024px) {\r\n    :root {\r\n      --container-padding: 4rem;\r\n      --font-size-base: 18px;\r\n    }\r\n  }\r\n  "
+        }
+    ]
+}
