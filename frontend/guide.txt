@@ -1,1 +1,37 @@
 개발 세팅 완료
+
+주요 파일 및 디렉토리 설명
+
+1. components/:
+* 버튼, 입력 필드와 같은 재사용 가능한 컴포넌트를 저장.
+* 각 컴포넌트는 개별 폴더에 관련 파일(CSS, 테스트 파일 포함)로 구성하는 것이 일반적.
+
+2. pages/:
+* 라우트와 연결된 페이지 컴포넌트.
+* 페이지별로 하위 디렉토리를 만들어 관리 가능.
+
+3. store/:
+* Redux 관련 파일 저장.
+* slices/: Redux Toolkit의 슬라이스 파일 저장. (예: authSlice.ts, userSlice.ts 등)
+* hooks.ts: Redux에 특화된 커스텀 훅 정의.
+* index.ts: Redux store 초기화 및 미들웨어 설정.
+
+4. styles/:
+* 전역 스타일(CSS/SCSS) 또는 테마 관련 파일.
+* reset.css, variables.scss, mixins.scss 등을 포함 가능.
+
+5. types/:
+* TypeScript 타입 선언 파일. (예: User.ts, Product.ts 등)
+* 프로젝트의 타입 안정성을 높이기 위해 사용.
+
+6. utils/:
+* 반복적으로 사용되는 유틸리티 함수 저장.
+* 예: 날짜 포맷터, API 호출 래퍼 등.
+
+7. App.tsx:
+* 앱의 전반적인 구조를 정의하는 컴포넌트.
+* 라우터와 Provider를 감싸는 역할.
+
+8. main.tsx:
+* React 애플리케이션의 진입점.
+* Redux Provider 및 ReactDOM.createRoot 사용.

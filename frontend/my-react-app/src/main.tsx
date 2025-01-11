@@ -1,3 +1,5 @@
+// 메인 파일 (+Redux Provider 설정)
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

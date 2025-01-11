@@ -1,3 +1,4 @@
+/*Counter.tsx: 카운터 컴포넌트*/
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './utils/store';
