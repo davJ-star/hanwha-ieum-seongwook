@@ -1,7 +1,6 @@
-/*Counter.tsx: 카운터 컴포넌트*/
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from './utils/store';
+import { RootState } from './store';
 import { increment, decrement, incrementByAmount } from './features/counterSlice';
 
 const Counter = () => {
