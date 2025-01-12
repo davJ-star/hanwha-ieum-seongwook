@@ -1,0 +1,30 @@
+{
+    "sourceFile": "frontend/my-react-app/src/components/button.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1736649014640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1736649263300,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,1 @@\n-// button example\r\n-import React from 'react';\r\n-import './button.css';\r\n \r\n-const Button = ({ text, onClick }) => {\r\n-  return (\r\n-    <button className=\"button\" onClick={onClick}>\r\n-      {text}\r\n-    </button>\r\n-  );\r\n-}\r\n"
+                },
+                {
+                    "date": 1736649305521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,11 @@\n+// button component\r\n \r\n+import React from 'react';\r\n+\r\n+const Button = ({ label, onClick }) => {\r\n+  return (\r\n+    <button onClick={onClick}>{label}</button>\r\n+  );\r\n+};\r\n+\r\n+export default Button; // export default Button: Button 컴포넌트를 default로 export\r\n"
+                },
+                {
+                    "date": 1736649368325,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,14 @@\n // button component\r\n \r\n import React from 'react';\r\n \r\n-const Button = ({ label, onClick }) => {\r\n+interface ButtonProps {\r\n+  label: string;\r\n+  onClick: () => void;\r\n+}\r\n+\r\n+const Button: React.FC<ButtonProps> = ({ label, onClick }) => {\r\n   return (\r\n     <button onClick={onClick}>{label}</button>\r\n   );\r\n };\r\n"
+                }
+            ],
+            "date": 1736649014640,
+            "name": "Commit-0",
+            "content": "// button example\r\nimport React from 'react';\r\nimport './button.css';\r\n\r\nconst Button = ({ text, onClick }) => {\r\n  return (\r\n    <button className=\"button\" onClick={onClick}>\r\n      {text}\r\n    </button>\r\n  );\r\n}\r\n"
+        }
+    ]
+}

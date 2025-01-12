@@ -1,0 +1,30 @@
+{
+    "sourceFile": "frontend/my-next-app/components/button.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1736649383178,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1736649418572,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,14 @@\n-// \n\\ No newline at end of file\n+// buttons component\r\n+\r\n+import React from 'react';\r\n+\r\n+const Buttons = ({ increment, decrement }) => {\r\n+  return (\r\n+    <div>\r\n+      <button onClick={increment}>Increment</button>\r\n+      <button onClick={decrement}>Decrement</button>\r\n+    </div>\r\n+  );\r\n+};\r\n+\r\n+export default Buttons; // export default Buttons: Buttons 컴포넌트를 default로 export\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1736649483747,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,15 @@\n-// buttons component\r\n-\r\n+// button component\r\n import React from 'react';\r\n \r\n-const Buttons = ({ increment, decrement }) => {\r\n-  return (\r\n-    <div>\r\n-      <button onClick={increment}>Increment</button>\r\n-      <button onClick={decrement}>Decrement</button>\r\n-    </div>\r\n-  );\r\n-};\r\n+interface ButtonProps {\r\n\\ No newline at end of file\n+  label: string;\r\n+  onClick: () => void;\r\n+}\r\n \r\n-export default Buttons; // export default Buttons: Buttons 컴포넌트를 default로 export\n+const Button = ({ label, onClick }: ButtonProps) => {\r\n+    return (\r\n+        <button onClick={onClick}>{label}</button>\r\n+    );\r\n+    }\r\n+    \r\n+export default Button; // export default Button: Button 컴포넌트를 default로 export\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1736649521885,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,5 @@\n-// button component\r\n-import React from 'react';\r\n-\r\n interface ButtonProps {\r\n   label: string;\r\n   onClick: () => void;\r\n }\r\n \r\n-const Button = ({ label, onClick }: ButtonProps) => {\r\n-    return (\r\n-        <button onClick={onClick}>{label}</button>\r\n-    );\r\n-    }\r\n-    \r\n-export default Button; // export default Button: Button 컴포넌트를 default로 export\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1736649383178,
+            "name": "Commit-0",
+            "content": "// "
+        }
+    ]
+}
