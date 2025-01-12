@@ -1,15 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Responsive Web Example</title>
+    <title>MediLink</title>
     <link rel="stylesheet" href="styles/variables.css" />
     <link rel="stylesheet" href="styles/common.css" />
+  
+    <title>Basic Navbar</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: KoddiUD;
+      }
+      .navbar {
+        background-color: #fffdda;
+        overflow: hidden;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .navbar h5 {
+        margin: 0;
+      }
+      .navbar a {
+        color: #000000;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        display: inline-block;
+      }
+      .navbar a:hover {
+        background-color: #f0f0f0;
+      }
+      .logo-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #FFFF00;
+      }
+      
+      .user-menu {
+        display: flex;
+        gap: 1rem;
+      }
+      
+      .user-menu a {
+        color: #000000;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        background-color: #FFFF00;
+        border-radius: 4px;
+      }
+      
+      .user-menu a:hover {
+        background-color: #f0f0f0;
+      }
+
+      .main-banner {
+        position: relative;
+      width: 100%;
+      height: 400px;
+      background-image: url('/images/medicine.png'); /* 배너 이미지 경로 */
+      background-size: cover;
+      background-position: center;
+      }
+
+      .main-banner .banner-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+
   </head>
   <body>
+
+    <header class="logo-header">
+      <h3>MediLink</h3>
+      <div class="user-menu">
+        <a href="#member&mypage">회원관리 | 마이페이지</a>
+      </div>
+    </header>
+    <header class="navbar">
+      <h4>단축키 안내</h4>
+      <a href="#search">① 정보 검색</a>
+      <a href="#about">② 복용약 관리</a>
+      <a href="#services">③ 허위광고 판별</a>
+      <a href="#login">④ 로그인</a>
+    </header>
+    <header class="main-banner">
+    <h1>쉬운 의약품 복용 관리 플랫폼 MediLink입니다!</h1>
     <div class="container">
-      반응형 웹 예제
-    </div>
+      <h3>약 정보 찾기 어려우셨나요?</h3>
+      <h3>약국 추천만 믿고 복용하셨던 분들!</h3>
+      <h3>내 질환에 딱 맞는 정보를 원하셨던 분들!</h3>
+      <h3>이제 MediLink와 함께 쉽고 편리한 약 복용 관리 서비스를 경험해보세요!</h3>
+    </div>  
+  </header>
+  
   </body>
 </html>
