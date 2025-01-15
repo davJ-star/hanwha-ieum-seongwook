@@ -1,53 +1,140 @@
-/*App.css: 애플리케이션의 기본 스타일 파일*/
+body {
+  margin: 0;
+  font-family: KoddiUD, Arial, sans-serif;
+  background-color: #f4f4f4;
+}
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* 로고 헤더 스타일 */
+.logo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFFF00;
+  padding: 0.5rem 1rem;
+}
+
+.user-menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.user-menu a {
+  color: #000000;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  background-color: #FFFF00;
+  border-radius: 4px;
+}
+
+.user-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+  background-color: #fffdda;
+  overflow: hidden;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar h4 {
+  margin: 0;
+}
+
+.navbar a {
+  color: #000000;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+}
+
+.navbar a:hover {
+  background-color: #f0f0f0;
+}
+
+/* 메인 배너 스타일 */
+.main-banner {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-image: url('/images/medicine.png'); /* 배너 이미지 경로 */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
   text-align: center;
 }
 
-/* 로고 스타일 */
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.main-banner h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* 로고 호버 스타일 */
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.main-banner .container h3 {
+  margin: 0.5rem 0;
 }
 
-/* 리액트 로고 호버 스타일 */
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* 검색 컨테이너 스타일 */
+.search-container {
+  padding: 2rem;
+  background-color: white;
+  margin: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 로고 회전 애니메이션 */
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-container h2,
+.search-container h4 {
+  margin: 0 0 1rem 0;
 }
 
-/* 미디어 쿼리: 미디어 쿼리를 사용하여 반응형 웹 디자인을 구현할 수 있다. */
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.search-container form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
-/* 카드 스타일 */
-.card {
-  padding: 2em;
+.search-container select,
+.search-container input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-/* 문서 스타일 */
-.read-the-docs {
-  color: #888;
+.search-container button {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #45a049;
+}
+
+/* 커뮤니티 버튼 스타일 */
+h2, h4 {
+  text-align: center;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border: none;
+  background-color: #FFFF00;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f0f0f0;
 }
