@@ -1,0 +1,89 @@
+.login-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .login-wrapper h1,
+  .login-wrapper h3 {
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .login-wrapper input[type="text"],
+  .login-wrapper input[type="password"],
+  .login-wrapper input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .login-wrapper input[type="submit"] {
+    background-color: #FFFF00;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .login-wrapper input[type="submit"]:hover {
+    background-color: #FFFF00;
+  }
+  
+  .kakao-login-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ffeb00;
+    color: #3c1e1e;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+  }
+  
+  .floating-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .floating-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .floating-button span {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .floating-button svg {
+    font-size: 18px;
+  }
+  

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
-import { FaArrowUp, FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import './DiseaseSearchResult.css';
+import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 
-function Home() {
+function DiseaseSearchResult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token); // 토큰 존재 여부로 로그인 상태 설정
+    setIsLoggedIn(!!token);
   }, []);
 
   const handleLogout = () => {
@@ -51,12 +51,9 @@ function Home() {
         <a href="#medications">② 복용약 관리</a>
         <a href="#ads">③ 허위광고 판별</a>
         <a onClick={() => navigate('/login')}>④ 로그인</a>
+        <button onClick={() => handleZoom('in')}>+ 확대</button>
+        <button onClick={() => handleZoom('out')}>- 축소</button>
       </header>
-
-      {/* 메인 배너 */}
-      <div className="main-banner">
-        <h1>쉬운 의약품 복용 관리 플랫폼 MediLink입니다!</h1>
-      </div>
 
       {/* 검색 섹션 */}
       <div className="search-container">
@@ -86,19 +83,27 @@ function Home() {
         </div>
       </div>
 
-      {/* 커뮤니티 섹션 */}
-      <div className="community-container">
-        <h2>커뮤니티 바로가기</h2>
-        <p>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
-        <button onClick={() => navigate('/community-main')}>커뮤니티 메인 바로가기</button>
-        <button onClick={() => navigate('/physical-disability-community')}>지체장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/brain-lesion-disorder-community')}>뇌병변장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/visual-impairment-community')}>시각장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/hearing-impairment-community')}>청각장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/speech-impediment-community')}>언어장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/facial-disorder-community')}>안면장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/internal-organ-disorder-community')}>내부기관 장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/mental-disability-community')}>정신적 장애 커뮤니티 바로가기</button>
+      {/* 검색 결과 섹션 */}
+      <div className="search-results">
+        <h2>검색 결과</h2>
+        <div className="results-container">
+          <div className="result-item">
+            <h3>질병명: 감기</h3>
+            <div className="result-details">
+              <p><strong>증상:</strong> 발열, 기침, 인후통, 콧물</p>
+              <p><strong>설명:</strong> 바이러스성 상기도 감염으로 인한 급성 호흡기 질환</p>
+              <p><strong>치료방법:</strong> 충분한 휴식과 수분 섭취, 해열제 복용</p>
+            </div>
+          </div>
+          {/* <div className="result-item">
+            <h3>관련 의약품</h3>
+            <ul>
+              <li>타이레놀</li>
+              <li>테라플루</li>
+              <li>판콜에이</li>
+            </ul>
+          </div> */}
+        </div>
       </div>
 
       <div className="floating-buttons">
@@ -126,17 +131,9 @@ function Home() {
           <FaUniversalAccess />
           <span>접근성 기능 가이드라인</span>
         </button>
-        <button 
-          className="floating-button ads-check-button"
-          onClick={() => navigate('/ads-verification')}
-          title="허위광고 판별"
-        >
-          <FaExclamationTriangle />
-          <span>의약품 허위광고 판별</span>
-        </button>
       </div>
     </div>
   );
 }
 
-export default Home;
+export default DiseaseSearchResult;

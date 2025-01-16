@@ -1,0 +1,67 @@
+.community-page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.community-content {
+  display: flex;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.board-list {
+  width: 200px;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.board-list button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.post-list-container {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.write-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.post-list {
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.post-item {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.post-item h4 {
+  margin: 0 0 10px 0;
+}
+
+.post-item p {
+  margin: 5px 0;
+  color: #666;
+}

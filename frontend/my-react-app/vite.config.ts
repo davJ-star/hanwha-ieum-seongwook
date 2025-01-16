@@ -13,5 +13,9 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@styles': path.resolve(__dirname, './src/styles')
     }
+  },
+  server: {
+    port: 5174,
+    host: true
   }
 })
