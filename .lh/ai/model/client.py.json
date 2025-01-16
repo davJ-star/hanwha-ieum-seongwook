@@ -1,0 +1,34 @@
+{
+    "sourceFile": "ai/model/client.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1737014737879,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737014894622,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,19 @@\n \r\n def send_prompt(prompt):\r\n     url = \"http://localhost:8000/generate\"\r\n     data = {\"prompt\": prompt}\r\n-    response = requests.post(url, json=data)\r\n-    return response.json()\r\n+    try:\r\n+        response = requests.post(url, json=data)\r\n+        response.raise_for_status()  # 4xx, 5xx 오류 발생 시 예외 발생\r\n+        return response.json()\r\n+    except requests.RequestException as e:\r\n+        print(f\"오류 발생: {e}\")\r\n+        return None\r\n \r\n if __name__ == \"__main__\":\r\n     prompt = input(\"프롬프트를 입력하세요: \")\r\n     result = send_prompt(prompt)\r\n-    print(\"생성된 텍스트:\", result[\"generated_text\"])\r\n+    if result and 'generated_text' in result:\r\n+        print(\"생성된 텍스트:\", result[\"generated_text\"])\r\n+    else:\r\n+        print(\"텍스트 생성에 실패했습니다.\")\r\n"
+                },
+                {
+                    "date": 1737014955179,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import requests\r\n \r\n def send_prompt(prompt):\r\n-    url = \"http://localhost:8000/generate\"\r\n+    url = \"http://127.0.0.1:8000/generate\"\r\n     data = {\"prompt\": prompt}\r\n     try:\r\n         response = requests.post(url, json=data)\r\n         response.raise_for_status()  # 4xx, 5xx 오류 발생 시 예외 발생\r\n"
+                },
+                {
+                    "date": 1737015177974,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,14 +4,17 @@\n     url = \"http://127.0.0.1:8000/generate\"\r\n     data = {\"prompt\": prompt}\r\n     try:\r\n         response = requests.post(url, json=data)\r\n-        response.raise_for_status()  # 4xx, 5xx 오류 발생 시 예외 발생\r\n+        response.raise_for_status()\r\n         return response.json()\r\n     except requests.RequestException as e:\r\n         print(f\"오류 발생: {e}\")\r\n+        if response.status_code == 422:\r\n+            print(\"서버 응답:\", response.text)\r\n         return None\r\n \r\n+\r\n if __name__ == \"__main__\":\r\n     prompt = input(\"프롬프트를 입력하세요: \")\r\n     result = send_prompt(prompt)\r\n     if result and 'generated_text' in result:\r\n"
+                },
+                {
+                    "date": 1737015304585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,8 @@\n import requests\r\n \r\n def send_prompt(prompt):\r\n+    # 로컬 주소는 알아서 변경해봐야함.\r\n     url = \"http://127.0.0.1:8000/generate\"\r\n     data = {\"prompt\": prompt}\r\n     try:\r\n         response = requests.post(url, json=data)\r\n"
+                }
+            ],
+            "date": 1737014737879,
+            "name": "Commit-0",
+            "content": "import requests\r\n\r\ndef send_prompt(prompt):\r\n    url = \"http://localhost:8000/generate\"\r\n    data = {\"prompt\": prompt}\r\n    response = requests.post(url, json=data)\r\n    return response.json()\r\n\r\nif __name__ == \"__main__\":\r\n    prompt = input(\"프롬프트를 입력하세요: \")\r\n    result = send_prompt(prompt)\r\n    print(\"생성된 텍스트:\", result[\"generated_text\"])\r\n"
+        }
+    ]
+}

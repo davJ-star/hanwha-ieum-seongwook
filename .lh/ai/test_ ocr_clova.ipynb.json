@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ai/test_ ocr_clova.ipynb",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1736932782046,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1736932782046,
+            "name": "Commit-0",
+            "content": "{\n \"cells\": [\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 1,\n   \"metadata\": {},\n   \"outputs\": [\n    {\n     \"name\": \"stdout\",\n     \"output_type\": \"stream\",\n     \"text\": [\n      \"Requirement already satisfied: python-dotenv in c:\\\\users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\hanwha-ieum\\\\lib\\\\site-packages (1.0.1)\\n\",\n      \"Collecting pillow\\n\",\n      \"  Downloading pillow-11.1.0-cp310-cp310-win_amd64.whl.metadata (9.3 kB)\\n\",\n      \"Downloading pillow-11.1.0-cp310-cp310-win_amd64.whl (2.6 MB)\\n\",\n      \"   ---------------------------------------- 0.0/2.6 MB ? eta -:--:--\\n\",\n      \"   ----------------------- ---------------- 1.6/2.6 MB 8.3 MB/s eta 0:00:01\\n\",\n      \"   ---------------------------------------- 2.6/2.6 MB 8.0 MB/s eta 0:00:00\\n\",\n      \"Installing collected packages: pillow\\n\",\n      \"Successfully installed pillow-11.1.0\\n\"\n     ]\n    }\n   ],\n   \"source\": [\n    \"!pip install python-dotenv pillow\\n\"\n   ]\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": []\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": []\n  }\n ],\n \"metadata\": {\n  \"kernelspec\": {\n   \"display_name\": \"Python 3\",\n   \"language\": \"python\",\n   \"name\": \"python3\"\n  },\n  \"language_info\": {\n   \"codemirror_mode\": {\n    \"name\": \"ipython\",\n    \"version\": 3\n   },\n   \"file_extension\": \".py\",\n   \"mimetype\": \"text/x-python\",\n   \"name\": \"python\",\n   \"nbconvert_exporter\": \"python\",\n   \"pygments_lexer\": \"ipython3\",\n   \"version\": \"3.10.16\"\n  }\n },\n \"nbformat\": 4,\n \"nbformat_minor\": 2\n}\n"
+        }
+    ]
+}

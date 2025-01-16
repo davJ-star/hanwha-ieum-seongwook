@@ -1,0 +1,30 @@
+{
+    "sourceFile": "ai/llama/main.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1737028086148,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737028323526,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,10 +16,8 @@\n async def generate_text(prompt: str):\r\n     response = llm(prompt)\r\n     return {\"generated_text\": response}\r\n \r\n-@app.get(\"/favicon.ico\", include_in_schema=False)\r\n-async def favicon():\r\n-    return FileResponse(os.path.join(\"static\", \"favicon.ico\"))\r\n \r\n+\r\n if __name__ == \"__main__\":\r\n     print(\"FastAPI application is ready.\")\r\n"
+                },
+                {
+                    "date": 1737028518645,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,23 @@\n+from fastapi import FastAPI\r\n+from pydantic import BaseModel\r\n+from langchain_ollama import OllamaLLM\r\n+\r\n+print(\"Starting the FastAPI application...\")\r\n+\r\n+app = FastAPI()\r\n+llm = OllamaLLM(model=\"llama2\")\r\n+\r\n+class PromptRequest(BaseModel):\r\n+    prompt: str\r\n+\r\n+@app.get(\"/\")\r\n+async def root():\r\n+    return {\"message\": \"Welcome to the API\"}\r\n+\r\n+@app.post(\"/generate\")\r\n+async def generate_text(request: PromptRequest):\r\n+    response = llm(request.prompt)\r\n+    return {\"generated_text\": response}\r\n+\r\n+if __name__ == \"__main__\":\r\n+    print(\"FastAPI application is ready.\")\r\n"
+                },
+                {
+                    "date": 1737028531311,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,28 +1,5 @@\n from fastapi import FastAPI\r\n-from pydantic import BaseModel\r\n-from langchain_ollama import OllamaLLM\r\n-\r\n-print(\"Starting the FastAPI application...\")\r\n-\r\n-app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama2\")\r\n-\r\n-class PromptRequest(BaseModel):\r\n-    prompt: str\r\n-\r\n-@app.get(\"/\")\r\n-async def root():\r\n-    return {\"message\": \"Welcome to the API\"}\r\n-\r\n-@app.post(\"/generate\")\r\n-async def generate_text(request: PromptRequest):\r\n-    response = llm(request.prompt)\r\n-    return {\"generated_text\": response}\r\n-\r\n-if __name__ == \"__main__\":\r\n-    print(\"FastAPI application is ready.\")\r\n-from fastapi import FastAPI\r\n from fastapi.responses import FileResponse\r\n from langchain_ollama import OllamaLLM\r\n import os\r\n \r\n"
+                }
+            ],
+            "date": 1737028086148,
+            "name": "Commit-0",
+            "content": "from fastapi import FastAPI\r\nfrom fastapi.responses import FileResponse\r\nfrom langchain_ollama import OllamaLLM\r\nimport os\r\n\r\nprint(\"Starting the FastAPI application...\")\r\n\r\napp = FastAPI()\r\nllm = OllamaLLM(model=\"llama3\")\r\n\r\n@app.get(\"/\")\r\nasync def root():\r\n    return {\"message\": \"Welcome to the API\"}\r\n\r\n@app.post(\"/generate\")\r\nasync def generate_text(prompt: str):\r\n    response = llm(prompt)\r\n    return {\"generated_text\": response}\r\n\r\n@app.get(\"/favicon.ico\", include_in_schema=False)\r\nasync def favicon():\r\n    return FileResponse(os.path.join(\"static\", \"favicon.ico\"))\r\n\r\nif __name__ == \"__main__\":\r\n    print(\"FastAPI application is ready.\")\r\n"
+        }
+    ]
+}

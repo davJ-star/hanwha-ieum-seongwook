@@ -1,0 +1,22 @@
+{
+    "sourceFile": "ai/model/main.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1737014160141,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737014440006,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,25 @@\n from fastapi import FastAPI\r\n-from langchain.llms import Ollama\r\n+from fastapi.responses import FileResponse\r\n+from langchain_ollama import OllamaLLM\r\n+import os\r\n \r\n print(\"Starting the FastAPI application...\")\r\n \r\n app = FastAPI()\r\n-llm = Ollama(model=\"llama2\")\r\n+llm = OllamaLLM(model=\"llama2\")\r\n \r\n+@app.get(\"/\")\r\n+async def root():\r\n+    return {\"message\": \"Welcome to the API\"}\r\n+\r\n @app.post(\"/generate\")\r\n async def generate_text(prompt: str):\r\n     response = llm(prompt)\r\n     return {\"generated_text\": response}\r\n \r\n+@app.get(\"/favicon.ico\", include_in_schema=False)\r\n+async def favicon():\r\n+    return FileResponse(os.path.join(\"static\", \"favicon.ico\"))\r\n+\r\n if __name__ == \"__main__\":\r\n     print(\"FastAPI application is ready.\")\r\n"
+                }
+            ],
+            "date": 1737014160141,
+            "name": "Commit-0",
+            "content": "from fastapi import FastAPI\r\nfrom langchain.llms import Ollama\r\n\r\nprint(\"Starting the FastAPI application...\")\r\n\r\napp = FastAPI()\r\nllm = Ollama(model=\"llama2\")\r\n\r\n@app.post(\"/generate\")\r\nasync def generate_text(prompt: str):\r\n    response = llm(prompt)\r\n    return {\"generated_text\": response}\r\n\r\nif __name__ == \"__main__\":\r\n    print(\"FastAPI application is ready.\")\r\n"
+        }
+    ]
+}
