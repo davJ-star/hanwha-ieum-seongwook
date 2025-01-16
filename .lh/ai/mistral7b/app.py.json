@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ai/mistral7b/app.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1737036824254,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1737036824254,
+            "name": "Commit-0",
+            "content": "import torch\r\nfrom fastapi import FastAPI, HTTPException\r\nfrom pydantic import BaseModel\r\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\r\n\r\napp = FastAPI()\r\n\r\n# Mistral 7B 모델 및 토크나이저 로드\r\nmodel_name = \"mistralai/Mistral-7B-v0.1\"\r\ntokenizer = AutoTokenizer.from_pretrained(model_name)\r\nmodel = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=\"auto\")\r\n\r\nclass Query(BaseModel):\r\n    text: str\r\n\r\n@app.post(\"/generate\")\r\nasync def generate_text(query: Query):\r\n    try:\r\n        # 입력 텍스트 토큰화\r\n        inputs = tokenizer(query.text, return_tensors=\"pt\").to(model.device)\r\n        \r\n        # 텍스트 생성\r\n        with torch.no_grad():\r\n            outputs = model.generate(\r\n                **inputs,\r\n                max_new_tokens=100,\r\n                do_sample=True,\r\n                temperature=0.7,\r\n                top_k=50,\r\n                top_p=0.95\r\n            )\r\n        \r\n        # 생성된 텍스트 디코딩\r\n        generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)\r\n        \r\n        return {\"generated_text\": generated_text}\r\n    except Exception as e:\r\n        raise HTTPException(status_code=500, detail=str(e))\r\n\r\n@app.get(\"/\")\r\nasync def root():\r\n    return {\"message\": \"Mistral 7B API is running\"}\r\n\r\nif __name__ == \"__main__\":\r\n    import uvicorn\r\n    uvicorn.run(app, host=\"0.0.0.0\", port=8000)\r\n"
+        }
+    ]
+}

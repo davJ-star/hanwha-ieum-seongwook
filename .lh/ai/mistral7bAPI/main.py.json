@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ai/mistral7bAPI/main.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1737037016331,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1737037016331,
+            "name": "Commit-0",
+            "content": "from fastapi import FastAPI\r\nimport requests\r\n\r\napp = FastAPI()\r\n\r\n@app.post(\"/mistral\")\r\nasync def call_mistral_api(data: dict):\r\n    url = \"http://localhost:14434/api\"  # Mistral API endpoint\r\n    response = requests.post(url, json=data)\r\n    return response.json()\r\n"
+        }
+    ]
+}
