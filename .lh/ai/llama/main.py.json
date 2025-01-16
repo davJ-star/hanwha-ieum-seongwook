@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 3,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1737028086148,
@@ -20,6 +20,22 @@
                 {
                     "date": 1737028531311,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,28 +1,5 @@\n from fastapi import FastAPI\r\n-from pydantic import BaseModel\r\n-from langchain_ollama import OllamaLLM\r\n-\r\n-print(\"Starting the FastAPI application...\")\r\n-\r\n-app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama2\")\r\n-\r\n-class PromptRequest(BaseModel):\r\n-    prompt: str\r\n-\r\n-@app.get(\"/\")\r\n-async def root():\r\n-    return {\"message\": \"Welcome to the API\"}\r\n-\r\n-@app.post(\"/generate\")\r\n-async def generate_text(request: PromptRequest):\r\n-    response = llm(request.prompt)\r\n-    return {\"generated_text\": response}\r\n-\r\n-if __name__ == \"__main__\":\r\n-    print(\"FastAPI application is ready.\")\r\n-from fastapi import FastAPI\r\n from fastapi.responses import FileResponse\r\n from langchain_ollama import OllamaLLM\r\n import os\r\n \r\n"
+                },
+                {
+                    "date": 1737028558425,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,23 +1,23 @@\n from fastapi import FastAPI\r\n-from fastapi.responses import FileResponse\r\n+from pydantic import BaseModel\r\n from langchain_ollama import OllamaLLM\r\n-import os\r\n \r\n print(\"Starting the FastAPI application...\")\r\n \r\n app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama3\")\r\n+llm = OllamaLLM(model=\"llama2\")\r\n \r\n+class PromptRequest(BaseModel):\r\n+    prompt: str\r\n+\r\n @app.get(\"/\")\r\n async def root():\r\n     return {\"message\": \"Welcome to the API\"}\r\n \r\n @app.post(\"/generate\")\r\n-async def generate_text(prompt: str):\r\n-    response = llm(prompt)\r\n+async def generate_text(request: PromptRequest):\r\n+    response = llm(request.prompt)\r\n     return {\"generated_text\": response}\r\n \r\n-\r\n-\r\n if __name__ == \"__main__\":\r\n     print(\"FastAPI application is ready.\")\r\n"
+                },
+                {
+                    "date": 1737028680423,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n \r\n print(\"Starting the FastAPI application...\")\r\n \r\n app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama2\")\r\n+llm = OllamaLLM(model=\"llama3\")\r\n \r\n class PromptRequest(BaseModel):\r\n     prompt: str\r\n \r\n"
+                },
+                {
+                    "date": 1737028696935,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,16 @@\n-from fastapi import FastAPI\r\n+from fastapi import FastAPI, HTTPException\r\n from pydantic import BaseModel\r\n from langchain_ollama import OllamaLLM\r\n+import logging\r\n \r\n+logging.basicConfig(level=logging.INFO)\r\n+logger = logging.getLogger(__name__)\r\n+\r\n print(\"Starting the FastAPI application...\")\r\n \r\n app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama3\")\r\n+llm = OllamaLLM(model=\"llama2\")\r\n \r\n class PromptRequest(BaseModel):\r\n     prompt: str\r\n \r\n@@ -15,9 +19,13 @@\n     return {\"message\": \"Welcome to the API\"}\r\n \r\n @app.post(\"/generate\")\r\n async def generate_text(request: PromptRequest):\r\n-    response = llm(request.prompt)\r\n-    return {\"generated_text\": response}\r\n+    try:\r\n+        response = llm(request.prompt)\r\n+        return {\"generated_text\": response}\r\n+    except Exception as e:\r\n+        logger.error(f\"Error generating text: {str(e)}\")\r\n+        raise HTTPException(status_code=500, detail=f\"Internal server error: {str(e)}\")\r\n \r\n if __name__ == \"__main__\":\r\n     print(\"FastAPI application is ready.\")\r\n"
+                },
+                {
+                    "date": 1737028705943,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \r\n print(\"Starting the FastAPI application...\")\r\n \r\n app = FastAPI()\r\n-llm = OllamaLLM(model=\"llama2\")\r\n+llm = OllamaLLM(model=\"llama3\")\r\n \r\n class PromptRequest(BaseModel):\r\n     prompt: str\r\n \r\n"
                 }
             ],
             "date": 1737028086148,

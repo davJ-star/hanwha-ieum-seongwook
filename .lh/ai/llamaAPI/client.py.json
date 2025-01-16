@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ai/llamaAPI/client.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1737031549128,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1737031549128,
+            "name": "Commit-0",
+            "content": "import requests\r\n\r\nbase_url = \"http://127.0.0.1:8000\"\r\n\r\n# /generate 엔드포인트 테스트\r\ngenerate_data = {\r\n    \"model\": \"llama3\",\r\n    \"prompt\": \"Tell me about the history of South Korea.\"\r\n}\r\ngenerate_response = requests.post(f\"{base_url}/generate\", json=generate_data)\r\nprint(\"Generate Response:\", generate_response.json())\r\n\r\n# /chat 엔드포인트 테스트\r\nchat_data = {\r\n    \"model\": \"llama3\",\r\n    \"prompt\": \"Why is the sky blue?\"\r\n}\r\nchat_response = requests.post(f\"{base_url}/chat\", json=chat_data)\r\nprint(\"Chat Response:\", chat_response.json())\r\n"
+        }
+    ]
+}

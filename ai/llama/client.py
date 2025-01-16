@@ -1,7 +1,6 @@
 import requests
 
 def send_prompt(prompt):
-    # 로컬 주소는 알아서 변경해봐야함.
     url = "http://127.0.0.1:8000/generate"
     data = {"prompt": prompt}
     try:
@@ -10,10 +9,9 @@ def send_prompt(prompt):
         return response.json()
     except requests.RequestException as e:
         print(f"오류 발생: {e}")
-        if response.status_code == 422:
-            print("서버 응답:", response.text)
+        if hasattr(e.response, 'text'):
+            print("서버 응답:", e.response.text)
         return None
-
 
 if __name__ == "__main__":
     prompt = input("프롬프트를 입력하세요: ")

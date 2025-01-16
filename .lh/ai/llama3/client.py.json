@@ -1,0 +1,22 @@
+{
+    "sourceFile": "ai/llama3/client.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1737029723732,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737029737666,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,26 +0,0 @@\n-from fastapi import FastAPI\r\n-from pydantic import BaseModel\r\n-import httpx\r\n-\r\n-app = FastAPI()\r\n-\r\n-class LlamaRequest(BaseModel):\r\n-    model: str\r\n-    prompt: str\r\n-\r\n-@app.post(\"/generate\")\r\n-async def generate_response(request: LlamaRequest):\r\n-    url = \"http://localhost:11434/api/generate\"  # Adjust based on your LLaMA 3 API endpoint\r\n-    headers = {'Content-Type': 'application/json'}\r\n-    \r\n-    async with httpx.AsyncClient() as client:\r\n-        response = await client.post(url, json=request.dict(), headers=headers)\r\n-        \r\n-    if response.status_code == 200:\r\n-        return response.json()\r\n-    else:\r\n-        return {\"error\": \"Failed to generate response\", \"status_code\": response.status_code}\r\n-\r\n-@app.get(\"/\")\r\n-def read_root():\r\n-    return {\"message\": \"Welcome to the LLaMA 3 FastAPI service!\"}\r\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1737029723732,
+            "name": "Commit-0",
+            "content": "from fastapi import FastAPI\r\nfrom pydantic import BaseModel\r\nimport httpx\r\n\r\napp = FastAPI()\r\n\r\nclass LlamaRequest(BaseModel):\r\n    model: str\r\n    prompt: str\r\n\r\n@app.post(\"/generate\")\r\nasync def generate_response(request: LlamaRequest):\r\n    url = \"http://localhost:11434/api/generate\"  # Adjust based on your LLaMA 3 API endpoint\r\n    headers = {'Content-Type': 'application/json'}\r\n    \r\n    async with httpx.AsyncClient() as client:\r\n        response = await client.post(url, json=request.dict(), headers=headers)\r\n        \r\n    if response.status_code == 200:\r\n        return response.json()\r\n    else:\r\n        return {\"error\": \"Failed to generate response\", \"status_code\": response.status_code}\r\n\r\n@app.get(\"/\")\r\ndef read_root():\r\n    return {\"message\": \"Welcome to the LLaMA 3 FastAPI service!\"}\r\n"
+        }
+    ]
+}
