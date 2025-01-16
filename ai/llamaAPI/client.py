@@ -10,7 +10,7 @@ generate_data = {
 generate_response = requests.post(f"{base_url}/generate", json=generate_data)
 print("Generate Response:", generate_response.json())
 
-# /chat 엔드포인트 테스트
+# /chat 엔드포인트 테스트 -> chat은 계속 오류가 남. 확인 바람람
 chat_data = {
     "model": "llama3",
     "prompt": "Why is the sky blue?"

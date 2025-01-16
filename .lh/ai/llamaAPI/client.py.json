@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1737031549128,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737033097430,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n }\r\n generate_response = requests.post(f\"{base_url}/generate\", json=generate_data)\r\n print(\"Generate Response:\", generate_response.json())\r\n \r\n-# /chat 엔드포인트 테스트\r\n+# /chat 엔드포인트 테스트 -> chat은 계속 오류가 남. 확인 바람람\r\n chat_data = {\r\n     \"model\": \"llama3\",\r\n     \"prompt\": \"Why is the sky blue?\"\r\n }\r\n"
                 }
             ],
             "date": 1737031549128,
