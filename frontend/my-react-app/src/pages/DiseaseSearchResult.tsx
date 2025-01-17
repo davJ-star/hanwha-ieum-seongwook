@@ -52,9 +52,7 @@ function DiseaseSearchResult() {
         <a href="#search">① 정보 검색</a>
         <a href="#medications">② 복용약 관리</a>
         <a href="#ads">③ 허위광고 판별</a>
-        <a onClick={() => navigate('/login')}>④ 로그인</a>
-        <button onClick={() => handleZoom('in')}>+ 확대</button>
-        <button onClick={() => handleZoom('out')}>- 축소</button>
+        <a onClick={() => setIsModalOpen(true)}>④ 로그인</a>
       </header>
 
       {/* 검색 섹션 */}

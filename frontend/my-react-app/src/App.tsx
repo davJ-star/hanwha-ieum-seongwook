@@ -6,6 +6,7 @@ import Mypage from './pages/mypage'; // 회원관리 페이지 import
 import CommunityMain from './pages/CommunityMain';
 import DiseaseSearchResult from './pages/DiseaseSearchResult';
 import DrugSearchResult from './pages/DrugSearchResult';
+import './assets/fonts/FontSet.css';
 
 function App() {
   return (

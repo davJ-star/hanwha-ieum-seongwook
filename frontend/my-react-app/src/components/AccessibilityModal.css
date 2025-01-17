@@ -48,3 +48,7 @@
 .modal-close:hover {
   background-color: #0056b3;
 }
+
+.modal-close {
+  color: #000000;
+}
