@@ -1,0 +1,22 @@
+{
+    "sourceFile": "ai/OCR/GoogleMLKITAPI/googleMLKitTextDetectionOCR.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1737102497402,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737102638511,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,5 +21,5 @@\n     if response.error.message:\r\n         raise Exception(f'{response.error.message}\\n자세한 오류 정보: https://cloud.google.com/apis/design/errors')\r\n \r\n # 이미지 파일 경로를 지정하여 함수 호출\r\n-detect_text('path/to/your/image.jpg')\r\n+detect_text('C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg')\r\n"
+                }
+            ],
+            "date": 1737102497402,
+            "name": "Commit-0",
+            "content": "from google.cloud import vision\r\nimport io\r\n\r\ndef detect_text(path):\r\n    \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n    client = vision.ImageAnnotatorClient()\r\n\r\n    with io.open(path, 'rb') as image_file:\r\n        content = image_file.read()\r\n\r\n    image = vision.Image(content=content)\r\n    response = client.text_detection(image=image)\r\n    texts = response.text_annotations\r\n\r\n    print('텍스트:')\r\n    for text in texts:\r\n        print(f'\\n\"{text.description}\"')\r\n        vertices = [f'({vertex.x},{vertex.y})' for vertex in text.bounding_poly.vertices]\r\n        print('경계: {}'.format(','.join(vertices)))\r\n\r\n    if response.error.message:\r\n        raise Exception(f'{response.error.message}\\n자세한 오류 정보: https://cloud.google.com/apis/design/errors')\r\n\r\n# 이미지 파일 경로를 지정하여 함수 호출\r\ndetect_text('path/to/your/image.jpg')\r\n"
+        }
+    ]
+}

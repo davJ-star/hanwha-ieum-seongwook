@@ -3,11 +3,23 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1737099989501,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737101840968,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n from transformers import AutoTokenizer, AutoModelForCausalLM\r\n \r\n def load_model():\r\n     model_name = \"beomi/llama-3-ko-8b-instruct\"\r\n-    tokenizer = AutoTokenizer.from_pretrained(model_name)\r\n+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=os.environ.get(\"HUGGINGFACE_TOKEN\"))\r\n     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=\"auto\")\r\n     return tokenizer, model\r\n \r\n def generate_response(tokenizer, model, prompt, max_length=512):\r\n"
+                },
+                {
+                    "date": 1737101853579,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \r\n def load_model():\r\n     model_name = \"beomi/llama-3-ko-8b-instruct\"\r\n     tokenizer = AutoTokenizer.from_pretrained(model_name, token=os.environ.get(\"HUGGINGFACE_TOKEN\"))\r\n-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=\"auto\")\r\n+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=\"auto\", token=os.environ.get(\"HUGGINGFACE_TOKEN\"))\r\n     return tokenizer, model\r\n \r\n def generate_response(tokenizer, model, prompt, max_length=512):\r\n     inputs = tokenizer(prompt, return_tensors=\"pt\").to(model.device)\r\n"
+                },
+                {
+                    "date": 1737101912544,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import torch\r\n from transformers import AutoTokenizer, AutoModelForCausalLM\r\n+import os\r\n \r\n def load_model():\r\n     model_name = \"beomi/llama-3-ko-8b-instruct\"\r\n     tokenizer = AutoTokenizer.from_pretrained(model_name, token=os.environ.get(\"HUGGINGFACE_TOKEN\"))\r\n"
                 }
             ],
             "date": 1737099989501,

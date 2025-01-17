@@ -1,10 +1,11 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import os
 
 def load_model():
     model_name = "beomi/llama-3-ko-8b-instruct"
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=os.environ.get("HUGGINGFACE_TOKEN"))
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto", token=os.environ.get("HUGGINGFACE_TOKEN"))
     return tokenizer, model
 
 def generate_response(tokenizer, model, prompt, max_length=512):

@@ -1,0 +1,26 @@
+{
+    "sourceFile": "ai/koLLM/EEVE-Korean/eeveKorean.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1737100488787,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737101253766,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,4 +32,6 @@\n \r\n if __name__ == \"__main__\":\r\n     eeve_model = load_eeve_model()\r\n     chat_with_eeve(eeve_model)\r\n+\r\n+# python eeve_chat.py\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1737101267977,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,5 +33,5 @@\n if __name__ == \"__main__\":\r\n     eeve_model = load_eeve_model()\r\n     chat_with_eeve(eeve_model)\r\n \r\n-# python eeve_chat.py\n\\ No newline at end of file\n+# python eeveKorean.py\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1737100488786,
+            "name": "Commit-0",
+            "content": "from langchain import HuggingFacePipeline\r\nfrom transformers import AutoTokenizer, AutoModelForCausalLM, pipeline\r\nimport torch\r\n\r\ndef load_eeve_model():\r\n    model_name = \"yanolja/EEVE-Korean-Instruct-10.8B-v1.0\"\r\n    tokenizer = AutoTokenizer.from_pretrained(model_name)\r\n    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=\"auto\")\r\n    \r\n    pipe = pipeline(\r\n        \"text-generation\",\r\n        model=model,\r\n        tokenizer=tokenizer,\r\n        max_new_tokens=512,\r\n        temperature=0.7,\r\n        top_p=0.95,\r\n        repetition_penalty=1.15\r\n    )\r\n    \r\n    local_llm = HuggingFacePipeline(pipeline=pipe)\r\n    return local_llm\r\n\r\ndef chat_with_eeve(llm):\r\n    print(\"EEVE-Korean 챗봇에 오신 것을 환영합니다! (종료하려면 'quit'를 입력하세요)\")\r\n    while True:\r\n        user_input = input(\"사용자: \")\r\n        if user_input.lower() == 'quit':\r\n            break\r\n        \r\n        response = llm(user_input)\r\n        print(\"EEVE:\", response)\r\n\r\nif __name__ == \"__main__\":\r\n    eeve_model = load_eeve_model()\r\n    chat_with_eeve(eeve_model)\r\n"
+        }
+    ]
+}
