@@ -79,7 +79,7 @@ function Login() {
 
       <div className="floating-buttons">
         <button 
-          className="floating-button zoom-in-button"
+          className="floating-button zoom-button round"
           onClick={() => handleZoom('in')}
           title="화면 확대"
         >
@@ -87,7 +87,7 @@ function Login() {
           <span>확대</span>
         </button>
         <button 
-          className="floating-button zoom-out-button"
+          className="floating-button zoom-button round"
           onClick={() => handleZoom('out')}
           title="화면 축소"
         >
@@ -98,6 +98,7 @@ function Login() {
           className="floating-button accessibility-button"
           onClick={() => navigate('/accessibility-guide')}
           title="접근성 기능 가이드"
+          style={{ backgroundColor: '#00ff00' }}
         >
           <FaUniversalAccess />
           <span>접근성 기능 가이드라인</span>

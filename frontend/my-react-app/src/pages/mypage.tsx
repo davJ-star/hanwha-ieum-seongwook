@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import './Mypage.css'; // 스타일 파일 추가
+import { FaSearch } from 'react-icons/fa';
+import { FaUniversalAccess } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Mypage = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState('홍길동');
   const [phone, setPhone] = useState('010-1234-5678');
   const [email, setEmail] = useState('hongildong@example.com');
@@ -37,6 +41,12 @@ const Mypage = () => {
   const handleSave = () => {
     // 저장 로직 추가
     alert('회원 정보가 저장되었습니다.');
+  };
+
+  const handleZoom = (zoomType: string) => {
+    const currentZoom = document.body.style.zoom ? parseFloat(document.body.style.zoom) : 1;
+    if (zoomType === 'in') document.body.style.zoom = (currentZoom + 0.1).toString();
+    if (zoomType === 'out') document.body.style.zoom = (currentZoom - 0.1).toString();
   };
 
   return (
@@ -152,6 +162,35 @@ const Mypage = () => {
         <button onClick={handleSave}>저장</button>
         <button className="delete-account">회원 탈퇴</button>
       </div>
+
+      <div className="floating-buttons">
+        <button 
+          className="floating-button round"
+          onClick={() => handleZoom('in')}
+          title="화면 확대"
+        >
+          <FaSearch />
+          <span>확대</span>
+        </button>
+        <button 
+          className="floating-button round"
+          onClick={() => handleZoom('out')}
+          title="화면 축소"
+        >
+          <FaSearch />
+          <span>축소</span>
+        </button>
+        <button 
+          className="floating-button accessibility-button"
+          onClick={() => navigate('/accessibility-guide')}
+          title="접근성 기능 가이드"
+          style={{ backgroundColor: '#00ff00' }}
+        >
+          <FaUniversalAccess />
+          <span>접근성 기능 가이드라인</span>
+        </button>
+      </div>
+
     </div>
   );
 };

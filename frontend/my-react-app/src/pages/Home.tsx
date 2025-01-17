@@ -89,7 +89,7 @@ function Home() {
       {/* 커뮤니티 섹션 */}
       <div className="community-container">
         <h2>커뮤니티 바로가기</h2>
-        <p>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
+        <p style={{ textAlign: 'center' }}>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
         <button onClick={() => navigate('/community-main')}>커뮤니티 메인 바로가기</button>
         <button onClick={() => navigate('/physical-disability-community')}>지체장애 커뮤니티 바로가기</button>
         <button onClick={() => navigate('/brain-lesion-disorder-community')}>뇌병변장애 커뮤니티 바로가기</button>
@@ -103,7 +103,7 @@ function Home() {
 
       <div className="floating-buttons">
         <button 
-          className="floating-button zoom-in-button"
+          className="floating-button zoom-button round"
           onClick={() => handleZoom('in')}
           title="화면 확대"
         >
@@ -111,7 +111,7 @@ function Home() {
           <span>확대</span>
         </button>
         <button 
-          className="floating-button zoom-out-button"
+          className="floating-button zoom-button round"
           onClick={() => handleZoom('out')}
           title="화면 축소"
         >
@@ -122,6 +122,7 @@ function Home() {
           className="floating-button accessibility-button"
           onClick={() => navigate('/accessibility-guide')}
           title="접근성 기능 가이드"
+          style={{ backgroundColor: '#00ff00' }}
         >
           <FaUniversalAccess />
           <span>접근성 기능 가이드라인</span>
@@ -130,6 +131,7 @@ function Home() {
           className="floating-button ads-check-button"
           onClick={() => navigate('/ads-verification')}
           title="허위광고 판별"
+          style={{ backgroundColor: '#ff9900' }}
         >
           <FaExclamationTriangle />
           <span>의약품 허위광고 판별</span>

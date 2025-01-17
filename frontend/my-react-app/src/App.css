@@ -1,7 +1,8 @@
 body {
   margin: 0;
+  color: #000000; /*페이지 글자색 변경 */
   font-family: KoddiUD, Arial, sans-serif;
-  background-color: #ffffff;
+  background-color: #ffffff; /* 배경색 변경 */
 }
 
 .logo-header {
@@ -13,16 +14,16 @@ body {
 }
 
 .user-menu a {
-  color: #000;
+  color: #000000;
   text-decoration: none;
   padding: 0.5rem 1rem;
-  background-color: #FFFF00;
+  background-color: #FFFF00; /* 버튼 배경색 변경 */
   border-radius: 4px;
   cursor: pointer;
 }
 
 .navbar {
-  background-color: #fffdda;
+  background-color: #FFFF00; /* 버튼 배경색 변경 */
   padding: 0.5rem 1rem;
   display: flex;
   gap: 1rem;
@@ -32,7 +33,7 @@ body {
 .navbar a,
 .navbar button {
   text-decoration: none;
-  color: #000;
+  color: #000000; /* 버튼 글자색 변경 */
   padding: 0.5rem 1rem;
   border: none;
   background: none;
@@ -42,7 +43,7 @@ body {
 .main-banner {
   width: 100%;
   height: 400px;
-  background-image: url("/images/medicine.png");
+  background-image: url("/images/medicine.png"); /* 배경 이미지 변경 */
   background-size: cover;
   background-position: center;
   display: flex;
@@ -50,7 +51,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white;
+  color: #000000;
 }
 
 .main-banner h1 {
@@ -61,7 +62,7 @@ body {
 .search-container {
   margin: 20px;
   padding: 20px;
-  background: #ffffff;
+  background: #000000; /* 배경색 변경 */
   border-radius: 8px;
   /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
 }
@@ -72,6 +73,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  background-color: #000000;
 }
 
 .floating-buttons {
@@ -92,24 +94,24 @@ body {
   border-radius: 25px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px #00000033;
   transition: transform 0.2s;
   font-size: 14px;
   white-space: nowrap;
 }
 
 .accessibility-button {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #007f00 !important; /* important 추가 */
+  color: #ffffff !important; /* 가시성을 위해 텍스트 색상을 흰색으로 변경 */
 }
 
 .ads-check-button {
-  background-color: #ff9800;
-  color: white;
+  background-color: #ff7b00 !important; /* important 추가 */
+  color: #ffffff !important; /* 가시성을 위해 텍스트 색상을 흰색으로 변경 */
 }
 
 .floating-button svg {
-  font-size: 20px;
+  font-size: 20px; /* 버튼 아이콘 크기 변경 */
 }
 
 .floating-button:hover {
@@ -119,12 +121,12 @@ body {
 .image-search-container {
   margin-top: 20px;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #000000; /* 버튼 테두리 색 변경 */
   border-radius: 8px;
 }
 
 .image-upload-box {
-  border: 2px dashed #ccc;
+  border: 2px dashed #ccc; /* 버튼 테두리 색 변경 */
   padding: 20px;
   text-align: center;
   border-radius: 4px;
@@ -133,5 +135,22 @@ body {
 }
 
 .image-upload-box:hover {
-  border-color: #007bff;
+  border-color: #666666;
+}
+
+.floating-button.round /*확대/축소 버튼*/{
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #666666; /* 확대/축소 버튼 배경색 추가 */
+}
+
+.floating-button.round span {
+  font-size: 12px; /* 버튼 글자 크기 변경 */
+  margin-top: 4px;
 }
