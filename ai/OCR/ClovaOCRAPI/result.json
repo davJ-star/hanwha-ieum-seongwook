@@ -1,0 +1,240 @@
+{
+	"version": "V2",
+	"requestId": "68a68c5a-d68f-4c76-9e8f-d90f5ee7da30",
+	"timestamp": 1737082947795,
+	"images": [
+		{
+			"uid": "2dedea9d6e744c5b98723ca3117bc27c",
+			"name": "demo",
+			"inferResult": "SUCCESS",
+			"message": "SUCCESS",
+			"validationResult": {
+				"result": "NO_REQUESTED"
+			},
+			"convertedImageInfo": {
+				"width": 500,
+				"height": 333,
+				"pageIndex": 0,
+				"longImage": false
+			},
+			"fields": [
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 244.0,
+								"y": 185.0
+							},
+							{
+								"x": 220.0,
+								"y": 137.0
+							},
+							{
+								"x": 249.0,
+								"y": 123.0
+							},
+							{
+								"x": 273.0,
+								"y": 171.0
+							}
+						]
+					},
+					"inferText": "500",
+					"inferConfidence": 0.8121,
+					"type": "NORMAL",
+					"lineBreak": false
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 225.0,
+								"y": 139.0
+							},
+							{
+								"x": 240.0,
+								"y": 173.0
+							},
+							{
+								"x": 232.0,
+								"y": 176.0
+							},
+							{
+								"x": 217.0,
+								"y": 143.0
+							}
+						]
+					},
+					"inferText": "아제트아이노원",
+					"inferConfidence": 0.8165,
+					"type": "NORMAL",
+					"lineBreak": false
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 239.0,
+								"y": 127.0
+							},
+							{
+								"x": 295.0,
+								"y": 95.0
+							},
+							{
+								"x": 368.0,
+								"y": 224.0
+							},
+							{
+								"x": 312.0,
+								"y": 256.0
+							}
+						]
+					},
+					"inferText": "타이레놀",
+					"inferConfidence": 0.9908,
+					"type": "NORMAL",
+					"lineBreak": true
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 265.0,
+								"y": 223.0
+							},
+							{
+								"x": 242.0,
+								"y": 178.0
+							},
+							{
+								"x": 262.0,
+								"y": 168.0
+							},
+							{
+								"x": 285.0,
+								"y": 213.0
+							}
+						]
+					},
+					"inferText": "듣다보름",
+					"inferConfidence": 0.4545,
+					"type": "NORMAL",
+					"lineBreak": true
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 247.0,
+								"y": 233.0
+							},
+							{
+								"x": 254.0,
+								"y": 258.0
+							},
+							{
+								"x": 239.0,
+								"y": 262.0
+							},
+							{
+								"x": 232.0,
+								"y": 237.0
+							}
+						]
+					},
+					"inferText": "10정",
+					"inferConfidence": 0.9944,
+					"type": "NORMAL",
+					"lineBreak": true
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 320.0,
+								"y": 248.0
+							},
+							{
+								"x": 320.0,
+								"y": 234.0
+							},
+							{
+								"x": 339.0,
+								"y": 234.0
+							},
+							{
+								"x": 339.0,
+								"y": 248.0
+							}
+						]
+					},
+					"inferText": "&",
+					"inferConfidence": 0.6119,
+					"type": "NORMAL",
+					"lineBreak": true
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 320.0,
+								"y": 288.0
+							},
+							{
+								"x": 344.0,
+								"y": 288.0
+							},
+							{
+								"x": 344.0,
+								"y": 317.0
+							},
+							{
+								"x": 320.0,
+								"y": 317.0
+							}
+						]
+					},
+					"inferText": "O",
+					"inferConfidence": 0.6995,
+					"type": "NORMAL",
+					"lineBreak": true
+				},
+				{
+					"valueType": "ALL",
+					"boundingPoly": {
+						"vertices": [
+							{
+								"x": 350.0,
+								"y": 295.0
+							},
+							{
+								"x": 489.0,
+								"y": 295.0
+							},
+							{
+								"x": 489.0,
+								"y": 312.0
+							},
+							{
+								"x": 350.0,
+								"y": 312.0
+							}
+						]
+					},
+					"inferText": "YONHAPNEWS",
+					"inferConfidence": 0.9726,
+					"type": "NORMAL",
+					"lineBreak": true
+				}
+			]
+		}
+	]
+}

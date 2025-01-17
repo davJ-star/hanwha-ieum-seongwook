@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 3,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1737078333194,
@@ -20,6 +20,18 @@
                 {
                     "date": 1737078620382,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')\r\n-image_file = ''\r\n+image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n     'images': [\r\n"
+                },
+                {
+                    "date": 1737082817886,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n load_dotenv()\r\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n-secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')\r\n+secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY')\r\n image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n"
+                },
+                {
+                    "date": 1737082863380,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n load_dotenv()\r\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n-secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY')\r\n+secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY').strip('\"')\r\n image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n"
+                },
+                {
+                    "date": 1737082943121,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n }\r\n \r\n payload = {'message': json.dumps(request_json).encode('UTF-8')}\r\n files = [\r\n-    ('file', open(image_file, 'rb'))\r\n+    ('file', open(image_path, 'rb'))\r\n ]\r\n headers = {\r\n     'X-OCR-SECRET': secret_key\r\n }\r\n"
                 }
             ],
             "date": 1737078333194,

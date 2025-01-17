@@ -10,7 +10,7 @@ load_dotenv()
 
 # API 설정
 api_url = os.getenv('CLOVA_OCR_API_URL')
-secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')
+secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY').strip('"')
 image_path = 'C:\\Users\\82106\\develop\\hanwha-ieum\\ai\\img\\test.jpg'
 
 # API 요청 준비
@@ -28,7 +28,7 @@ request_json = {
 
 payload = {'message': json.dumps(request_json).encode('UTF-8')}
 files = [
-    ('file', open(image_file, 'rb'))
+    ('file', open(image_path, 'rb'))
 ]
 headers = {
     'X-OCR-SECRET': secret_key
