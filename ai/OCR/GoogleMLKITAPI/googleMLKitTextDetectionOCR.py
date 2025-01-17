@@ -1,25 +1,40 @@
-from google.cloud import vision
-import io
+from langchain_community.llms import HuggingFacePipeline
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+import torch
+import warnings
 
-def detect_text(path):
-    """이미지 파일에서 텍스트를 감지합니다."""
-    client = vision.ImageAnnotatorClient()
+# 경고 무시 설정
+warnings.filterwarnings("ignore", category=UserWarning)
 
-    with io.open(path, 'rb') as image_file:
-        content = image_file.read()
+def load_eeve_model():
+    model_name = "yanolja/EEVE-Korean-Instruct-10.8B-v1.0"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto")
+    
+    pipe = pipeline(
+        "text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        max_new_tokens=512,
+        do_sample=True,  # 샘플링 활성화
+        temperature=0.7,
+        top_p=0.95,
+        repetition_penalty=1.15
+    )
+    
+    local_llm = HuggingFacePipeline(pipeline=pipe)
+    return local_llm
 
-    image = vision.Image(content=content)
-    response = client.text_detection(image=image)
-    texts = response.text_annotations
+def chat_with_eeve(llm):
+    print("EEVE-Korean 챗봇에 오신 것을 환영합니다! (종료하려면 'quit'를 입력하세요)")
+    while True:
+        user_input = input("사용자: ")
+        if user_input.lower() == 'quit':
+            break
+        
+        response = llm.invoke(user_input)  # __call__ 대신 invoke 사용
+        print("EEVE:", response)
 
-    print('텍스트:')
-    for text in texts:
-        print(f'\n"{text.description}"')
-        vertices = [f'({vertex.x},{vertex.y})' for vertex in text.bounding_poly.vertices]
-        print('경계: {}'.format(','.join(vertices)))
-
-    if response.error.message:
-        raise Exception(f'{response.error.message}\n자세한 오류 정보: https://cloud.google.com/apis/design/errors')
-
-# 이미지 파일 경로를 지정하여 함수 호출
-detect_text('C:\\Users\\82106\\develop\\hanwha-ieum\\ai\\img\\test.jpg')
+if __name__ == "__main__":
+    eeve_model = load_eeve_model()
+    chat_with_eeve(eeve_model)
