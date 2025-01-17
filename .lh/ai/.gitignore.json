@@ -1,0 +1,22 @@
+{
+    "sourceFile": "ai/.gitignore",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1737097322693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737097366313,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n .env\r\n *.env\r\n .env.local\r\n-hanwha-ieum-785071e73804.json\r\n+hanwha-ieum-googlecloudapi.json\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1737097322693,
+            "name": "Commit-0",
+            "content": ".env\r\n*.env\r\n.env.local\r\nhanwha-ieum-785071e73804.json\r\n"
+        }
+    ]
+}

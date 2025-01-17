@@ -1,3 +1,4 @@
 .env
 *.env
 .env.local
+hanwha-ieum-googlecloudapi.json

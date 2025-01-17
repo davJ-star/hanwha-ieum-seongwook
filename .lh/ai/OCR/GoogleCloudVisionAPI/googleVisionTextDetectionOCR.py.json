@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1737096405666,
@@ -16,6 +16,26 @@
                 {
                     "date": 1737096442258,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,5 +29,5 @@\n             f'텍스트 감지 중 오류 발생: {response.error.message}')\r\n \r\n # 사용 예시\r\n # 'path_to_image.jpg'를 실제 이미지 파일 경로로 바꾸세요\r\n-detect_text('path_to_image.jpg')\r\n+detect_text(image_path)\r\n"
+                },
+                {
+                    "date": 1737098266557,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,10 +2,13 @@\n import os\r\n from google.cloud import vision\r\n import io\r\n \r\n+## 코드 다시 체크...\r\n+\r\n # .env 파일 로드\r\n load_dotenv()\r\n+\r\n image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n \r\n def detect_text(image_path):\r\n"
+                },
+                {
+                    "date": 1737098600691,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,26 +1,31 @@\n from dotenv import load_dotenv\r\n import os\r\n from google.cloud import vision\r\n+from google.oauth2 import service_account\r\n import io\r\n \r\n-## 코드 다시 체크...\r\n-\r\n # .env 파일 로드\r\n load_dotenv()\r\n \r\n-image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n-\r\n-\r\n def detect_text(image_path):\r\n     \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n-    client = vision.ImageAnnotatorClient()\r\n+    # 서비스 계정 키 파일 경로\r\n+    key_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')\r\n \r\n+    # 인증 정보 로드\r\n+    credentials = service_account.Credentials.from_service_account_file(key_path)\r\n+\r\n+    # Vision 클라이언트 생성\r\n+    client = vision.ImageAnnotatorClient(credentials=credentials)\r\n+\r\n+    # 이미지 파일 열기\r\n     with io.open(image_path, 'rb') as image_file:\r\n         content = image_file.read()\r\n \r\n     image = vision.Image(content=content)\r\n \r\n+    # 텍스트 감지 요청\r\n     response = client.text_detection(image=image)\r\n     texts = response.text_annotations\r\n \r\n     print('감지된 텍스트:')\r\n@@ -31,6 +36,9 @@\n         raise Exception(\r\n             f'텍스트 감지 중 오류 발생: {response.error.message}')\r\n \r\n # 사용 예시\r\n-# 'path_to_image.jpg'를 실제 이미지 파일 경로로 바꾸세요\r\n-detect_text(image_path)\r\n+if __name__ == \"__main__\":\r\n+    # 'path_to_image.jpg'를 실제 이미지 파일 경로로 바꾸세요\r\n+    image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n+\r\n+    detect_text(image_path)\r\n"
+                },
+                {
+                    "date": 1737098696910,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n \r\n def detect_text(image_path):\r\n     \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n     # 서비스 계정 키 파일 경로\r\n-    key_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')\r\n+    key_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').strip('\"')\r\n \r\n     # 인증 정보 로드\r\n     credentials = service_account.Credentials.from_service_account_file(key_path)\r\n \r\n"
+                },
+                {
+                    "date": 1737098995049,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,12 +7,16 @@\n # .env 파일 로드\r\n load_dotenv()\r\n \r\n def detect_text(image_path):\r\n-    \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n     # 서비스 계정 키 파일 경로\r\n     key_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').strip('\"')\r\n+    print(f\"서비스 계정 키 파일 경로: {key_path}\")  # 디버깅을 위해 추가\r\n \r\n+    # 파일 존재 여부 확인\r\n+    if not os.path.exists(key_path):\r\n+        raise FileNotFoundError(f\"서비스 계정 키 파일을 찾을 수 없습니다: {key_path}\")\r\n+    \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n     # 인증 정보 로드\r\n     credentials = service_account.Credentials.from_service_account_file(key_path)\r\n \r\n     # Vision 클라이언트 생성\r\n"
+                },
+                {
+                    "date": 1737099081788,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,9 @@\n \r\n     # 파일 존재 여부 확인\r\n     if not os.path.exists(key_path):\r\n         raise FileNotFoundError(f\"서비스 계정 키 파일을 찾을 수 없습니다: {key_path}\")\r\n+    \r\n     \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n     # 인증 정보 로드\r\n     credentials = service_account.Credentials.from_service_account_file(key_path)\r\n \r\n"
                 }
             ],
             "date": 1737096405666,
