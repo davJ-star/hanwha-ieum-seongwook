@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DrugSearchResult.css';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import AccessibilityModal from '../components/AccessibilityModal';
 
 function DrugSearchResult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -57,7 +59,7 @@ function DrugSearchResult() {
 
       {/* 검색 섹션 */}
       <div className="search-container">
-        <h2>질병/의약품 검색하기</h2>
+        <h2>의약품 정보 검색하기</h2>
         <form>
           <select name="type">
             <option value="" disabled selected>검색 조건</option>
@@ -65,7 +67,7 @@ function DrugSearchResult() {
             <option value="disease">질병</option>
           </select>
           <input type="text" placeholder="검색어를 입력하세요" />
-          <button type="submit">검색</button>
+          <button type="submit" style={{ color: '#000000' }}>검색</button>
         </form>
 
         <div className="image-search-container">
@@ -120,7 +122,7 @@ function DrugSearchResult() {
         </button>
         <button 
           className="floating-button accessibility-button"
-          onClick={() => navigate('/accessibility-guide')}
+          onClick={() => setIsModalOpen(true)}
           title="접근성 기능 가이드"
           style={{ backgroundColor: '#00ff00' }}
         >
@@ -128,6 +130,11 @@ function DrugSearchResult() {
           <span>접근성 기능 가이드라인</span>
         </button>
       </div>
+
+      <AccessibilityModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

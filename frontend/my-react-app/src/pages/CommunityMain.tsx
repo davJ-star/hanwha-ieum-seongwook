@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CommunityMain.css';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
+import AccessibilityModal from '../components/AccessibilityModal';
 
 const CommunityMain = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -67,7 +69,13 @@ const CommunityMain = () => {
         <div className="post-list-container">
           <div className="post-header">
             <h2>전체 게시글</h2>
-            <button className="write-button" onClick={() => navigate('/write-post')}>글쓰기</button>
+            <button 
+              className="write-button" 
+              onClick={() => navigate('/write-post')} 
+              style={{ color: '#000000' }}
+            >
+              글쓰기
+            </button>
           </div>
           
           {/* 임시 게시글 목록 */}
@@ -101,7 +109,7 @@ const CommunityMain = () => {
         </button>
         <button 
           className="floating-button accessibility-button"
-          onClick={() => navigate('/accessibility-guide')}
+          onClick={() => setIsModalOpen(true)}
           title="접근성 기능 가이드"
           style={{ backgroundColor: '#00ff00' }}
         >
@@ -109,6 +117,11 @@ const CommunityMain = () => {
           <span>접근성 기능 가이드라인</span>
         </button>
       </div>
+
+      <AccessibilityModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

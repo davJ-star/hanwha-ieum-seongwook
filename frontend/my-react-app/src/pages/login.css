@@ -2,97 +2,138 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 0;
+  margin: 0;
 }
 
 .login-wrapper {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .login-wrapper h1,
-  .login-wrapper h3 {
-    margin: 10px 0;
-    text-align: center;
-  }
-  
-  .login-wrapper input[type="text"],
-  .login-wrapper input[type="password"],
-  .login-wrapper input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .login-wrapper input[type="submit"] {
-    background-color: #FFFF00;
-    color: #ffffff;
-    cursor: pointer;
-  }
-  
-  .login-wrapper input[type="submit"]:hover {
-    background-color: #FFFF00;
-  }
-  
-  .kakao-login-btn {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #ffeb00;
-    color: #3c1e1e;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .floating-button.round {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #666666;
-    color: #ffffff;
-  }
-  
-  .floating-button.round span {
-    font-size: 12px;
-    margin-top: 4px;
-  }
-  
-  .floating-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 5px #00000033;
-    transition: transform 0.2s;
-    font-size: 14px;
-    white-space: nowrap;
-  }
-  
-  .floating-button:hover {
-    transform: scale(1.05);
-  }
-  
-  .floating-buttons {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-  }
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  padding: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-header {
+  text-align: center ;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.login-wrapper form {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+}
+
+.login-wrapper input[type="text"],
+.login-wrapper input[type="password"] {
+  width: 100%;
+  max-width: 320px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  color: #000000;
+}
+
+.login-wrapper input[type="submit"] {
+  width: 100%;
+  max-width: 320px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #FFFF00;
+  border: none;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-wrapper input[type="submit"]:hover {
+  background-color: #e6e600;
+}
+
+.kakao-login-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 10px;
+  margin: 10px auto;
+  background-color: #ffeb00;
+  color: #3c1e1e;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.additional-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.floating-button.round {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+  justify-content: center;
+  background-color: #666666;
+  color: #ffffff;
+}
+
+.floating-button.round span {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.floating-button {
+  display: flex;
+  align-items: center ;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 5px #00000033;
+  transition: transform 0.2s;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.floating-button:hover {
+  transform: scale(1.05);
+}
+
+.floating-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
   

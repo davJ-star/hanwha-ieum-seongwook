@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import { FaArrowUp, FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import AccessibilityModal from '../components/AccessibilityModal';
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -47,6 +49,7 @@ function Home() {
 
       {/* 단축키 안내 */}
       <header className="navbar">
+        <h3>단축키 안내</h3>
         <a href="#search">① 정보 검색</a>
         <a href="#medications">② 복용약 관리</a>
         <a href="#ads">③ 허위광고 판별</a>
@@ -55,12 +58,26 @@ function Home() {
 
       {/* 메인 배너 */}
       <div className="main-banner">
-        <h1>쉬운 의약품 복용 관리 플랫폼 MediLink입니다!</h1>
+        <div className="banner-content">
+          <h1>쉬운 의약품 복용 관리 플랫폼 
+            <div style={{ marginTop: '10px' }}>
+              <span style={{
+                color: '#FFFF00',
+                textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
+              }}>MediLink</span>입니다!
+            </div>
+          </h1>
+          <h4>약 정보 찾기 어려우셨나요?</h4>
+          <h4>약국 추천만 믿고 복용하셨던 분들!</h4>
+          <h4>내 질환에 딱 맞는 정보를 원하셨던 분들!</h4>
+          <h4>이제 MediLink와 함께 쉽고 편리한 약 복용 관리 서비스를 경험해보세요!</h4>
+        </div>
       </div>
 
       {/* 검색 섹션 */}
       <div className="search-container">
         <h2>질병/의약품 검색하기</h2>
+        <p style={{ textAlign: 'center', color: '#666666' }}>내가 가진 질병과 복용 중인 의약품에 대해 더 정확히 알고 싶다면 여기서 검색해보세요 !</p>
         <form>
           <select name="type">
             <option value="" disabled selected>검색 조건</option>
@@ -68,7 +85,7 @@ function Home() {
             <option value="disease">질병</option>
           </select>
           <input type="text" placeholder="검색어를 입력하세요" />
-          <button type="submit">검색</button>
+          <button type="submit" style={{ color: '#000000' }}>검색</button>
         </form>
 
         <div className="image-search-container">
@@ -89,7 +106,7 @@ function Home() {
       {/* 커뮤니티 섹션 */}
       <div className="community-container">
         <h2>커뮤니티 바로가기</h2>
-        <p style={{ textAlign: 'center' }}>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
+        <p style={{ textAlign: 'center', color: '#666666' }}>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
         <button onClick={() => navigate('/community-main')}>커뮤니티 메인 바로가기</button>
         <button onClick={() => navigate('/physical-disability-community')}>지체장애 커뮤니티 바로가기</button>
         <button onClick={() => navigate('/brain-lesion-disorder-community')}>뇌병변장애 커뮤니티 바로가기</button>
@@ -120,7 +137,7 @@ function Home() {
         </button>
         <button 
           className="floating-button accessibility-button"
-          onClick={() => navigate('/accessibility-guide')}
+          onClick={() => setIsModalOpen(true)}
           title="접근성 기능 가이드"
           style={{ backgroundColor: '#00ff00' }}
         >
@@ -137,6 +154,11 @@ function Home() {
           <span>의약품 허위광고 판별</span>
         </button>
       </div>
+
+      <AccessibilityModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

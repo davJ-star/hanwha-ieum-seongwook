@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import './Login.css';
+import AccessibilityModal from '../components/AccessibilityModal';
 
 function Login() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,8 +46,10 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-wrapper">
-        <h3>환영합니다!</h3>
-        <h1>Login</h1>
+        <div className="login-header">
+          <h3>환영합니다!</h3>
+          <h1>로그인</h1>
+        </div>
         <form onSubmit={handleSubmit}>
           <h3>전화번호 또는 이메일 주소를 입력해주세요.</h3>
           <input
@@ -96,7 +100,7 @@ function Login() {
         </button>
         <button 
           className="floating-button accessibility-button"
-          onClick={() => navigate('/accessibility-guide')}
+          onClick={() => setIsModalOpen(true)}
           title="접근성 기능 가이드"
           style={{ backgroundColor: '#00ff00' }}
         >
@@ -104,6 +108,11 @@ function Login() {
           <span>접근성 기능 가이드라인</span>
         </button>
       </div>
+
+      <AccessibilityModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
