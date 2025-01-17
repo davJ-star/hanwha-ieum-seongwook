@@ -1,0 +1,30 @@
+{
+    "sourceFile": "ai/OCR/ClovaOCRAPI/clovaOCR.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1737078333194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737078506493,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,17 @@\n+import os\r\n import requests\r\n import uuid\r\n import time\r\n import json\r\n+from dotenv import load_dotenv\r\n \r\n+# .env 파일 로드\r\n+load_dotenv()\r\n+\r\n # API 설정\r\n-api_url = 'YOUR_API_URL'\r\n-secret_key = 'YOUR_SECRET_KEY'\r\n+api_url = os.getenv('CLOVA_OCR_API_URL')\r\n+secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')\r\n image_file = 'YOUR_IMAGE_FILE'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n"
+                },
+                {
+                    "date": 1737078598702,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')\r\n-image_file = 'YOUR_IMAGE_FILE'\r\n+image_file = ''\r\n \r\n # API 요청 준비\r\n request_json = {\r\n     'images': [\r\n"
+                },
+                {
+                    "date": 1737078620382,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n secret_key = os.getenv('CLOVA_OCR_SECRET_KEY')\r\n-image_file = ''\r\n+image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n     'images': [\r\n"
+                }
+            ],
+            "date": 1737078333194,
+            "name": "Commit-0",
+            "content": "import requests\r\nimport uuid\r\nimport time\r\nimport json\r\n\r\n# API 설정\r\napi_url = 'YOUR_API_URL'\r\nsecret_key = 'YOUR_SECRET_KEY'\r\nimage_file = 'YOUR_IMAGE_FILE'\r\n\r\n# API 요청 준비\r\nrequest_json = {\r\n    'images': [\r\n        {\r\n            'format': 'jpg',\r\n            'name': 'demo'\r\n        }\r\n    ],\r\n    'requestId': str(uuid.uuid4()),\r\n    'version': 'V2',\r\n    'timestamp': int(round(time.time() * 1000))\r\n}\r\n\r\npayload = {'message': json.dumps(request_json).encode('UTF-8')}\r\nfiles = [\r\n    ('file', open(image_file, 'rb'))\r\n]\r\nheaders = {\r\n    'X-OCR-SECRET': secret_key\r\n}\r\n\r\n# API 요청 보내기\r\nresponse = requests.request(\"POST\", api_url, headers=headers, data=payload, files=files)\r\n\r\n# 결과 저장\r\nresult = response.json()\r\nwith open('result.json', 'w', encoding='utf-8') as make_file:\r\n    json.dump(result, make_file, indent=\"\\t\", ensure_ascii=False)\r\n\r\n# 텍스트 추출\r\ntext = \"\"\r\nfor field in result['images'][0]['fields']:\r\n    text += field['inferText'] + \" \"\r\n\r\nprint(\"추출된 텍스트:\")\r\nprint(text)\r\n"
+        }
+    ]
+}
