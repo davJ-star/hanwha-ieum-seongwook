@@ -1,0 +1,26 @@
+{
+    "sourceFile": "ai/OCR/GoogleCloudVisionAPI/googleVisionTextDetectionOCR.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1737096405666,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737096432925,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,11 @@\n import io\r\n \r\n # .env 파일 로드\r\n load_dotenv()\r\n+image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n+\r\n def detect_text(image_path):\r\n     \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n     client = vision.ImageAnnotatorClient()\r\n \r\n"
+                },
+                {
+                    "date": 1737096442258,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,5 +29,5 @@\n             f'텍스트 감지 중 오류 발생: {response.error.message}')\r\n \r\n # 사용 예시\r\n # 'path_to_image.jpg'를 실제 이미지 파일 경로로 바꾸세요\r\n-detect_text('path_to_image.jpg')\r\n+detect_text(image_path)\r\n"
+                }
+            ],
+            "date": 1737096405666,
+            "name": "Commit-0",
+            "content": "from dotenv import load_dotenv\r\nimport os\r\nfrom google.cloud import vision\r\nimport io\r\n\r\n# .env 파일 로드\r\nload_dotenv()\r\n\r\ndef detect_text(image_path):\r\n    \"\"\"이미지 파일에서 텍스트를 감지합니다.\"\"\"\r\n    client = vision.ImageAnnotatorClient()\r\n\r\n    with io.open(image_path, 'rb') as image_file:\r\n        content = image_file.read()\r\n\r\n    image = vision.Image(content=content)\r\n\r\n    response = client.text_detection(image=image)\r\n    texts = response.text_annotations\r\n\r\n    print('감지된 텍스트:')\r\n    for text in texts:\r\n        print(f'\"{text.description}\"')\r\n\r\n    if response.error.message:\r\n        raise Exception(\r\n            f'텍스트 감지 중 오류 발생: {response.error.message}')\r\n\r\n# 사용 예시\r\n# 'path_to_image.jpg'를 실제 이미지 파일 경로로 바꾸세요\r\ndetect_text('path_to_image.jpg')\r\n"
+        }
+    ]
+}
