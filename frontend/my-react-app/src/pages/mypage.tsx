@@ -214,7 +214,12 @@ const Mypage = () => {
         {/* 저장 및 회원 탈퇴 */}
         <div className="actions">
           <button onClick={handleSave}>저장</button>
-          <button className="delete-account">회원 탈퇴</button>
+          <button 
+            className="delete-account" 
+            onClick={() => navigate('/secession')}
+          >
+            회원 탈퇴
+          </button>
         </div>
 
         <div className="floating-buttons">

@@ -6,6 +6,7 @@ import Mypage from './pages/mypage'; // 회원관리 페이지 import
 import CommunityMain from './pages/CommunityMain';
 import DiseaseSearchResult from './pages/DiseaseSearchResult';
 import DrugSearchResult from './pages/DrugSearchResult';
+import Secession from './pages/Secession'; //빨간 표시 무시
 import './assets/fonts/FontSet.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/community-main" element={<CommunityMain />} />
         <Route path="/DiseaseSearchResult" element={<DiseaseSearchResult />} />
         <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
+        <Route path="/secession" element={<Secession />} />
       </Routes>
     </Router>
   );
