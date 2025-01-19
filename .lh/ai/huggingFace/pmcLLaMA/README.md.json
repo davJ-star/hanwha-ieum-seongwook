@@ -1,0 +1,38 @@
+{
+    "sourceFile": "ai/huggingFace/pmcLLaMA/README.md",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1737266662312,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1737266681934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,11 @@\n ## 강제 로그인\r\n+huggingface-cli login이 안돼서 강제 로그인을 진행했다.\r\n+\r\n ```python \r\n from huggingface_hub import login\r\n login()\r\n\\ No newline at end of file\n ```\r\n-python ./pmcLlama.py 입력하고 바로 토큰 입력후 로그인 완료. \n+python ./pmcLlama.py 입력하고 바로 토큰 입력후 로그인 완료. \r\n+\r\n+### 그외 방법들\r\n+\r\n"
+                },
+                {
+                    "date": 1737266729787,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,4 +7,15 @@\n ```\r\n python ./pmcLlama.py 입력하고 바로 토큰 입력후 로그인 완료. \r\n \r\n ### 그외 방법들\r\n+\r\n+- Set an environment variable:\r\n+```bash\r\n+export HF_TOKEN=your_token_here\r\n+```\r\n+\r\n+- Pass the token directly in your code:\r\n+```python\r\n+from huggingface_hub import HfApi\r\n+api = HfApi(token=\"your_token_here\")\r\n+```\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1737266947824,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n ```python \r\n from huggingface_hub import login\r\n login()\r\n ```\r\n-python ./pmcLlama.py 입력하고 바로 토큰 입력후 로그인 완료. \r\n+python ./login.py 입력하고 바로 토큰 입력후 로그인 완료. \r\n \r\n ### 그외 방법들\r\n \r\n - Set an environment variable:\r\n"
+                },
+                {
+                    "date": 1737266989402,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,10 @@\n+## 로그인 실패\r\n+```\r\n+pip install -U \"huggingface_hub[cli]\"\r\n+huggingface-cli login\r\n+```\r\n+\r\n ## 강제 로그인\r\n huggingface-cli login이 안돼서 강제 로그인을 진행했다.\r\n \r\n ```python \r\n"
+                },
+                {
+                    "date": 1737266997983,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n ## 로그인 실패\r\n-```\r\n+```bash\r\n pip install -U \"huggingface_hub[cli]\"\r\n huggingface-cli login\r\n ```\r\n \r\n"
+                }
+            ],
+            "date": 1737266662312,
+            "name": "Commit-0",
+            "content": "## 강제 로그인\r\n```python \r\nfrom huggingface_hub import login\r\nlogin()\r\n```\r\npython ./pmcLlama.py 입력하고 바로 토큰 입력후 로그인 완료. "
+        }
+    ]
+}

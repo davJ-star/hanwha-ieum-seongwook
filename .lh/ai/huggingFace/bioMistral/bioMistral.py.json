@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ai/huggingFace/bioMistral/bioMistral.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1737267961852,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1737267961852,
+            "name": "Commit-0",
+            "content": "import torch\r\nfrom transformers import AutoTokenizer, AutoModelForCausalLM\r\nfrom huggingface_hub import snapshot_download\r\n\r\n# 모델 다운로드\r\nmodel_name = \"BioMistral/BioMistral-7B\"\r\nprint(\"모델 다운로드 중...\")\r\nsnapshot_download(repo_id=model_name, local_dir=\"./biomistral_model\")\r\nprint(\"모델 다운로드 완료\")\r\n\r\n# 토크나이저와 모델 로드\r\nprint(\"토크나이저와 모델 로딩 중...\")\r\ntokenizer = AutoTokenizer.from_pretrained(\"./biomistral_model\")\r\nmodel = AutoModelForCausalLM.from_pretrained(\"./biomistral_model\")\r\nprint(\"토크나이저와 모델 로딩 완료\")\r\n\r\n# GPU 사용 가능 여부 확인 및 설정\r\ndevice = \"cuda\" if torch.cuda.is_available() else \"cpu\"\r\nmodel = model.to(device)\r\nprint(f\"사용 중인 디바이스: {device}\")\r\n\r\n# 텍스트 생성 함수\r\ndef generate_text(prompt, max_length=100):\r\n    inputs = tokenizer(prompt, return_tensors=\"pt\").to(device)\r\n    outputs = model.generate(**inputs, max_length=max_length)\r\n    return tokenizer.decode(outputs[0], skip_special_tokens=True)\r\n\r\n# 사용자 입력 및 텍스트 생성\r\nwhile True:\r\n    user_prompt = input(\"질문을 입력하세요 (종료하려면 'quit' 입력): \")\r\n    if user_prompt.lower() == 'quit':\r\n        break\r\n    \r\n    print(\"응답 생성 중...\")\r\n    response = generate_text(user_prompt)\r\n    print(\"생성된 응답:\", response)\r\n    print()\r\n\r\nprint(\"프로그램을 종료합니다.\")\r\n"
+        }
+    ]
+}
