@@ -7,6 +7,7 @@ import CommunityMain from './pages/CommunityMain';
 import DiseaseSearchResult from './pages/DiseaseSearchResult';
 import DrugSearchResult from './pages/DrugSearchResult';
 import Secession from './pages/Secession'; //빨간 표시 무시
+import FADsearch from './pages/FADsearch';
 import './assets/fonts/FontSet.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/DiseaseSearchResult" element={<DiseaseSearchResult />} />
         <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
         <Route path="/secession" element={<Secession />} />
+        <Route path="/FADsearch" element={<FADsearch />} />
       </Routes>
     </Router>
   );

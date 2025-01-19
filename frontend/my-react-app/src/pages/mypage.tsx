@@ -81,7 +81,7 @@ const Mypage = () => {
         <h3>단축키 안내</h3>
         <a href="#search">① 정보 검색</a>
         <a href="#medications">② 복용약 관리</a>
-        <a href="#ads">③ 허위광고 판별</a>
+        <a onClick={() => navigate('/FADsearch')}>③ 허위광고 판별</a>
         <a onClick={() => navigate('/login')}>④ 로그인</a>
       </header>
 
