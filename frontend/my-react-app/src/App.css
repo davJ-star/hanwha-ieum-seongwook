@@ -181,3 +181,22 @@ body {
   margin: 20px;
   padding: 20px;
 }
+
+.floating-button.fad-button {
+  background-color: #ff4444 !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-button.fad-button:hover {
+  background-color: #ff6666 !important;
+  transform: scale(1.05);
+}
+
+.floating-button.fad-button svg {
+  font-size: 18px;
+}
+

@@ -5,14 +5,30 @@
     src: url('KoddiUDOnGothic-Regular.woff') format('woff');
 }
 
+/* 전역 스타일 적용 */
 :root {
-    font-family: 'KoddiUD', sans-serif;
+    font-family: 'KoddiUD', sans-serif !important;
 }
 
+/* body 태그에 적용 */
 body {
-    font-family: inherit;
+    font-family: 'KoddiUD', sans-serif !important;
 }
 
+/* 모든 요소에 적용 */
 * {
-    font-family: inherit;
+    font-family: 'KoddiUD', sans-serif !important;
+}
+
+/* 입력 요소들에 대한 명시적 적용 */
+input, 
+button, 
+textarea, 
+select, 
+a, 
+p, 
+span, 
+div, 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'KoddiUD', sans-serif !important;
 }

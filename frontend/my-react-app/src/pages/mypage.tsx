@@ -4,6 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 import { FaUniversalAccess } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import AccessibilityModal from '../components/AccessibilityModal';
+import Layout from '../components/Layout';
 
 const Mypage = () => {
   const navigate = useNavigate();
@@ -67,196 +68,153 @@ const Mypage = () => {
   };
 
   return (
-    <div>
-      {/* 상단 로고 및 회원관리 */}
-      <header className="logo-header">
-        <h3>MediLink</h3>
-        <div className="user-menu">
-          <a onClick={() => navigate('/mypage')}>회원관리 | 마이페이지</a>
-        </div>
-      </header>
+    <Layout>
+      <div>
+        <div className="mypage-wrapper">
+          <h2>회원정보 수정</h2>
+          <p>전화번호와 이메일 주소를 수정하거나 비밀번호를 재설정할 수 있어요.</p>
 
-      {/* 단축키 안내 */}
-      <header className="navbar">
-        <h3>단축키 안내</h3>
-        <a href="#search">① 정보 검색</a>
-        <a href="#medications">② 복용약 관리</a>
-        <a onClick={() => navigate('/FADsearch')}>③ 허위광고 판별</a>
-        <a onClick={() => navigate('/login')}>④ 로그인</a>
-      </header>
+          {/* 개인정보 수정 */}
+          <div className="section">
+            <h3>개인정보 수정</h3>
+            <label>
+              이름
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            </label>
+            <label>
+              전화번호
+              <div className="input-group">
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  disabled={isPhoneVerified}
+                />
+                <button onClick={handlePhoneVerify}>인증</button>
+              </div>
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="인증번호 입력"
+                  value={phoneCode}
+                  onChange={(e) => setPhoneCode(e.target.value)}
+                  disabled={isPhoneVerified}
+                />
+                <button
+                  onClick={() => {
+                    // 인증 로직 추가
+                    if (phoneCode === '123456') {
+                      setIsPhoneVerified(true);
+                      alert('전화번호 인증이 완료되었습니다.');
+                    } else {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }}
+                >
+                  확인
+                </button>
+              </div>
+            </label>
+            <label>
+              이메일
+              <div className="input-group">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isEmailVerified}
+                />
+                <button onClick={handleEmailVerify}>인증</button>
+              </div>
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="인증번호 입력"
+                  value={emailCode}
+                  onChange={(e) => setEmailCode(e.target.value)}
+                  disabled={isEmailVerified}
+                />
+                <button
+                  onClick={() => {
+                    // 인증 로직 추가
+                    if (emailCode === '654321') {
+                      setIsEmailVerified(true);
+                      alert('이메일 인증이 완료되었습니다.');
+                    } else {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }}
+                >
+                  확인
+                </button>
+              </div>
+            </label>
+          </div>
 
-      <div className="mypage-wrapper">
-        <h2>회원정보 수정</h2>
-        <p>전화번호와 이메일 주소를 수정하거나 비밀번호를 재설정할 수 있어요.</p>
+          {/* 비밀번호 재설정 */}
+          <div className="section">
+            <h3>비밀번호 재설정</h3>
+            <label>
+              현재 비밀번호
+              <div className="input-group">
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+                <button onClick={handlePasswordVerify}>확인</button>
+              </div>
+            </label>
+            {isPasswordValid && (
+              <>
+              {/*현재 비밀번호 입력 후 확인되어야 새 비밀번호 입력 로직이 뜸*/}
+                <label>
+                  새 비밀번호
+                  <div className="input-group">
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="8자 이상 입력해주세요"
+                    />
+                  </div>
+                </label>
+                <label>
+                  새 비밀번호 확인
+                  <div className="input-group">
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="새 비밀번호를 다시 입력해주세요"
+                    />
+                    <button onClick={handleConfirmNewPassword}>확인</button>
+                  </div>
+                </label>
+                {passwordError && <p style={{ color: 'red', fontSize: '14px' }}>{passwordError}</p>}
+              </>
+            )}
+          </div>
 
-        {/* 개인정보 수정 */}
-        <div className="section">
-          <h3>개인정보 수정</h3>
-          <label>
-            이름
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-          </label>
-          <label>
-            전화번호
-            <div className="input-group">
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                disabled={isPhoneVerified}
-              />
-              <button onClick={handlePhoneVerify}>인증</button>
-            </div>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="인증번호 입력"
-                value={phoneCode}
-                onChange={(e) => setPhoneCode(e.target.value)}
-                disabled={isPhoneVerified}
-              />
-              <button
-                onClick={() => {
-                  // 인증 로직 추가
-                  if (phoneCode === '123456') {
-                    setIsPhoneVerified(true);
-                    alert('전화번호 인증이 완료되었습니다.');
-                  } else {
-                    alert('인증번호가 일치하지 않습니다.');
-                  }
-                }}
-              >
-                확인
-              </button>
-            </div>
-          </label>
-          <label>
-            이메일
-            <div className="input-group">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isEmailVerified}
-              />
-              <button onClick={handleEmailVerify}>인증</button>
-            </div>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="인증번호 입력"
-                value={emailCode}
-                onChange={(e) => setEmailCode(e.target.value)}
-                disabled={isEmailVerified}
-              />
-              <button
-                onClick={() => {
-                  // 인증 로직 추가
-                  if (emailCode === '654321') {
-                    setIsEmailVerified(true);
-                    alert('이메일 인증이 완료되었습니다.');
-                  } else {
-                    alert('인증번호가 일치하지 않습니다.');
-                  }
-                }}
-              >
-                확인
-              </button>
-            </div>
-          </label>
-        </div>
+          {/* 저장 및 회원 탈퇴 */}
+          <div className="actions">
+            <button onClick={handleSave}>저장</button>
+            <button 
+              className="delete-account" 
+              onClick={() => navigate('/secession')}
+            >
+              회원 탈퇴
+            </button>
+          </div>
 
-        {/* 비밀번호 재설정 */}
-        <div className="section">
-          <h3>비밀번호 재설정</h3>
-          <label>
-            현재 비밀번호
-            <div className="input-group">
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <button onClick={handlePasswordVerify}>확인</button>
-            </div>
-          </label>
-          {isPasswordValid && (
-            <>
-            {/*현재 비밀번호 입력 후 확인되어야 새 비밀번호 입력 로직이 뜸*/}
-              <label>
-                새 비밀번호
-                <div className="input-group">
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="8자 이상 입력해주세요"
-                  />
-                </div>
-              </label>
-              <label>
-                새 비밀번호 확인
-                <div className="input-group">
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="새 비밀번호를 다시 입력해주세요"
-                  />
-                  <button onClick={handleConfirmNewPassword}>확인</button>
-                </div>
-              </label>
-              {passwordError && <p style={{ color: 'red', fontSize: '14px' }}>{passwordError}</p>}
-            </>
-          )}
         </div>
 
-        {/* 저장 및 회원 탈퇴 */}
-        <div className="actions">
-          <button onClick={handleSave}>저장</button>
-          <button 
-            className="delete-account" 
-            onClick={() => navigate('/secession')}
-          >
-            회원 탈퇴
-          </button>
-        </div>
-
-        <div className="floating-buttons">
-          <button 
-            className="floating-button round"
-            onClick={() => handleZoom('in')}
-            title="화면 확대"
-          >
-            <FaSearch />
-            <span>확대</span>
-          </button>
-          <button 
-            className="floating-button round"
-            onClick={() => handleZoom('out')}
-            title="화면 축소"
-          >
-            <FaSearch />
-            <span>축소</span>
-          </button>
-          <button 
-            className="floating-button accessibility-button"
-            onClick={() => setIsModalOpen(true)}
-            title="접근성 기능 가이드"
-            style={{ backgroundColor: '#00ff00' }}
-          >
-            <FaUniversalAccess />
-            <span>접근성 기능 가이드라인</span>
-          </button>
-        </div>
-
+        <AccessibilityModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
-
-      <AccessibilityModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </div>
+    </Layout>
   );
 };
 

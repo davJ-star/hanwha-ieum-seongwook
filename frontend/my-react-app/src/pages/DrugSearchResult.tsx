@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './DrugSearchResult.css';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
+import Layout from '../components/Layout';
 
 function DrugSearchResult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,30 +32,7 @@ function DrugSearchResult() {
   };
 
   return (
-    <div>
-      {/* 상단 로고 및 회원관리 */}
-      <header className="logo-header">
-        <h3>MediLink</h3>
-        <div className="user-menu">
-          {isLoggedIn ? (
-            <>
-              <a onClick={() => navigate('/mypage')}>회원관리 | 마이페이지</a>
-              <button onClick={handleLogout}>로그아웃</button>
-            </>
-          ) : (
-            <a onClick={() => navigate('/login')}>로그인</a>
-          )}
-        </div>
-      </header>
-
-      {/* 단축키 안내 */}
-      <header className="navbar">
-        <a href="#search">① 정보 검색</a>
-        <a href="#medications">② 복용약 관리</a>
-        <a onClick={() => navigate('/FADsearch')}>③ 허위광고 판별</a>
-        <a onClick={() => setIsModalOpen(true)}>④ 로그인</a>
-      </header>
-
+    <Layout>
       {/* 검색 섹션 */}
       <div className="search-container">
         <h2>의약품 정보 검색하기</h2>
@@ -101,39 +79,11 @@ function DrugSearchResult() {
         </div>
       </div>
 
-      <div className="floating-buttons">
-        <button 
-          className="floating-button round"
-          onClick={() => handleZoom('in')}
-          title="화면 확대"
-        >
-          <FaSearch />
-          <span>확대</span>
-        </button>
-        <button 
-          className="floating-button round"
-          onClick={() => handleZoom('out')}
-          title="화면 축소"
-        >
-          <FaSearch />
-          <span>축소</span>
-        </button>
-        <button 
-          className="floating-button accessibility-button"
-          onClick={() => setIsModalOpen(true)}
-          title="접근성 기능 가이드"
-          style={{ backgroundColor: '#00ff00' }}
-        >
-          <FaUniversalAccess />
-          <span>접근성 기능 가이드라인</span>
-        </button>
-      </div>
-
       <AccessibilityModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-    </div>
+    </Layout>
   );
 }
 

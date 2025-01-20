@@ -9,6 +9,7 @@ import DrugSearchResult from './pages/DrugSearchResult';
 import Secession from './pages/Secession'; //빨간 표시 무시
 import FADsearch from './pages/FADsearch';
 import './assets/fonts/FontSet.css';
+import './styles/common.css';
 
 function App() {
   return (
