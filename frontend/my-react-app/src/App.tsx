@@ -8,6 +8,7 @@ import DiseaseSearchResult from './pages/DiseaseSearchResult';
 import DrugSearchResult from './pages/DrugSearchResult';
 import Secession from './pages/Secession'; //빨간 표시 무시
 import FADsearch from './pages/FADsearch';
+import Signup from './pages/signup';
 import './assets/fonts/FontSet.css';
 import './styles/common.css';
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
         <Route path="/secession" element={<Secession />} />
         <Route path="/FADsearch" element={<FADsearch />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );

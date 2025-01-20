@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import './Login.css';
 import AccessibilityModal from '../components/AccessibilityModal';
@@ -71,8 +71,8 @@ function Login() {
             카카오 로그인
           </button>
           <div className="additional-buttons">
-            <a href="/signup">회원가입</a>
-            <a href="/forgot-password">비밀번호 찾기</a>
+            <Link to="/signup">회원가입</Link>
+            <Link to="/forgot-password">비밀번호 찾기</Link>
           </div>
         </div>
       </div>
