@@ -90,7 +90,7 @@ const Mypage = () => {
                   onChange={(e) => setPhone(e.target.value)}
                   disabled={isPhoneVerified}
                 />
-                <button onClick={handlePhoneVerify}>인증</button>
+                <button onClick={handlePhoneVerify} style={{ color: '#000' }}>인증</button>
               </div>
               <div className="input-group">
                 <input
@@ -110,6 +110,7 @@ const Mypage = () => {
                       alert('인증번호가 일치하지 않습니다.');
                     }
                   }}
+                  style={{ color: '#000' }}
                 >
                   확인
                 </button>
@@ -124,7 +125,7 @@ const Mypage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isEmailVerified}
                 />
-                <button onClick={handleEmailVerify}>인증</button>
+                <button onClick={handleEmailVerify} style={{ color: '#000' }}>인증</button>
               </div>
               <div className="input-group">
                 <input
@@ -144,6 +145,7 @@ const Mypage = () => {
                       alert('인증번호가 일치하지 않습니다.');
                     }
                   }}
+                  style={{ color: '#000' }}
                 >
                   확인
                 </button>
@@ -162,7 +164,7 @@ const Mypage = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                 />
-                <button onClick={handlePasswordVerify}>확인</button>
+                <button onClick={handlePasswordVerify} style={{ color: '#000' }}>확인</button>
               </div>
             </label>
             {isPasswordValid && (
@@ -188,7 +190,7 @@ const Mypage = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="새 비밀번호를 다시 입력해주세요"
                     />
-                    <button onClick={handleConfirmNewPassword}>확인</button>
+                    <button onClick={handleConfirmNewPassword} style={{ color: '#000' }}>확인</button>
                   </div>
                 </label>
                 {passwordError && <p style={{ color: 'red', fontSize: '14px' }}>{passwordError}</p>}
@@ -198,10 +200,11 @@ const Mypage = () => {
 
           {/* 저장 및 회원 탈퇴 */}
           <div className="actions">
-            <button onClick={handleSave}>저장</button>
+            <button onClick={handleSave} style={{ color: '#000' }}>저장</button>
             <button 
               className="delete-account" 
               onClick={() => navigate('/secession')}
+              style={{ color: '#000' }}
             >
               회원 탈퇴
             </button>

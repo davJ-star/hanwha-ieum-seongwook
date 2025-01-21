@@ -7,7 +7,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div>
+    <>
       <header className="logo-header">
-        <h3 onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>MediLink</h3> {/* 홈 버튼 */}
+        <h3>MediLink</h3>
         <div className="user-menu">
           {isLoggedIn ? (
             <>
@@ -44,17 +44,15 @@ function Layout({ children }: LayoutProps) {
           )}
         </div>
       </header>
-
+      
       <header className="navbar">
-        <h3>단축키 안내</h3>
         <a href="#search">① 정보 검색</a>
         <a href="#medications">② 복용약 관리</a>
         <a onClick={() => navigate('/FADsearch')}>③ 허위광고 판별</a>
         <a onClick={() => navigate('/login')}>④ 로그인</a>
       </header>
 
-      {children}
-
+      <main>{children}</main>
       <div className="floating-buttons">
         <button 
           className="floating-button round"
@@ -82,13 +80,12 @@ function Layout({ children }: LayoutProps) {
           <span>접근성 기능 가이드라인</span>
         </button>
         <button 
-          className="floating-button fad-button"
+          className="floating-button fad-check-button"
           onClick={() => navigate('/FADsearch')}
-          title="의약품 허위광고 판별"
-          style={{ backgroundColor: '#ff4444' }}
+          title="허위광고 판별"
         >
           <FaExclamationTriangle />
-          <span>의약품 허위광고 판별 서비스</span>
+          <span>허위광고 판별</span>
         </button>
       </div>
 
@@ -96,8 +93,8 @@ function Layout({ children }: LayoutProps) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-    </div>
+    </>
   );
-}
+};
 
 export default Layout; 

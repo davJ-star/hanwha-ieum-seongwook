@@ -10,6 +10,7 @@ import Secession from './pages/Secession'; //빨간 표시 무시
 import FADsearch from './pages/FADsearch';
 import Signup from './pages/signup';
 import ForgotPassword from './pages/forgotpw';
+import WritePost from './pages/writepost';
 import './assets/fonts/FontSet.css';
 import './styles/common.css';
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/FADsearch" element={<FADsearch />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgotpw" element={<ForgotPassword />} />
+        <Route path="/writepost" element={<WritePost />} />
       </Routes>
     </Router>
   );
