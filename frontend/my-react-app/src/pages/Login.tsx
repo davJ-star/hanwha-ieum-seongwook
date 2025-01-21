@@ -72,7 +72,7 @@ function Login() {
           </button>
           <div className="additional-buttons">
             <Link to="/signup">회원가입</Link>
-            <Link to="/forgot-password">비밀번호 찾기</Link>
+            <Link to="/forgotpw">비밀번호 찾기</Link>
           </div>
         </div>
       </div>
