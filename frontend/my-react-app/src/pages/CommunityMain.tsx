@@ -39,6 +39,16 @@ const CommunityMain = () => {
 
           {/* 중앙 게시글 목록 */}
           <div className="post-list-container">
+            {/* 게시글 검색창 추가 */}
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="게시글 검색"
+                className="search-input"
+              />
+              <button className="search-button">검색</button>
+            </div>
+
             <div className="post-header">
               <h2>전체 게시글</h2>
               <button 
