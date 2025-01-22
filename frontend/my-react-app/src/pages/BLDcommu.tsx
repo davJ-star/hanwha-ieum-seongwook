@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './CommunityMain.css';
+import './commu.css';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout';
 
-const CommunityMain = () => {
+const BLDcommu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ const CommunityMain = () => {
             </div>
 
             <div className="post-header">
-              <h2>전체 게시글</h2>
+              <h2>뇌병변장애 게시판</h2>
               <button 
                 className="write-button" 
                 onClick={() => navigate('/writepost')} 
@@ -76,4 +76,4 @@ const CommunityMain = () => {
   );
 }
 
-export default CommunityMain;
+export default BLDcommu;

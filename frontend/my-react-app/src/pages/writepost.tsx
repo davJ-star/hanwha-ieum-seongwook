@@ -57,14 +57,14 @@ const WritePost = () => {
         {/* 좌측 게시판 목록 */}
         <div className="board-list">
           <h3>게시판 목록</h3>
-          <button onClick={() => navigate('/physical-disability-community')}>지체장애 게시판</button>
-          <button onClick={() => navigate('/brain-lesion-disorder-community')}>뇌병변장애 게시판</button>
-          <button onClick={() => navigate('/visual-impairment-community')}>시각장애 게시판</button>
-          <button onClick={() => navigate('/hearing-impairment-community')}>청각장애 게시판</button>
-          <button onClick={() => navigate('/speech-impediment-community')}>언어장애 게시판</button>
-          <button onClick={() => navigate('/facial-disorder-community')}>안면장애 게시판</button>
-          <button onClick={() => navigate('/internal-organ-disorder-community')}>내부기관장애 게시판</button>
-          <button onClick={() => navigate('/mental-disability-community')}>정신적장애 게시판</button>
+          <button onClick={() => navigate('/PDCcommu')}>지체장애 게시판</button>
+          <button onClick={() => navigate('/BLDcommu')}>뇌병변장애 게시판</button>
+          <button onClick={() => navigate('/VIcommu')}>시각장애 게시판</button>
+          <button onClick={() => navigate('/HIcommu')}>청각장애 게시판</button>
+          <button onClick={() => navigate('/SIcommu')}>언어장애 게시판</button>
+          <button onClick={() => navigate('/FDcommu')}>안면장애 게시판</button>
+          <button onClick={() => navigate('/IODcommu')}>내부기관장애 게시판</button>
+          <button onClick={() => navigate('/MDcommu')}>정신적장애 게시판</button>
         </div>
 
         {/* 우측 글쓰기 영역 */}

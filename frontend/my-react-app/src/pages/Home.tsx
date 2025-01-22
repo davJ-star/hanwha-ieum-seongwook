@@ -62,8 +62,8 @@ function Home() {
         <h2>커뮤니티 바로가기</h2>
         <p style={{ textAlign: 'center', color: '#666666' }}>같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !</p>
         <button onClick={() => navigate('/community-main')}>커뮤니티 메인 바로가기</button>
-        <button onClick={() => navigate('/physical-disability-community')}>지체장애 커뮤니티 바로가기</button>
-        <button onClick={() => navigate('/brain-lesion-disorder-community')}>뇌병변장애 커뮤니티 바로가기</button>
+        <button onClick={() => navigate('/PDCcommu')}>지체장애 커뮤니티 바로가기</button>
+        <button onClick={() => navigate('/BLDcommu')}>뇌병변장애 커뮤니티 바로가기</button>
         <button onClick={() => navigate('/visual-impairment-community')}>시각장애 커뮤니티 바로가기</button>
         <button onClick={() => navigate('/hearing-impairment-community')}>청각장애 커뮤니티 바로가기</button>
         <button onClick={() => navigate('/speech-impediment-community')}>언어장애 커뮤니티 바로가기</button>
