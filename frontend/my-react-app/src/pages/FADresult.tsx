@@ -3,11 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import './FADresult.css';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
+import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandle'; //점자 클릭 핸들러 호출
 import Layout from '../components/Layout';
 import { MdCheckCircle, MdError } from "react-icons/md";
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import SignLanguageIcon from '@mui/icons-material/SignLanguage';
+import { FaBraille } from 'react-icons/fa';
 
 function FADresult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showBrailleOptions, setShowBrailleOptions] = useState(false);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,6 +35,19 @@ function FADresult() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBrailleOptionsClick = () => {
+    setShowBrailleOptions(!showBrailleOptions);
+  };
+
+  const handleBrailleOptionSelect = (option: string) => {
+    if (option === 'convert') {
+      handleBrailleClick();
+    } else if (option === 'revert') {
+      handleBrailleRevert();
+    }
+    setShowBrailleOptions(false);
   };
 
   return (
@@ -58,7 +76,26 @@ function FADresult() {
 
       {/* 검색 결과 섹션 */}
       <div className="search-results">
-        <h2>의약품 허위광고 판별 결과</h2>
+        <div className="result-header">
+          <h2>의약품 허위광고 판별 결과</h2>
+          <div className="accessibility-icons">
+            <VolumeUpIcon className="icon" />
+            <SignLanguageIcon className="icon" />
+            <div className="braille-dropdown">
+              <FaBraille className="icon" onClick={handleBrailleOptionsClick} />
+              {showBrailleOptions && (
+                <div className="braille-options">
+                  <button onClick={() => handleBrailleOptionSelect('convert')}>
+                    점자로 변환
+                  </button>
+                  <button onClick={() => handleBrailleOptionSelect('revert')}>
+                    점자 역변환
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         <p style={{ textAlign: 'center', color: '#666666' }}>건강기능식품, 의약품 인증 및 허가 여부를 통해 제품의 효능을 검증할 수 있어요.</p>
         <div className="results-container">
           <div className="result-item">

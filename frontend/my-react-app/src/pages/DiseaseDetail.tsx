@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DiseaseDetail.css';
-import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandle';
+import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa'; // 점자 해설
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp'; //음성 해설
+import SignLanguageIcon from '@mui/icons-material/SignLanguage'; // 수어 해설
 
 function DiseaseDetail() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showBrailleOptions, setShowBrailleOptions] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,6 +33,15 @@ function DiseaseDetail() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBrailleOptionSelect = (option: string) => {
+    if (option === 'convert') {
+      handleBrailleClick();
+    } else if (option === 'revert') {
+      handleBrailleRevert();
+    }
+    setShowBrailleOptions(false);
   };
 
   return (
@@ -63,7 +76,14 @@ function DiseaseDetail() {
 
       {/* 검색 결과 섹션 */}
       <div className="search-results">
-        <h2>검색 결과</h2>
+        <div className="result-header">
+          <h2>검색 결과</h2>
+          <div className="accessibility-icons">
+            <VolumeUpIcon className="icon" />
+            <SignLanguageIcon className="icon" />
+            <FaBraille className="icon" onClick={handleBrailleClick}/>
+          </div>
+        </div>
         <div className="results-container">
           <div className="result-item">
             <h2>질병명: 감기</h2>
