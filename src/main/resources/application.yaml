@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: hanhwa_ieum
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ieum.hanwha@gmail.com
+    password: jspu psum qmmv pnyx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hanwha?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
+    password: 8233
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        type:
+          descriptor:
+            sql: trace
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mvc:
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - file:./uploads/
+
+  jwt:
+    secret: 7ZWc7ZmU7J6l7JWg7J247LC97JeF6rO166qo7KCE7J207J2MFDad2dKOK1dll010SlF11ddDk1d
+
+  config:
+    upload:
+      dir: uploads
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <!-- 알림 메시지 -->
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        [[${message}]]
+    </div>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        [[${error}]]
+    </div>
+
+    <!-- 게시글 내용 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <span class="badge bg-primary" th:text="${post.category.value}"></span>
+                    <span class="badge bg-secondary" th:text="${post.disabilityType.value}"></span>
+                    [[${post.title}]]
+                </h4>
+                <small th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+            </div>
+            <div class="small text-muted mt-2">
+                작성자: [[${post.authorName}]]
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text" style="white-space: pre-line;">[[${post.content}]]</p>
+        </div>
+
+        <!-- 수정/삭제 버튼 (작성자만 보임) -->
+        <div class="card-footer" th:if="${#authentication.name == post.authorName}">
+            <div class="d-flex justify-content-end">
+                <a th:href="@{/community/post/{id}/edit(id=${post.id})}"
+                   class="btn btn-warning me-2">수정</a>
+                <form th:action="@{/community/post/{id}/delete(id=${post.id})}"
+                      method="post" style="display: inline-block;"
+                      onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 댓글 목록 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">댓글 ([[${#lists.size(post.comments)}]])</h5>
+        </div>
+        <div class="list-group list-group-flush">
+            <div th:each="comment : ${post.comments}" class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>[[${comment.authorName}]]</strong>
+                        <small class="text-muted ms-2"
+                               th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">
+                        </small>
+                    </div>
+                    <!-- 댓글 삭제 버튼 (작성자만 보임) -->
+                    <form th:if="${#authentication.name == comment.authorName}"
+                          th:action="@{/community/post/{postId}/comment/{commentId}/delete(postId=${post.id},commentId=${comment.id})}"
+                          method="post" style="display: inline-block;"
+                          onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+                        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                    </form>
+                </div>
+                <p class="mb-0 mt-2">[[${comment.content}]]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 댓글 작성 폼 -->
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/community/post/{id}/comment(id=${post.id})}" method="post">
+                <div class="mb-3">
+                       <textarea class="form-control" name="content" rows="3"
+                                 required placeholder="댓글을 입력하세요"></textarea>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">댓글 작성</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 목록으로 버튼 -->
+    <div class="text-center mt-4">
+        <a href="/community" class="btn btn-secondary">목록으로</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
