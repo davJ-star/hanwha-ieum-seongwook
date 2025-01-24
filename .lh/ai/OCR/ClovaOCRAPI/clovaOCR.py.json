@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1737078333194,
@@ -32,6 +32,10 @@
                 {
                     "date": 1737082943121,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n }\r\n \r\n payload = {'message': json.dumps(request_json).encode('UTF-8')}\r\n files = [\r\n-    ('file', open(image_file, 'rb'))\r\n+    ('file', open(image_path, 'rb'))\r\n ]\r\n headers = {\r\n     'X-OCR-SECRET': secret_key\r\n }\r\n"
+                },
+                {
+                    "date": 1737727499520,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,8 +10,9 @@\n \r\n # API 설정\r\n api_url = os.getenv('CLOVA_OCR_API_URL')\r\n secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY').strip('\"')\r\n+## 태우가 ocr 적용할 이미지 주소 또는 프론트로부터 받은 이미지에 해당한다.(백엔드에 해당 이미지를 저장하거나 다른 방법이 있다면 해당 사진이 된다.)\r\n image_path = 'C:\\\\Users\\\\82106\\\\develop\\\\hanwha-ieum\\\\ai\\\\img\\\\test.jpg'\r\n \r\n # API 요청 준비\r\n request_json = {\r\n@@ -42,8 +43,9 @@\n with open('result.json', 'w', encoding='utf-8') as make_file:\r\n     json.dump(result, make_file, indent=\"\\t\", ensure_ascii=False)\r\n \r\n # 텍스트 추출\r\n+## 해당 추출된 포맷을 어떻게 활용할지 백엔드랑 논의가 필요하다.\r\n text = \"\"\r\n for field in result['images'][0]['fields']:\r\n     text += field['inferText'] + \" \"\r\n \r\n"
                 }
             ],
             "date": 1737078333194,

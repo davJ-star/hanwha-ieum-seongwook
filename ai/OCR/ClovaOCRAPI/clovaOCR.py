@@ -11,6 +11,7 @@ load_dotenv()
 # API 설정
 api_url = os.getenv('CLOVA_OCR_API_URL')
 secret_key = os.getenv('CLOVA_OCR_API_SECRET_KEY').strip('"')
+## 태우가 ocr 적용할 이미지 주소 또는 프론트로부터 받은 이미지에 해당한다.(백엔드에 해당 이미지를 저장하거나 다른 방법이 있다면 해당 사진이 된다.)
 image_path = 'C:\\Users\\82106\\develop\\hanwha-ieum\\ai\\img\\test.jpg'
 
 # API 요청 준비
@@ -43,6 +44,7 @@ with open('result.json', 'w', encoding='utf-8') as make_file:
     json.dump(result, make_file, indent="\t", ensure_ascii=False)
 
 # 텍스트 추출
+## 해당 추출된 포맷을 어떻게 활용할지 백엔드랑 논의가 필요하다.
 text = ""
 for field in result['images'][0]['fields']:
     text += field['inferText'] + " "
