@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DiseaseDetail.css';
-import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandle';
+import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout';

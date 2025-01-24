@@ -1,5 +1,5 @@
-import { HanBraille } from "../components/hanbraille";
-import { Braille } from "../components/braille";
+import { HanBraille } from "./hanbraille";
+import { Braille } from "./braille";
 
 export const handleBrailleClick = () => {
   const text = prompt("점자로 변환할 텍스트를 입력하세요:");
