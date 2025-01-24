@@ -1,7 +1,6 @@
-/*Counter.tsx: 카운터 컴포넌트*/
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from './utils/store';
+import { RootState } from './store';
 import { increment, decrement, incrementByAmount } from './features/counterSlice';
 
 const Counter = () => {
@@ -9,12 +8,29 @@ const Counter = () => {
   const dispatch = useDispatch();
 
   return (
-    <div>
-      <h1>Counter: {count}</h1>
-      <button onClick={() => dispatch(increment())}>Increment</button>
-      <button onClick={() => dispatch(decrement())}>Decrement</button>
-      <button onClick={() => dispatch(incrementByAmount(5))}>Increment by 5</button>
-    </div>
+    <section aria-label="카운터 섹션">
+      <h1 id="counter-title">Counter: {count}</h1>
+      <div role="group" aria-labelledby="counter-title">
+        <button 
+          onClick={() => dispatch(increment())}
+          aria-label="1 증가"
+        >
+          Increment
+        </button>
+        <button 
+          onClick={() => dispatch(decrement())}
+          aria-label="1 감소"
+        >
+          Decrement
+        </button>
+        <button 
+          onClick={() => dispatch(incrementByAmount(5))}
+          aria-label="5만큼 증가"
+        >
+          Increment by 5
+        </button>
+      </div>
+    </section>
   );
 };
 

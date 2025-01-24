@@ -10,7 +10,9 @@ import { store } from './store';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <div role="application" aria-label="리액트 애플리케이션 루트">
+        <App />
+      </div>
     </Provider>
   </React.StrictMode>
 );
