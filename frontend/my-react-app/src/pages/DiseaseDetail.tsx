@@ -44,6 +44,10 @@ function DiseaseDetail() {
     setShowBrailleOptions(false);
   };
 
+  const handleBrailleOptionsClick = () => {
+    setShowBrailleOptions(!showBrailleOptions);
+  };
+
   return (
     <Layout>
       {/* 검색 섹션 */}
@@ -81,7 +85,19 @@ function DiseaseDetail() {
           <div className="accessibility-icons">
             <VolumeUpIcon className="icon" />
             <SignLanguageIcon className="icon" />
-            <FaBraille className="icon" onClick={handleBrailleClick}/>
+            <div className="braille-dropdown">
+              <FaBraille className="icon" onClick={handleBrailleOptionsClick} />
+              {showBrailleOptions && (
+                <div className="braille-options">
+                  <button onClick={() => handleBrailleOptionSelect('convert')}>
+                    점자로 변환
+                  </button>
+                  <button onClick={() => handleBrailleOptionSelect('revert')}>
+                    점자 역변환
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="results-container">
