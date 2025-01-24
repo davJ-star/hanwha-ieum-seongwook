@@ -16,13 +16,13 @@ const ForgotPassword = () => {
 
   return (
     <Layout>
-      <div className="forgot-password-wrapper">
+      <main className="forgot-password-wrapper" role="main">
         <div className="forgot-password-container">
-          <h1>비밀번호 찾기</h1>
+          <h1 id="pageTitle">비밀번호 찾기</h1>
           <div className="forgot-password-form">
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">이름</label>
+            <form onSubmit={handleSubmit} aria-labelledby="pageTitle">
+              <div className="form-group" role="group" aria-labelledby="nameLabel">
+                <label id="nameLabel" htmlFor="name">이름</label>
                 <input
                   type="text"
                   id="name"
@@ -30,10 +30,11 @@ const ForgotPassword = () => {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="이름을 입력하세요"
                   required
+                  aria-required="true"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="email">이메일</label>
+              <div className="form-group" role="group" aria-labelledby="emailLabel">
+                <label id="emailLabel" htmlFor="email">이메일</label>
                 <input
                   type="email"
                   id="email"
@@ -41,16 +42,17 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="가입시 등록한 이메일을 입력하세요"
                   required
+                  aria-required="true"
                 />
               </div>
-              <button type="submit" className="submit-button">
+              <button type="submit" className="submit-button" aria-label="비밀번호 찾기 요청하기">
                 비밀번호 찾기
               </button>
             </form>
-            {message && <p className="message">{message}</p>}
+            {message && <p className="message" role="alert" aria-live="polite">{message}</p>}
           </div>
         </div>
-      </div>
+      </main>
     </Layout>
   );
 };

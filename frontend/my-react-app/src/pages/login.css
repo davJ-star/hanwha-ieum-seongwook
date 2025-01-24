@@ -30,7 +30,8 @@
 
 .login-wrapper form {
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center ;
@@ -39,13 +40,11 @@
 .login-wrapper input[type="text"],
 .login-wrapper input[type="password"] {
   width: 100%;
-  max-width: 320px;
   padding: 10px;
-  margin: 10px 0;
-  background-color: #ffffff;
-  border: 2px solid #000000;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  color: #000000;
+  box-sizing: border-box;
 }
 
 .login-wrapper input[type="submit"] {

@@ -7,6 +7,7 @@ import Layout from '../components/Layout';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
+import { speakPageContent } from '../utils/accessibilityHandleTTS';
 
 function DrugSearchResult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,6 +49,13 @@ function DrugSearchResult() {
     setShowBrailleOptions(!showBrailleOptions);
   };
 
+  const handleTTSClick = () => {
+    const container = document.querySelector('.search-results');
+    if (container instanceof HTMLElement) {
+      speakPageContent(container);
+    }
+  };
+
   return (
     <Layout>
       {/* 검색 섹션 */}
@@ -83,7 +91,11 @@ function DrugSearchResult() {
         <div className="result-header">
           <h2>검색 결과</h2>
           <div className="accessibility-icons">
-            <VolumeUpIcon className="icon" />
+            <VolumeUpIcon 
+              className="icon" 
+              onClick={handleTTSClick}
+              style={{ cursor: 'pointer' }}
+            />
             <SignLanguageIcon className="icon" />
             <div className="braille-dropdown">
               <FaBraille className="icon" onClick={handleBrailleOptionsClick} />

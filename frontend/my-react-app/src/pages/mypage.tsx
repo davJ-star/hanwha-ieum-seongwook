@@ -69,147 +69,161 @@ const Mypage = () => {
 
   return (
     <Layout>
-      <div>
+      <div role="main">
         <div className="mypage-wrapper">
-          <h2>회원정보 수정</h2>
+          <h2 id="pageTitle">회원정보 수정</h2>
           <p>전화번호와 이메일 주소를 수정하거나 비밀번호를 재설정할 수 있어요.</p>
 
-          {/* 개인정보 수정 */}
-          <div className="section">
-            <h3>개인정보 수정</h3>
-            <label>
-              이름
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </label>
-            <label>
-              전화번호
-              <div className="input-group">
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={isPhoneVerified}
+          <section className="section" aria-labelledby="personalInfoTitle">
+            <h3 id="personalInfoTitle">개인정보 수정</h3>
+            <div role="form">
+              <label id="nameLabel">
+                이름
+                <input 
+                  type="text" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                  aria-labelledby="nameLabel"
+                  style={{ color: '#000000' }}
                 />
-                <button onClick={handlePhoneVerify} style={{ color: '#000' }}>인증</button>
-              </div>
-              <div className="input-group">
-                <input
-                  type="text"
-                  placeholder="인증번호 입력"
-                  value={phoneCode}
-                  onChange={(e) => setPhoneCode(e.target.value)}
-                  disabled={isPhoneVerified}
-                />
-                <button
-                  onClick={() => {
-                    // 인증 로직 추가
-                    if (phoneCode === '123456') {
-                      setIsPhoneVerified(true);
-                      alert('전화번호 인증이 완료되었습니다.');
-                    } else {
-                      alert('인증번호가 일치하지 않습니다.');
-                    }
-                  }}
-                  style={{ color: '#000' }}
-                >
-                  확인
-                </button>
-              </div>
-            </label>
-            <label>
-              이메일
-              <div className="input-group">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isEmailVerified}
-                />
-                <button onClick={handleEmailVerify} style={{ color: '#000' }}>인증</button>
-              </div>
-              <div className="input-group">
-                <input
-                  type="text"
-                  placeholder="인증번호 입력"
-                  value={emailCode}
-                  onChange={(e) => setEmailCode(e.target.value)}
-                  disabled={isEmailVerified}
-                />
-                <button
-                  onClick={() => {
-                    // 인증 로직 추가
-                    if (emailCode === '654321') {
-                      setIsEmailVerified(true);
-                      alert('이메일 인증이 완료되었습니다.');
-                    } else {
-                      alert('인증번호가 일치하지 않습니다.');
-                    }
-                  }}
-                  style={{ color: '#000' }}
-                >
-                  확인
-                </button>
-              </div>
-            </label>
-          </div>
+              </label>
+              <label id="phoneLabel">
+                전화번호
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={isPhoneVerified}
+                    aria-labelledby="phoneLabel"
+                  />
+                  <button onClick={handlePhoneVerify} aria-label="전화번호 인증하기">인증</button>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    placeholder="인증번호 입력"
+                    value={phoneCode}
+                    onChange={(e) => setPhoneCode(e.target.value)}
+                    disabled={isPhoneVerified}
+                    aria-label="전화번호 인증번호 입력"
+                  />
+                  <button
+                    onClick={() => {
+                      // 인증 로직 추가
+                      if (phoneCode === '123456') {
+                        setIsPhoneVerified(true);
+                        alert('전화번호 인증이 완료되었습니다.');
+                      } else {
+                        alert('인증번호가 일치하지 않습니다.');
+                      }
+                    }}
+                    style={{ color: '#000' }}
+                    aria-label="인증번호 확인"
+                  >
+                    확인
+                  </button>
+                </div>
+              </label>
+              <label id="emailLabel">
+                이메일
+                <div className="input-group">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isEmailVerified}
+                    aria-labelledby="emailLabel"
+                  />
+                  <button onClick={handleEmailVerify} aria-label="이메일 인증하기">인증</button>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    placeholder="인증번호 입력"
+                    value={emailCode}
+                    onChange={(e) => setEmailCode(e.target.value)}
+                    disabled={isEmailVerified}
+                    aria-label="이메일 인증번호 입력"
+                  />
+                  <button
+                    onClick={() => {
+                      // 인증 로직 추가
+                      if (emailCode === '654321') {
+                        setIsEmailVerified(true);
+                        alert('이메일 인증이 완료되었습니다.');
+                      } else {
+                        alert('인증번호가 일치하지 않습니다.');
+                      }
+                    }}
+                    style={{ color: '#000' }}
+                    aria-label="인증번호 확인"
+                  >
+                    확인
+                  </button>
+                </div>
+              </label>
+            </div>
+          </section>
 
-          {/* 비밀번호 재설정 */}
-          <div className="section">
-            <h3>비밀번호 재설정</h3>
-            <label>
-              현재 비밀번호
-              <div className="input-group">
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <button onClick={handlePasswordVerify} style={{ color: '#000' }}>확인</button>
-              </div>
-            </label>
-            {isPasswordValid && (
-              <>
-              {/*현재 비밀번호 입력 후 확인되어야 새 비밀번호 입력 로직이 뜸*/}
-                <label>
-                  새 비밀번호
-                  <div className="input-group">
-                    <input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="8자 이상 입력해주세요"
-                    />
-                  </div>
-                </label>
-                <label>
-                  새 비밀번호 확인
-                  <div className="input-group">
-                    <input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="새 비밀번호를 다시 입력해주세요"
-                    />
-                    <button onClick={handleConfirmNewPassword} style={{ color: '#000' }}>확인</button>
-                  </div>
-                </label>
-                {passwordError && <p style={{ color: 'red', fontSize: '14px' }}>{passwordError}</p>}
-              </>
-            )}
-          </div>
+          <section className="section" aria-labelledby="passwordTitle">
+            <h3 id="passwordTitle">비밀번호 재설정</h3>
+            <div role="form">
+              <label id="currentPwLabel">
+                현재 비밀번호
+                <div className="input-group">
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    aria-labelledby="currentPwLabel"
+                  />
+                  <button onClick={handlePasswordVerify} aria-label="현재 비밀번호 확인">확인</button>
+                </div>
+              </label>
+              {isPasswordValid && (
+                <>
+                  <label id="newPwLabel">
+                    새 비밀번호
+                    <div className="input-group">
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="8자 이상 입력해주세요"
+                        aria-labelledby="newPwLabel"
+                      />
+                    </div>
+                  </label>
+                  <label id="confirmPwLabel">
+                    새 비밀번호 확인
+                    <div className="input-group">
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="새 비밀번호를 다시 입력해주세요"
+                        aria-labelledby="confirmPwLabel"
+                      />
+                      <button onClick={handleConfirmNewPassword} aria-label="새 비밀번호 확인">확인</button>
+                    </div>
+                  </label>
+                  {passwordError && <p role="alert" aria-live="polite">{passwordError}</p>}
+                </>
+              )}
+            </div>
+          </section>
 
-          {/* 저장 및 회원 탈퇴 */}
-          <div className="actions">
-            <button onClick={handleSave} style={{ color: '#000' }}>저장</button>
+          <div className="actions" role="group" aria-label="회원 정보 관리">
+            <button onClick={handleSave} aria-label="변경사항 저장">저장</button>
             <button 
               className="delete-account" 
               onClick={() => navigate('/secession')}
-              style={{ color: '#000' }}
+              aria-label="회원 탈퇴 페이지로 이동"
             >
               회원 탈퇴
             </button>
           </div>
-
         </div>
 
         <AccessibilityModal 

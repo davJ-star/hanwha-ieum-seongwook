@@ -39,7 +39,7 @@ function Login() {
 
   return (
     <Layout>
-      <div className="login-container">
+      <div className="login-container" role="main">
         <div className="login-wrapper">
           <div className="login-header">
             <h3>환영합니다!</h3>
@@ -54,6 +54,7 @@ function Login() {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               required
+              aria-required="true"
             />
             <h3>비밀번호를 입력해주세요.</h3>
             <input
@@ -63,11 +64,15 @@ function Login() {
               value={userPassword}
               onChange={(e) => setUserPassword(e.target.value)}
               required
+              aria-required="true"
             />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p role="alert">{error}</p>}
             <input type="submit" value="로그인" />
           </form>
-          <button className="kakao-login-btn" onClick={() => alert('카카오 로그인 시도')}>
+          <button 
+            className="kakao-login-btn" 
+            onClick={() => alert('카카오 로그인 시도')}
+          >
             카카오 로그인
           </button>
           <div className="additional-buttons">

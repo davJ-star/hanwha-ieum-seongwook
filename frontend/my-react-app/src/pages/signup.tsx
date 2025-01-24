@@ -33,49 +33,75 @@ const Signup = () => {
 
   return (
     <Layout>
-      <div className="signup-page">
+      <div className="signup-page" role="main">
         <div className="signup-container">
-          <h2>회원가입</h2>
-          <h4>이메일</h4>
-          <div className="input-group">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="이메일 주소"
-            />
-            <button onClick={handleSendCode}>
-              인증코드 받기
+          <h2 id="signupTitle">회원가입</h2>
+          <form role="form" aria-labelledby="signupTitle">
+            <div role="group" aria-labelledby="emailTitle">
+              <h4 id="emailTitle">이메일</h4>
+              <div className="input-group">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="이메일 주소"
+                  aria-required="true"
+                  aria-label="이메일 주소 입력"
+                />
+                <button 
+                  onClick={handleSendCode}
+                  type="button"
+                  aria-label="인증코드 받기"
+                >
+                  인증코드 받기
+                </button>
+              </div>
+            </div>
+
+            <div role="group" aria-labelledby="verificationTitle">
+              <h4 id="verificationTitle">인증코드</h4>
+              <div className="input-group">
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  placeholder="인증코드 입력"
+                  aria-required="true"
+                  aria-label="인증코드 입력"
+                />
+                <button 
+                  onClick={handleVerifyCode}
+                  type="button"
+                  aria-label="인증코드 확인"
+                >
+                  확인
+                </button>
+              </div>
+            </div>
+
+            <div role="group" aria-labelledby="passwordTitle">
+              <h4 id="passwordTitle">비밀번호</h4>
+              <div className="input-group">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  aria-required="true"
+                  aria-label="비밀번호 입력"
+                />
+              </div>
+            </div>
+            
+            <button 
+              className="signup-button"
+              onClick={handleSignup}
+              type="submit"
+              aria-label="가입하기"
+            >
+              가입하기
             </button>
-          </div>
-          <h4>인증코드</h4>
-          <div className="input-group">
-            <input
-              type="text"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder="인증코드 입력"
-            />
-            <button onClick={handleVerifyCode}>
-              확인
-            </button>
-          </div>
-          <h4>비밀번호</h4>
-          <div className="input-group">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호"
-            />
-          </div>
-          
-          <button 
-            className="signup-button"
-            onClick={handleSignup}
-          >
-            가입하기
-          </button>
+          </form>
         </div>
       </div>
     </Layout>

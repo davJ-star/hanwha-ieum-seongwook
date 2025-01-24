@@ -22,56 +22,58 @@ const CommunityMain = () => {
 
   return (
     <Layout>
-      <div className="community-page">
+      <main className="community-page" role="main">
         <div className="community-content">
           {/* 좌측 게시판 목록 */}
-          <div className="board-list">
-            <h3>게시판 목록</h3>
-            <button onClick={() => navigate('/PDCcommu')}>지체장애 게시판</button>
-            <button onClick={() => navigate('/BLDcommu')}>뇌병변장애 게시판</button>
-            <button onClick={() => navigate('/VIcommu')}>시각장애 게시판</button>
-            <button onClick={() => navigate('/HIcommu')}>청각장애 게시판</button>
-            <button onClick={() => navigate('/SIcommu')}>언어장애 게시판</button>
-            <button onClick={() => navigate('/FDcommu')}>안면장애 게시판</button>
-            <button onClick={() => navigate('/IODcommu')}>내부기관장애 게시판</button>
-            <button onClick={() => navigate('/MDcommu')}>정신적장애 게시판</button>
-          </div>
+          <nav className="board-list" role="navigation" aria-label="게시판 메뉴">
+            <h3 id="boardListTitle">게시판 목록</h3>
+            <button aria-label="지체장애 게시판으로 이동" onClick={() => navigate('/PDCcommu')}>지체장애 게시판</button>
+            <button aria-label="뇌병변장애 게시판으로 이동" onClick={() => navigate('/BLDcommu')}>뇌병변장애 게시판</button>
+            <button aria-label="시각장애 게시판으로 이동" onClick={() => navigate('/VIcommu')}>시각장애 게시판</button>
+            <button aria-label="청각장애 게시판으로 이동" onClick={() => navigate('/HIcommu')}>청각장애 게시판</button>
+            <button aria-label="언어장애 게시판으로 이동" onClick={() => navigate('/SIcommu')}>언어장애 게시판</button>
+            <button aria-label="안면장애 게시판으로 이동" onClick={() => navigate('/FDcommu')}>안면장애 게시판</button>
+            <button aria-label="내부기관장애 게시판으로 이동" onClick={() => navigate('/IODcommu')}>내부기관장애 게시판</button>
+            <button aria-label="정신적장애 게시판으로 이동" onClick={() => navigate('/MDcommu')}>정신적장애 게시판</button>
+          </nav>
 
           {/* 중앙 게시글 목록 */}
-          <div className="post-list-container">
+          <section className="post-list-container" aria-labelledby="postListTitle">
             {/* 게시글 검색창 추가 */}
-            <div className="search-bar">
+            <div className="search-bar" role="search">
               <input
                 type="text"
                 placeholder="게시글 검색"
                 className="search-input"
+                aria-label="게시글 검색"
               />
-              <button className="search-button">검색</button>
+              <button className="search-button" aria-label="검색하기">검색</button>
             </div>
 
-            <div className="post-header">
-              <h2>전체 게시글</h2>
+            <header className="post-header">
+              <h2 id="postListTitle">전체 게시글</h2>
               <button 
                 className="write-button" 
                 onClick={() => navigate('/writepost')} 
                 style={{ color: '#000000' }}
+                aria-label="새 게시글 작성하기"
               >
                 글쓰기
               </button>
-            </div>
+            </header>
             
             {/* 임시 게시글 목록 */}
-            <div className="post-list">
-              <div className="post-item">
+            <article className="post-list">
+              <div className="post-item" role="article">
                 <h4>게시글 제목 예시</h4>
                 <p>작성자: 홍길동</p>
                 <p>작성일: 2024-03-21</p>
               </div>
               {/* 추가 게시글들... */}
-            </div>
-          </div>
+            </article>
+          </section>
         </div>
-      </div>
+      </main>
     </Layout>
   );
 }

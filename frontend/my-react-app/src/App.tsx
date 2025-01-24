@@ -28,30 +28,34 @@ import './styles/common.css'; // 공통 스타일 설정
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/mypage" element={<Mypage />} /> {/* 회원관리 페이지 */}
-        <Route path="/community-main" element={<CommunityMain />} />
-        <Route path="/PDCcommu" element={<PDCcommu />} />
-        <Route path="/BLDcommu" element={<BLDcommu />} />
-        <Route path="/VIcommu" element={<VIcommu />} />
-        <Route path="/HIcommu" element={<HIcommu />} />
-        <Route path="/SIcommu" element={<SIcommu />} />
-        <Route path="/FDcommu" element={<FDcommu />} />
-        <Route path="/IODcommu" element={<IODcommu />} />
-        <Route path="/MDcommu" element={<MDcommu />} />
-        <Route path="/DiseaseSearchResult" element={<DiseaseSearchResult />} />
-        <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
-        <Route path="/DiseaseDetail" element={<DiseaseDetail />} />
-        <Route path="/DrugDetail" element={<DrugDetail />} />
-        <Route path="/secession" element={<Secession />} />
-        <Route path="/FADsearch" element={<FADsearch />} />
-        <Route path="/FADresult" element={<FADresult />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgotpw" element={<ForgotPassword />} />
-        <Route path="/writepost" element={<WritePost />} />
-      </Routes>
+      <div role="application" aria-label="메인 애플리케이션">
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/mypage" element={<Mypage />} /> {/* 회원관리 페이지 */}
+            <Route path="/community-main" element={<CommunityMain />} />
+            <Route path="/PDCcommu" element={<PDCcommu />} />
+            <Route path="/BLDcommu" element={<BLDcommu />} />
+            <Route path="/VIcommu" element={<VIcommu />} />
+            <Route path="/HIcommu" element={<HIcommu />} />
+            <Route path="/SIcommu" element={<SIcommu />} />
+            <Route path="/FDcommu" element={<FDcommu />} />
+            <Route path="/IODcommu" element={<IODcommu />} />
+            <Route path="/MDcommu" element={<MDcommu />} />
+            <Route path="/DiseaseSearchResult" element={<DiseaseSearchResult />} />
+            <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
+            <Route path="/DiseaseDetail" element={<DiseaseDetail />} />
+            <Route path="/DrugDetail" element={<DrugDetail />} />
+            <Route path="/secession" element={<Secession />} />
+            <Route path="/FADsearch" element={<FADsearch />} />
+            <Route path="/FADresult" element={<FADresult />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgotpw" element={<ForgotPassword />} />
+            <Route path="/writepost" element={<WritePost />} />
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
