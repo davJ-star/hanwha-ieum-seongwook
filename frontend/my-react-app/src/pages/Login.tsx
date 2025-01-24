@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import './Login.css';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 
 function Login() {
   const [userName, setUserName] = useState('');

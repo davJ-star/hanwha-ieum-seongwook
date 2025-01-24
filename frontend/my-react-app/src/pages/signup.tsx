@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './signup.css'; // 스타일 파일 추가
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 
 const Signup = () => {
   const [email, setEmail] = useState('');

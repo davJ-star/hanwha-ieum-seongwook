@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 import './FADsearch.css';
 
 const FADsearch = () => {

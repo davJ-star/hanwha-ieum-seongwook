@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import { FaArrowUp, FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 
 function Home() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './forgotpw.css';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {

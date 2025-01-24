@@ -4,7 +4,7 @@ import './DiseaseDetail.css';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa'; // 점자 해설
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'; //음성 해설
 import SignLanguageIcon from '@mui/icons-material/SignLanguage'; // 수어 해설
 import { speakPageContent } from '../utils/accessibilityHandleTTS';

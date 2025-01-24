@@ -4,7 +4,7 @@ import './FADresult.css';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille'; //점자 클릭 핸들러 호출
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 import { MdCheckCircle, MdError } from "react-icons/md";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';

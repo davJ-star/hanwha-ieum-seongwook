@@ -4,7 +4,7 @@ import './DiseaseDetail.css';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { speakPageContent } from '../utils/accessibilityHandleTTS';

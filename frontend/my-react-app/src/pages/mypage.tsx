@@ -4,7 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 import { FaUniversalAccess } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 
 const Mypage = () => {
   const navigate = useNavigate();

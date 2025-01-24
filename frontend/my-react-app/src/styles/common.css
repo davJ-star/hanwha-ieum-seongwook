@@ -105,3 +105,19 @@ body {
   gap: 10px;
   z-index: 1000;
 }
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.accessibility-icons {
+  display: flex;
+  gap: 10px;
+}

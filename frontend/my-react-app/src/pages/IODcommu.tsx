@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './commu.css';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout/Layout';
 
 const IODcommu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
