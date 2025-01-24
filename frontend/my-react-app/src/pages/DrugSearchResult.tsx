@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DrugSearchResult.css';
-import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import SignLanguageIcon from '@mui/icons-material/SignLanguage';
+import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 
 function DrugSearchResult() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showBrailleOptions, setShowBrailleOptions] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,6 +33,19 @@ function DrugSearchResult() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBrailleOptionSelect = (option: string) => {
+    if (option === 'convert') {
+      handleBrailleClick();
+    } else if (option === 'revert') {
+      handleBrailleRevert();
+    }
+    setShowBrailleOptions(false);
+  };
+
+  const handleBrailleOptionsClick = () => {
+    setShowBrailleOptions(!showBrailleOptions);
   };
 
   return (
@@ -63,7 +80,26 @@ function DrugSearchResult() {
 
       {/* 검색 결과 섹션 */}
       <div className="search-results">
-        <h2>검색 결과</h2>
+        <div className="result-header">
+          <h2>검색 결과</h2>
+          <div className="accessibility-icons">
+            <VolumeUpIcon className="icon" />
+            <SignLanguageIcon className="icon" />
+            <div className="braille-dropdown">
+              <FaBraille className="icon" onClick={handleBrailleOptionsClick} />
+              {showBrailleOptions && (
+                <div className="braille-options">
+                  <button onClick={() => handleBrailleOptionSelect('convert')}>
+                    점자로 변환
+                  </button>
+                  <button onClick={() => handleBrailleOptionSelect('revert')}>
+                    점자 역변환
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="results-container">
           <div className="result-item">
             <h3>의약품명: 타이레놀</h3>
