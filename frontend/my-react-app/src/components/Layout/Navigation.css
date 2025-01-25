@@ -1,0 +1,54 @@
+.navbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.navbar a:hover {
+  background-color: #0000000d;
+}
+
+.shortcut-guide {
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+/* 모바일 환경에서 단축키 숨기기 */
+@media screen and (max-width: 768px) {
+  .navbar .shortcut-guide,
+  .navbar h4.shortcut-guide,
+  span.shortcut-guide,
+  .shortcut-guide,
+  h4.shortcut-guide,
+  *[class*="shortcut-guide"],
+  nav .shortcut-guide {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    opacity: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    max-height: 0 !important;
+    max-width: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    z-index: -1 !important;
+  }
+} 
