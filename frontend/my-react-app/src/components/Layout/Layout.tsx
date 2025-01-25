@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Navigation from './Navigation';
 import FloatingButtons from './FloatingButtons';
 import AccessibilityModal from '../AccessibilityModal';
 import Footer from './Footer';
@@ -43,8 +42,6 @@ const Layout = ({ children }: LayoutProps) => {
         onLogout={handleLogout}
         onNavigate={navigate}
       />
-      
-      <Navigation onNavigate={navigate} />
 
       <main className="main-content" role="main">
         {children}
