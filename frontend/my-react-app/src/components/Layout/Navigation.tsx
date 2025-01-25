@@ -14,11 +14,6 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
       >
         ③ 허위광고 판별
       </a>
-      <a 
-        onClick={() => onNavigate('/login')} 
-        aria-label="로그인"
-      >
-      </a>
     </nav>
   );
 };
