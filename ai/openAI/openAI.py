@@ -33,7 +33,7 @@ def simplify_medical_info(page_type, situation, original_info, target_age):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful medical information translator for children and "},
+                {"role": "system", "content": "You are an expert at explaining intellectual disabilities and borderline intellectual functioning in simple terms. Use easy-to-understand language that children and non-experts can comprehend. Replace complex medical terms with everyday expressions and provide concrete examples. Clearly differentiate between intellectual disabilities and borderline intellectual functioning, while maintaining an empathetic and unbiased approach. Feel free to use analogies or visual descriptions to aid understanding."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=500
