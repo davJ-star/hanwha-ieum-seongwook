@@ -5,6 +5,7 @@ interface NavigationProps {
 const Navigation = ({ onNavigate }: NavigationProps) => {
   return (
     <nav className="navbar" role="navigation" aria-label="메인 메뉴">
+      <h4>단축키 안내</h4>
       <a href="#search" aria-label="정보 검색">① 정보 검색</a>
       <a href="#medications" aria-label="복용약 관리">② 복용약 관리</a>
       <a 
@@ -17,7 +18,6 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
         onClick={() => onNavigate('/login')} 
         aria-label="로그인"
       >
-        ④ 로그인
       </a>
     </nav>
   );
