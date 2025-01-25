@@ -1,4 +1,4 @@
-import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaPlus, FaTimes, FaPills } from 'react-icons/fa';
 import React, { useEffect, useState } from 'react';
 import './FloatingButton.css';
 
@@ -83,9 +83,19 @@ const FloatingButtons = ({
             <span>접근성 기능 가이드라인</span>
           </button>
           <button
-            className="floating-button fad-check-button"
+            className="floating-button medication-button"
+            onClick={() => onNavigate('/medication')}
+            title="복용약 관리/알림"
+            style={{ backgroundColor: '#00ff00' }}
+          >
+            <FaPills aria-hidden="true" />
+            <span>복용약 관리/알림</span>
+          </button>
+          <button
+            className="floating-button fake-ad"
             onClick={() => onNavigate('/FADsearch')}
             title="허위광고 판별"
+            style={{ backgroundColor: '#FF0000' }}
           >
             <FaExclamationTriangle aria-hidden="true" />
             <span>허위광고 판별</span>

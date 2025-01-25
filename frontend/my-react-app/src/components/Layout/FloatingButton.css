@@ -19,7 +19,7 @@
     flex-direction: column;
     gap: 16px;
     position: absolute;
-    bottom: 110px;
+    bottom: 165px;
     right: 16px;
   }
   
@@ -34,4 +34,17 @@
   }
   .floating-button span {
     margin-right: 8px;
+  }
+  
+  /* 접근성 가이드라인과 복용약 알림 버튼 공통 스타일 */
+  .floating-button.accessibility-button,
+  .floating-button.medication-button {
+    background-color: #008200 !important;
+    color: #ffffff !important;
+  }
+  
+  /* 허위광고 판별 버튼 스타일 */
+  .floating-button.fake-ad {
+    background-color: #FF0000 !important;
+    color: #FFFFFF !important;
   }
