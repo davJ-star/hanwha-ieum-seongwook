@@ -2,7 +2,7 @@
 /* 미디어 쿼리 간결하게 관리 가능 */
 
 @mixin mobile {
-    @media (max-width: 767px) { @content; } /*@content는 믹스인 안에서 사용되는 SCSS 코드 블럭이 실제로 삽입되는 자리ㄴ*/
+    @media (max-width: 479px) { @content; } /*@content는 믹스인 안에서 사용되는 SCSS 코드 블럭이 실제로 삽입되는 자리ㄴ*/
   }
   
   @mixin tablet {
