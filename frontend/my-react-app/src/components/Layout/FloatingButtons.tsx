@@ -84,7 +84,7 @@ const FloatingButtons = ({
           </button>
           <button
             className="floating-button medication-button"
-            onClick={() => onNavigate('/medication')}
+            onClick={() => onNavigate('/mypage')}
             title="복용약 관리/알림"
             style={{ backgroundColor: '#00ff00' }}
           >
