@@ -48,7 +48,7 @@ function App() {
             <Route path="/DiseaseSearchResult" element={<DiseaseSearchResult />} />
             <Route path="/DrugSearchResult" element={<DrugSearchResult />} />
             <Route path="/DiseaseDetail" element={<DiseaseDetail />} />
-            <Route path="/drug-detail" element={<DrugDetail />} />
+            <Route path="/DrugDetail" element={<DrugDetail />} />
             <Route path="/secession" element={<Secession />} />
             <Route path="/FADsearch" element={<FADsearch />} />
             <Route path="/FADresult" element={<FADresult />} />
