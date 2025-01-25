@@ -1,0 +1,168 @@
+.mypage-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 프로필 섹션 */
+.profile-section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-image-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.upload-button svg {
+  color: white;
+  width: 20px;
+  height: 20px;
+}
+
+.nickname-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* 복용약 관리 섹션 */
+.medications-section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.medications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.add-medication-button {
+  margin-top: 1.5rem;
+  align-self: center;
+  background: none;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 1rem;
+}
+
+.add-medication-button:hover {
+  text-decoration: underline;
+}
+
+.add-button,
+.remove-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.add-button {
+  color: #28a745;
+}
+
+.remove-button {
+  color: #dc3545;
+}
+
+.medication-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.search-drug-button {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.dosage-container,
+.reminder-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.time-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* 접근성을 위한 스타일 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .mypage-container {
+    grid-template-columns: 1fr;
+  }
+
+  .medication-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
