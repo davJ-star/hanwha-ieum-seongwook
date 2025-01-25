@@ -15,3 +15,38 @@
     }
   }
   
+/* 기본 모바일 스타일 */
+.mypage-wrapper {
+  padding: 20px;
+  max-width: 100%;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 태블릿 */
+@media screen and (min-width: 768px) {
+  .mypage-wrapper {
+    padding: 40px;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  .input-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+/* 데스크톱 */
+@media screen and (min-width: 1024px) {
+  .mypage-wrapper {
+    padding: 60px;
+    max-width: 1000px;
+  }
+}
+  
