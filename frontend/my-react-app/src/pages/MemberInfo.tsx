@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/pages/Mypage.css'; // 스타일 파일 추가
+import '../styles/pages/MemberInfo.css'; // 스타일 파일 추가
 import { FaSearch } from 'react-icons/fa';
 import { FaUniversalAccess } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';

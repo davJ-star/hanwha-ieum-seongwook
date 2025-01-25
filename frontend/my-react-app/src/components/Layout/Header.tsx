@@ -12,7 +12,7 @@ const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
         {isLoggedIn ? (
           <>
             <a 
-              onClick={() => onNavigate('/mypage')} 
+              onClick={() => onNavigate('/MemberInfo')} 
               aria-label="회원관리와 마이페이지로 이동"
             >
               회원관리 | 마이페이지
