@@ -50,7 +50,7 @@ original_info = """[CDATA[ 직장탈출증 환자는 직장이 복강 내에서 
 if __name__ == "__main__":
     disease_name = "직장탈출증"
     page_type = "어린이용 질병 정보 페이지"
-    situation = "어린이가 가족의 질병에 대해 궁금해하는 상황"
+    situation = "7살이 질병에 대해 궁금해하는 상황"
     target_age = 7
     
     print(f"서버에서 받은 {disease_name} 정보:")
