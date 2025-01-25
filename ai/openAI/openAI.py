@@ -8,42 +8,33 @@ load_dotenv()
 # OpenAI 클라이언트 초기화
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def simplify_medical_info(page_type, situation, original_info, target_audience):
+def simplify_medical_info(page_type, situation, original_info, target_age):
     prompt = f"""
-    당신은 복잡한 의학 정보를 쉽게 설명하는 전문가입니다.
+    당신은 복잡한 의학 정보를 누구나 이해할 수 있게 설명하는 전문가입니다.
     현재 상황: {situation}
     페이지 유형: {page_type}
-    대상: {target_audience}
+    대상 연령: {target_age}세
     
-    다음의 의학 정보를 {target_audience}가 이해할 수 있도록 다시 설명해주세요:
+    다음의 의학 정보를 {target_age}세 어린이가 이해할 수 있도록 다시 존댓말로 설명해주세요:
 
     {original_info}
 
     설명할 때 다음 사항을 지켜주세요:
-
-
+    1. {target_age}세 어린이가 이해할 수 있는 단어와 개념을 사용하세요.
+    2. 짧고 쉬운 문장으로 설명하세요.
+    3. 어렵고, 복잡한 의학 용어는 사용하지 마세요.(조직이라던지 직장이라던지 천골이라던지 이런것도 어려운 수준으로 지정함.)
     4. 풍선이나 일상적인 물건을 활용한 비유를 사용해 설명하세요.
-
-    8. 각 증상이나 상태를 설명할 때 정확성을 유지하세요.
-  
-    
-    1. 매우 쉬운 단어와 간단한 문장을 사용하세요.
-    2. 의학 용어는 사용하지 마세요. 
-    3. 각 문장은 한 가지 개념만 설명하고, 30단어를 넘지 않도록 하세요.
-    4. 예를 들어 풍선이나 일상생활에서 볼 수 있는 물건이나 상황으로 비유해 설명하세요.
     5. 전체 설명을 3-4개의 짧은 단락으로 나눠주세요.
     6. 어린이가 무서워하지 않도록 부드럽고 친근한 톤을 사용하세요.
-
-    7. 중요한 점은 별표(*)로 강조해주세요.
-    8. 그림이나 이모지를 사용해도 좋습니다.
-    9. 마지막에 핵심 내용을 한 문장으로 요약해주세요.
+    7. 각 증상이나 상태를 설명할 때 정확성을 유지하세요.
+    8. 질병의 주요 특징을 간단히 요약하여 마무리하세요.
     """
 
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful medical information translator for children"},
+                {"role": "system", "content": "You are a helpful medical information translator for children."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=500
@@ -58,14 +49,14 @@ original_info = """[CDATA[ 직장탈출증 환자는 직장이 복강 내에서 
 # 사용 예시
 if __name__ == "__main__":
     disease_name = "직장탈출증"
-    page_type = "질병 검색 결과 페이지"
-    situation = "질병에 대해 궁금해하는 상황"
-    target_audience = "7살 어린이"
+    page_type = "어린이용 질병 정보 페이지"
+    situation = "어린이가 가족의 질병에 대해 궁금해하는 상황"
+    target_age = 7
     
     print(f"서버에서 받은 {disease_name} 정보:")
     print(original_info)
     print("\n" + "="*50 + "\n")
     
-    simplified_info = simplify_medical_info(page_type, situation, original_info, target_audience)
-    print(f"{disease_name}에 대한 쉬운 설명 (페이지: {page_type}, 상황: {situation}, 대상: {target_audience}):")
+    simplified_info = simplify_medical_info(page_type, situation, original_info, target_age)
+    print(f"{disease_name}에 대한 어린이용 쉬운 설명 (페이지: {page_type}, 상황: {situation}, 대상 연령: {target_age}세):")
     print(simplified_info)
