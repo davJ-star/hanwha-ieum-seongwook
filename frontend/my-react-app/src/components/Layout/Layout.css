@@ -1,0 +1,103 @@
+/* 기존 설정 유지 */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-color: #fff; /* 배경색 통일 */
+  }
+  
+  body {
+    transform: scale(var(--zoom-level, 1));
+    transform-origin: 0 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+  }
+  
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* 앱 컨테이너 수정 */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* 메인 컨텐츠 수정 */
+  .main-content {
+    flex: 1;
+    width: 100%;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1920px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 푸터 스타일 추가 */
+  .footer {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: auto; /* 푸터를 하단에 고정 */
+  }
+  
+  /* 반응형 스타일 개선 */
+  @media screen and (max-width: 1024px) {
+    .main-content {
+      padding: 16px;
+    }
+    
+    .footer {
+      padding: 16px;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .main-content {
+      padding: 12px;
+    }
+    
+    .footer {
+      padding: 12px;
+    }
+    
+    /* iOS Safari 대응 */
+    .app-container {
+      min-height: -webkit-fill-available;
+    }
+  }
+  
+  /* 컨텐츠가 적을 때도 footer가 항상 하단에 위치하도록 보장 */
+  .app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    flex: 1 0 auto;
+  }
+  
+  .footer {
+    flex-shrink: 0;
+  }
+  
