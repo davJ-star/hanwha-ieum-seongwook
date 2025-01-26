@@ -2,8 +2,12 @@ import { HanBraille } from "./hanbraille";
 import { Braille } from "./braille";
 
 export const handleBrailleClick = () => {
-  const text = prompt("점자로 변환할 텍스트를 입력하세요:");
-  if (!text) return;
+  // 검색 결과 컨테이너에서 텍스트 추출
+  const resultsContainer = document.querySelector('.results-container');
+  if (!resultsContainer) return;
+  
+  const text = resultsContainer.textContent || '';
+  if (!text.trim()) return;
 
   // 언어 설정 (기본값: 'ko')
   const language: "ko" | "en" = "ko";
