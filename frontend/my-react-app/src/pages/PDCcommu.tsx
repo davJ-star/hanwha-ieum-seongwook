@@ -39,7 +39,7 @@ const BoardList = ({ navigate }: { navigate: (path: string) => void }) => {
 
   return (
     <div className="board-list" role="navigation" aria-label="게시판 메뉴">
-      <h3 id="boardListTitle">게시판 목록</h3>
+      <h3 id="boardListTitle">게시판<br />목록</h3>
       {boards.map((board) => (
         <BoardButton
           key={board.path}
