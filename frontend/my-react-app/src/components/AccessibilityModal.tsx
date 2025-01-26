@@ -1,5 +1,5 @@
 import React from 'react';
-import './AccessibilityModal.css';
+import '../components/AccessibilityModal.css';
 
 interface AccessibilityModalProps {
   isOpen: boolean;
@@ -10,46 +10,85 @@ const AccessibilityModal = ({ isOpen, onClose }: AccessibilityModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="modal-overlay" 
-      role="dialog" 
-      aria-modal="true" 
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div 
-        className="modal-content"
-        role="document"
-      >
-        <h2 id="modal-title" tabIndex={-1}>접근성 기능 가이드라인</h2>
+      <div className="modal-content" role="document">
+        <h2 id="modal-title" className="modal-title">✅ 접근성 기능 사용 가이드라인</h2>
         <div className="modal-body" role="region" aria-label="접근성 기능 설명">
-          <section aria-labelledby="zoom-title">
-            <h3 id="zoom-title">화면 확대/축소</h3>
-            <p>- 우측 하단의 확대/축소 버튼을 클릭하여 화면 크기를 조절할 수 있습니다.</p>
-          </section>
-          
-          <section aria-labelledby="shortcuts-title">
-            <h3 id="shortcuts-title">단축키 안내</h3>
-            <nav role="navigation" aria-label="단축키 메뉴">
-              <p>- ① 정보 검색</p>
-              <p>- ② 복용약 관리</p>
-              <p>- ③ 허위광고 판별</p>
-              <p>- ④ 로그인</p>
-            </nav>
-          </section>
-          
-          <section aria-labelledby="screen-reader-title">
-            <h3 id="screen-reader-title">화면 읽기</h3>
-            <p>- 스크린 리더 지원</p>
-            <p>- 모든 이미지에 대체 텍스트 제공</p>
-          </section>
-          
-          <section aria-labelledby="contrast-title">
-            <h3 id="contrast-title">색상 대비</h3>
-            <p>- 시각적 편의성을 위한 고대비 색상 사용</p>
-          </section>
+          <div className="guideline-container">
+            <section className="guideline-section">
+              <div className="guideline-subsection">
+                <h4>&lt;PC 접근성 기능 활용 방법&gt;</h4>
+                <ol>
+                  <li>
+                    <strong>스크린 리더:</strong>
+                    <ul>
+                      <li>Windows: Windows 키 + Ctrl + Enter</li>
+                      <li>Mac: Cmd + F5</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>키보드 내비게이션:</strong>
+                    <ul>
+                      <li>Tab 키: 다음 버튼/링크 이동</li>
+                      <li>Shift + Tab: 이전 항목으로 이동</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </section>
+
+            <section className="guideline-section">
+              <div className="guideline-subsection">
+                <h4>&lt;모바일 접근성 기능 활용 방법&gt;</h4>
+                <ol>
+                  <li>
+                    <strong>화면 읽기 기능:</strong>
+                    <ul>
+                      <li>Android: 설정 &gt; 접근성 &gt; TalkBack</li>
+                      <li>iPhone: 설정 &gt; 손쉬운 사용 &gt; VoiceOver</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>음성 제어:</strong>
+                    <ul>
+                      <li>Android: 설정 &gt; 접근성 &gt; 음성 제어</li>
+                      <li>iPhone: 설정 &gt; 손쉬운 사용 &gt; 음성 제어</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </section>
+
+            <section className="guideline-section">
+              <div className="guideline-subsection">
+                <h4>&lt;공통 접근성 기능 활용 방법&gt;</h4>
+                <ol>
+                  <li>
+                    <strong>고대비 설정:</strong>
+                    <ul>
+                      <li>Windows/Android: 접근성 &gt; 고대비</li>
+                      <li>Mac/iOS: 손쉬운 사용 &gt; 고대비</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>텍스트 확대:</strong>
+                    <ul>
+                      <li>PC: Ctrl/Cmd + (+/-)</li>
+                      <li>모바일: 설정 &gt; 접근성 &gt; 글자 크기</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </section>
+          </div>
         </div>
-        <button 
-          className="modal-close" 
+        <button
+          className="modal-close"
           onClick={onClose}
           aria-label="접근성 가이드라인 닫기"
         >
