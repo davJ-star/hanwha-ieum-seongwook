@@ -7,7 +7,7 @@ interface SearchBarProps {
 
 const SearchBar = ({ placeholder, onSearch, className, buttonText }: SearchBarProps) => {
   return (
-    <div className={`search-bar ${className || ''}`} role="search">
+    <div className={`search-bar ${className || ''} input-group`} role="search">
       <input
         type="text"
         placeholder={placeholder || "검색어를 입력하세요"}
