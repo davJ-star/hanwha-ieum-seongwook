@@ -4,19 +4,18 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchResultDto {
+public class DiseaseDetailResponse {
     private String contentId;
     private String title;
     private List<SectionContentDto> sections;
 
     @Getter @Setter
-    @NoArgsConstructor
     @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class SectionContentDto {
         private String sectionName;
