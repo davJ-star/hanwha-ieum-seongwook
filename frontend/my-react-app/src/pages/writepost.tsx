@@ -141,8 +141,14 @@ const WriteForm = ({
         style={{ color: '#000000' }}
       >
         <option value="">게시판 선택</option>
-        <option value="복약">복약 게시판</option>
-        <option value="질환">질환 게시판</option>
+        <option value="복약">지체장애 게시판</option>
+        <option value="질환">뇌병변장애 게시판</option>
+        <option value="복약">시각장애 게시판</option>
+        <option value="복약">청각장애 게시판</option>
+        <option value="복약">언어장애 게시판</option>
+        <option value="복약">안면장애 게시판</option>
+        <option value="복약">내부기관장애 게시판</option>
+        <option value="복약">정신적장애 게시판</option>
       </select>
     </div>
 
