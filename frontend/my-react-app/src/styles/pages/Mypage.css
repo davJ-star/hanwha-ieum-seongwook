@@ -138,6 +138,17 @@
   align-items: center;
 }
 
+.dosage-container input,
+.dosage-container select {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.reminder-container select {
+  color: #000000;
+  background-color: #ffffff;
+}
+
 .time-selector {
   display: flex;
   gap: 0.5rem;
