@@ -106,3 +106,12 @@
     gap: 10px;
     z-index: 1000;
   }
+
+@media screen and (max-width: 768px) {
+  .input-group button {
+    padding: 0.5rem 0.2rem !important;
+    min-width: 45px !important;  /* 버튼의 최소 너비 설정 */
+    font-size: 14px !important;  /* 글자 크기도 약간 줄임 */
+    width: auto !important;  /* 내용에 맞게 너비 조정 */
+  }
+}
