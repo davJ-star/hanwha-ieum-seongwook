@@ -85,10 +85,10 @@ const LoginForm = ({
     <InputField
       type="text"
       name="userName"
-      label="전화번호 또는 이메일 주소를 입력해주세요."
+      label="이메일 주소를 입력해주세요."
       value={userName}
       onChange={onUserNameChange}
-      placeholder="전화번호 또는 이메일"
+      placeholder="이메일"
     />
     <InputField
       type="password"
