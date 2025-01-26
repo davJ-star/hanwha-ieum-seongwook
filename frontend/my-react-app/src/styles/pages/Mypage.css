@@ -1,16 +1,21 @@
 .mypage-container {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 2rem;
-  padding: 2rem;
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 2rem auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* 프로필 섹션 */
 .profile-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
   background: #fff;
-  padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -51,8 +56,19 @@
   height: 20px;
 }
 
+.profile-input-container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
 .nickname-input {
   width: 100%;
+  box-sizing: border-box;
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -63,8 +79,10 @@
 
 /* 복용약 관리 섹션 */
 .medications-section {
+  width: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
   background: #fff;
-  padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: relative;
@@ -111,12 +129,22 @@
   color: #dc3545;
 }
 
+.medications-list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
 .medication-item {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr auto;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
   align-items: center;
-  padding: 1rem;
   border-bottom: 1px solid #eee;
 }
 
@@ -168,21 +196,54 @@
 }
 
 /* 반응형 디자인 */
-@media (max-width: 768px) {
+@media screen and (min-width: 769px) {
   .mypage-container {
-    grid-template-columns: 1fr;
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 3rem;
+  }
+
+  .profile-section {
+    width: auto;
+    align-items: flex-start;
+  }
+
+  .profile-input-container {
+    padding: 0;
+  }
+
+  .medications-section {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile-section {
+    align-items: center;
   }
 
   .medication-item {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dosage-container,
+  .reminder-container {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .time-selector {
+    width: 100%;
+    display: flex;
     gap: 0.5rem;
   }
-}
-.profile-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
+
+  .search-drug-button {
+    width: 100%;
+  }
 }
 
 .profile-update-button {

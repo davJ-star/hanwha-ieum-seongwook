@@ -95,6 +95,7 @@ const Mypage = () => {
               onChange={(e) => setTempNickname(e.target.value)}
               className="nickname-input"
               aria-label="닉네임"
+              maxLength={20}
             />
             <button
               onClick={handleProfileUpdate}
