@@ -13,6 +13,7 @@ import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,5 +118,11 @@ public class PostService {
                 .authorName(comment.getAuthor().getName())
                 .createdAt(comment.getCreatedAt())
                 .build();
+    }
+
+    public Page<PostResponse> searchPosts(String keyword, PageRequest pageRequest) {
+        Page<Post> posts = postRepository.findByTitleContainingOrContentContaining(
+                keyword, keyword, pageRequest);
+        return posts.map(this::convertToDto);
     }
 }

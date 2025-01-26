@@ -16,4 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByCategoryAndDisabilityType(PostCategory category,
                                                DisabilityType disabilityType,
                                                org.springframework.data.domain.Pageable pageable);
+    Page<Post> findByTitleContainingOrContentContaining(
+            String titleKeyword,
+            String contentKeyword,
+            Pageable pageable);
 }

@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,19 +38,29 @@ public class SearchService {
 
     }
 
+
     public List<DrugBasicResponse> searchAndSave(String keyword) {
         DrugResponse response = drugSearch(keyword);
+        if (response.getBody() == null || response.getBody().getItems() == null) {
+            return new ArrayList<>();
+        }
+
         return response.getBody().getItems().stream()
                 .map(item -> {
+                    Search search;
                     if (!searchRepository.existsByItemName(item.getItemName())) {
-                        Search search = Search.builder()
+                        search = Search.builder()
                                 .entpName(item.getEntpName())
                                 .itemName(item.getItemName())
                                 .efcyQesitm(item.getEfcyQesitm())
                                 .build();
-                        searchRepository.save(search);
+                        search = searchRepository.save(search);
+                    } else {
+                        search = searchRepository.findByItemName(item.getItemName());
                     }
+
                     return new DrugBasicResponse(
+                            search.getId(),  // ID 포함
                             item.getEntpName(),
                             item.getItemName(),
                             item.getEfcyQesitm()

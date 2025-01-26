@@ -11,6 +11,7 @@ import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -98,7 +99,7 @@ public class CommunityController {
         }
     }
 
-    @PostMapping("/community/post/{id}/delete")
+    @DeleteMapping("/community/post/{id}/delete")
     public String delete(@PathVariable Long id,
                          @AuthenticationPrincipal User user,
                          RedirectAttributes redirectAttributes) {
@@ -140,5 +141,19 @@ public class CommunityController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/community/post/" + postId;
+    }
+
+    @GetMapping("/community/search")
+    public String search(@RequestParam String keyword,
+                         @PageableDefault(size = 10) Pageable pageable,
+                         Model model) {
+        PageRequest pageRequest = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("createdAt").descending());
+
+        model.addAttribute("posts", postService.searchPosts(keyword, pageRequest));
+        model.addAttribute("keyword", keyword);
+        return "community/home";
     }
 }

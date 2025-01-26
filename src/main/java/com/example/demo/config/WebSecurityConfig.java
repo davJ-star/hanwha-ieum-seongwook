@@ -38,8 +38,11 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/signup"),
                                 new AntPathRequestMatcher("/user"),
                                 new AntPathRequestMatcher(("/search/**")),
-                                new AntPathRequestMatcher("/api/**")
-                        ).permitAll()
+                                new AntPathRequestMatcher("/api/**"),
+                                new AntPathRequestMatcher("/ocr"),
+                                new AntPathRequestMatcher("/ocr/**"),
+                                new AntPathRequestMatcher("/community/**")
+                                ).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin //폼 기반 로그인 설정
                         .loginPage("/login")

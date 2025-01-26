@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface SearchRepository extends JpaRepository<Search,Long> {
     Optional<Search> findById(Long id);
     boolean existsByItemName(String itemName);
+    Search findByItemName(String itemname);
 }

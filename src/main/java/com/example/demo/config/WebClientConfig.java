@@ -20,4 +20,13 @@ public class WebClientConfig {
                 .uriBuilderFactory(factory)
                 .build();
     }
+
+
+    @Bean
+    public WebClient ocrWebClient() {
+        return WebClient.builder()
+                .baseUrl("http://localhost:8001")
+                .build();
+    }
+
 }
