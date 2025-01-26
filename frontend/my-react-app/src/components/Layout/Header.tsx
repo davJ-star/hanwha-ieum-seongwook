@@ -11,12 +11,21 @@ const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
       <div className="user-menu" role="navigation" aria-label="사용자 메뉴">
         {isLoggedIn ? (
           <>
-            <a 
-              onClick={() => onNavigate('/MemberInfo')} 
-              aria-label="회원관리와 마이페이지로 이동"
-            >
-              회원관리 | 마이페이지
-            </a>
+            <div className="user-menu-links">
+              <a 
+                onClick={() => onNavigate('/MemberInfo')} 
+                aria-label="회원관리로 이동"
+              >
+                회원관리
+              </a>
+              <span className="separator">|</span>
+              <a 
+                onClick={() => onNavigate('/Mypage')} 
+                aria-label="마이페이지로 이동"
+              >
+                마이페이지
+              </a>
+            </div>
             <button 
               onClick={onLogout} 
               aria-label="로그아웃"
