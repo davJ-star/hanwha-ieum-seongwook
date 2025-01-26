@@ -22,18 +22,31 @@ const Mypage = () => {
   const [medications, setMedications] = useState<MedicationItem[]>([]);
   const [profileImage, setProfileImage] = useState<string>('');
   const [nickname, setNickname] = useState('사용자');
+  const [tempProfileImage, setTempProfileImage] = useState<string>('');
+  const [tempNickname, setTempNickname] = useState('사용자');
 
-  const defaultProfileImage = '/images/profile.png'; // 기본 프로필 이미지 경로
+  const defaultProfileImage = '/images/profile.png';
+
+  React.useEffect(() => {
+    setTempProfileImage(profileImage);
+    setTempNickname(nickname);
+  }, [profileImage, nickname]);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result as string);
+        setTempProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleProfileUpdate = () => {
+    setProfileImage(tempProfileImage);
+    setNickname(tempNickname);
+    // TODO: 여기에 서버로 프로필 업데이트 요청을 보내는 로직 추가
   };
 
   const addMedication = () => {
@@ -58,11 +71,10 @@ const Mypage = () => {
       <main className="mypage-container" role="main">
         <h1 className="visually-hidden">마이페이지</h1>
         
-        {/* 좌측: 프로필 섹션 */}
         <section className="profile-section" aria-label="커뮤니티 프로필">
           <div className="profile-image-container" role="img" aria-label="프로필 이미지">
             <img 
-              src={profileImage || defaultProfileImage} 
+              src={tempProfileImage || defaultProfileImage} 
               alt="프로필 사진" 
               className="profile-image"
             />
@@ -76,16 +88,24 @@ const Mypage = () => {
               />
             </label>
           </div>
-          <input
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            className="nickname-input"
-            aria-label="닉네임"
-          />
+          <div className="profile-input-container">
+            <input
+              type="text"
+              value={tempNickname}
+              onChange={(e) => setTempNickname(e.target.value)}
+              className="nickname-input"
+              aria-label="닉네임"
+            />
+            <button
+              onClick={handleProfileUpdate}
+              className="profile-update-button"
+              aria-label="프로필 변경 저장"
+            >
+              변경사항 저장
+            </button>
+          </div>
         </section>
 
-        {/* 우측: 복용약 관리 섹션 */}
         <section className="medications-section" aria-label="복용약 관리">
           <header className="medications-header">
             <h2>복용약 목록</h2>
