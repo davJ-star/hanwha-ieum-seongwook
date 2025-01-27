@@ -106,7 +106,107 @@
         </div>
     </div>
 </div>
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>복용약 관리</h4>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/{id}/mypage/medication(id=${user.id})}" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="drugSearch" class="form-label">약품명 검색</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="drugSearch" placeholder="약품명을 입력하세요">
+                        <button type="button" class="btn btn-secondary" onclick="searchDrug()">검색</button>
+                    </div>
+                    <div id="searchResults" class="list-group mt-2" style="display:none;">
+                        <!-- 검색 결과가 여기에 표시됩니다 -->
+                    </div>
+                    <input type="hidden" id="drugName" name="drugName" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="dosage" class="form-label">복용량</label>
+                    <input type="number" step="0.1" class="form-control" id="dosage" name="dosage" required>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="unit" class="form-label">단위</label>
+                    <select class="form-select" id="unit" name="unit" required>
+                        <option value="MG">mg</option>
+                        <option value="MCG">mcg</option>
+                        <option value="G">g</option>
+                        <option value="ML">ml</option>
+                        <option value="PERCENT">%</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>추가</button>
+        </form>
 
+        <!-- 복용약 목록 -->
+        <div class="mt-4">
+            <h5>현재 복용중인 약</h5>
+            <div class="list-group">
+                <div th:each="medication : ${medications}" class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0" th:text="${medication.drugName}"></h6>
+                            <small th:text="|복용량: ${medication.dosage}${medication.unit}|"></small>
+                        </div>
+                        <small th:text="${#temporals.format(medication.addedAt, 'yyyy-MM-dd')}"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchDrug() {
+        const searchInput = document.getElementById('drugSearch').value;
+        if (!searchInput) return;
+
+        fetch(`/search/${searchInput}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('searchResults');
+                resultsDiv.innerHTML = '';
+                resultsDiv.style.display = 'block';
+
+                if (data && data.length > 0) {
+                    data.forEach(drug => {
+                        const item = document.createElement('a');
+                        item.href = '#';
+                        item.className = 'list-group-item list-group-item-action';
+                        // API 응답 구조에 맞게 수정
+                        item.textContent = `${drug.itemName} (${drug.entpName})`;
+                        item.onclick = function(e) {
+                            e.preventDefault();
+                            selectDrug(drug.itemName);
+                        };
+                        resultsDiv.appendChild(item);
+                    });
+                } else {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.textContent = '검색 결과가 없습니다.';
+                    resultsDiv.appendChild(item);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const resultsDiv = document.getElementById('searchResults');
+                resultsDiv.innerHTML = '<div class="list-group-item text-danger">검색 중 오류가 발생했습니다.</div>';
+                resultsDiv.style.display = 'block';
+            });
+    }
+
+    function selectDrug(drugName) {
+        document.getElementById('drugSearch').value = drugName;
+        document.getElementById('drugName').value = drugName;
+        document.getElementById('searchResults').style.display = 'none';
+        document.getElementById('submitBtn').disabled = false;
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

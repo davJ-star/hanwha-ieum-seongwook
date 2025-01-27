@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AddUserRequest;
-import com.example.demo.dto.PasswordUpdateRequest;
-import com.example.demo.dto.UserDeleteRequest;
-import com.example.demo.dto.UserUpdateRequest;
+import com.example.demo.dto.*;
 import com.example.demo.entity.User;
 import com.example.demo.service.EmailVerificationService;
+import com.example.demo.service.MedicationService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -28,6 +27,7 @@ import java.util.Map;
 public class UserViewController {
     private final UserService userService;
     private final EmailVerificationService emailVerificationService;
+    private final MedicationService medicationService;
 
     @GetMapping("/")
     public String home() {
@@ -78,13 +78,15 @@ public class UserViewController {
 
     @GetMapping("/{id}/mypage")
     public String myPage(@PathVariable Long id, @AuthenticationPrincipal User user, Model model) {
-        // 현재 로그인한 사용자와 요청한 페이지의 사용자가 같은지 확인
         if (!user.getId().equals(id)) {
             return "redirect:/";
         }
 
         User userInfo = userService.getMyInfo(user.getEmail());
+        List<MedicationResponse> medications = medicationService.getUserMedications(user.getEmail());
+
         model.addAttribute("user", userInfo);
+        model.addAttribute("medications", medications);  // 추가
         return "mypage";
     }
 
@@ -163,5 +165,23 @@ public class UserViewController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/" + id + "/mypage";
         }
+    }
+
+    @PostMapping("/{id}/mypage/medication")
+    public String addMedication(@PathVariable Long id,
+                                @AuthenticationPrincipal User user,
+                                @ModelAttribute MedicationRequest request,
+                                RedirectAttributes redirectAttributes) {
+        if (!user.getId().equals(id)) {
+            return "redirect:/";
+        }
+
+        try {
+            medicationService.addMedication(user.getEmail(), request);
+            redirectAttributes.addFlashAttribute("message", "복용약이 추가되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/" + id + "/mypage";
     }
 }
