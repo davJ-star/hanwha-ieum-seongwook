@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/pages/Mypage.css'; // 스타일 파일 추가
+import '../styles/pages/MemberInfo.css'; // 스타일 파일 추가
 import { FaSearch } from 'react-icons/fa';
 import { FaUniversalAccess } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -224,7 +224,13 @@ const PasswordSection = ({
             aria-labelledby="currentPwLabel"
             style={{ color: '#000000' }}
           />
-          <button onClick={onPasswordVerify} aria-label="현재 비밀번호 확인">확인</button>
+          <button 
+            onClick={onPasswordVerify} 
+            aria-label="현재 비밀번호 확인"
+            style={{ color: '#000000' }}
+          >
+            확인
+          </button>
         </div>
       </label>
       {isPasswordValid && (
@@ -253,7 +259,13 @@ const PasswordSection = ({
                 aria-labelledby="confirmPwLabel"
                 style={{ color: '#000000' }}
               />
-              <button onClick={onConfirmNewPassword} aria-label="새 비밀번호 확인">확인</button>
+              <button 
+                onClick={onConfirmNewPassword} 
+                aria-label="새 비밀번호 확인"
+                style={{ color: '#000000' }}
+              >
+                확인
+              </button>
             </div>
           </label>
           {passwordError && <p role="alert" aria-live="polite">{passwordError}</p>}
@@ -383,6 +395,7 @@ const Mypage = () => {
               className="delete-account" 
               onClick={() => navigate('/secession')}
               aria-label="회원 탈퇴 페이지로 이동"
+              style={{ color: '#000000' }}
             >
               회원 탈퇴
             </button>

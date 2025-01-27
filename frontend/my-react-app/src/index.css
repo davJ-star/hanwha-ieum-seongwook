@@ -30,10 +30,10 @@ a:hover {
 /* 바디 스타일 */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
+  min-width: 100vw;
   min-height: 100vh;
+  background-color: #ffffff;
 }
 
 /* 헤더 스타일 */

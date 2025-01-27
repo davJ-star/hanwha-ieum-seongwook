@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Navigation from './Navigation';
 import FloatingButtons from './FloatingButtons';
 import AccessibilityModal from '../AccessibilityModal';
+import Footer from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,16 +32,22 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <>
+    <div className="app-container" style={{ 
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column' 
+    }}>
       <Header 
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
         onNavigate={navigate}
       />
-      
-      <Navigation onNavigate={navigate} />
 
-      <main role="main">{children}</main>
+      <main className="main-content" role="main">
+        {children}
+      </main>
+
+      <Footer />
 
       <FloatingButtons 
         onZoomIn={() => handleZoom('in')}
@@ -54,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-    </>
+    </div>
   );
 };
 

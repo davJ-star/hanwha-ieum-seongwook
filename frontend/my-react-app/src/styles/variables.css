@@ -10,8 +10,8 @@
     --font-size-base: 16px; /* 보통 웹 브라우저 기본값이 16px */
   
     /* 반응형 폰트 사이즈 */
-    --font-size-sm: 0.875rem;  /* 14px */
-    --font-size-md: 1rem;      /* 16px */
-    --font-size-lg: 1.25rem;   /* 20px */
+    --font-size-sm: 0.625rem;  /* 10px */
+    --font-size-md: 0.75rem;      /* 12px */
+    --font-size-lg: 0.875rem;   /* 14px */
   }
   

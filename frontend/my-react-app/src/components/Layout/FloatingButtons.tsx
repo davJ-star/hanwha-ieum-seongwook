@@ -1,4 +1,6 @@
-import { FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
+import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaPlus, FaTimes, FaPills } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import './FloatingButton.css';
 
 interface FloatingButtonsProps {
   onZoomIn: () => void;
@@ -7,49 +9,99 @@ interface FloatingButtonsProps {
   onNavigate: (path: string) => void;
 }
 
-const FloatingButtons = ({ 
-  onZoomIn, 
-  onZoomOut, 
+const FloatingButtons = ({
+  onZoomIn,
+  onZoomOut,
   onAccessibilityToggle,
-  onNavigate 
+  onNavigate,
 }: FloatingButtonsProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // 키보드 단축키 이벤트 핸들러 추가
+  useEffect(() => {
+    const handleKeyboardShortcuts = (event: KeyboardEvent) => {
+      if (event.ctrlKey) {
+        if (event.key === '+' || event.key === '=') {
+          event.preventDefault();
+          onZoomIn();
+        } else if (event.key === '-') {
+          event.preventDefault();
+          onZoomOut();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyboardShortcuts);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyboardShortcuts);
+    };
+  }, [onZoomIn, onZoomOut]);
+
   return (
     <div className="floating-buttons" role="complementary" aria-label="접근성 도구">
-      <button 
-        className="floating-button round"
-        onClick={onZoomIn}
-        aria-label="화면 확대"
-        title="화면 확대"
+      {/* FAB 메인 버튼 */}
+      <button
+        className={`floating-button round fab-main-button ${isExpanded ? 'active' : ''}`}
+        onClick={() => setIsExpanded((prev) => !prev)}
+        aria-label={isExpanded ? "메뉴 닫기" : "메뉴 열기"}
+        title={isExpanded ? "메뉴 닫기" : "메뉴 열기"}
       >
-        <FaSearch aria-hidden="true" />
-        <span>확대</span>
+        {isExpanded ? <FaTimes /> : <FaPlus />}
       </button>
-      <button 
-        className="floating-button round"
-        onClick={onZoomOut}
-        aria-label="화면 축소"
-        title="화면 축소"
-      >
-        <FaSearch aria-hidden="true" />
-        <span>축소</span>
-      </button>
-      <button 
-        className="floating-button accessibility-button"
-        onClick={onAccessibilityToggle}
-        title="접근성 기능 가이드"
-        style={{ backgroundColor: '#00ff00' }}
-      >
-        <FaUniversalAccess aria-hidden="true" />
-        <span>접근성 기능 가이드라인</span>
-      </button>
-      <button 
-        className="floating-button fad-check-button"
-        onClick={() => onNavigate('/FADsearch')}
-        title="허위광고 판별"
-      >
-        <FaExclamationTriangle aria-hidden="true" />
-        <span>허위광고 판별</span>
-      </button>
+
+      {/* 하위 버튼들 */}
+      {isExpanded && (
+        <div className="fab-options">
+          <div className="zoom-controls">
+            <button
+              className="floating-button round"
+              onClick={onZoomIn}
+              aria-label="화면 확대 (단축키: Ctrl +)"
+              title="화면 확대 (Ctrl +)"
+            >
+              <span>확대</span>
+              <FaSearch aria-hidden="true" />
+            </button>
+            <button
+              className="floating-button round"
+              onClick={onZoomOut}
+              aria-label="화면 축소 (단축키: Ctrl -)"
+              title="화면 축소 (Ctrl -)"
+            >
+              <span>축소</span>
+              <FaSearch aria-hidden="true" />
+            </button>
+          </div>
+          <button
+            className="floating-button accessibility-button"
+            onClick={onAccessibilityToggle}
+            title="접근성 기능 가이드"
+            style={{ backgroundColor: '#00ff00' }}
+          >
+            <FaUniversalAccess aria-hidden="true" />
+            <span>접근성 기능 가이드라인</span>
+          </button>
+          <button
+            className="floating-button medication-button"
+            onClick={() => onNavigate('/mypage')}
+            title="복용약 관리/알림"
+            style={{ backgroundColor: '#00ff00' }}
+          >
+            <FaPills aria-hidden="true" />
+            <span>복용약 관리/알림</span>
+          </button>
+          <button
+            className="floating-button fake-ad"
+            onClick={() => onNavigate('/FADsearch')}
+            title="허위광고 판별"
+            style={{ backgroundColor: '#FF0000' }}
+          >
+            <FaExclamationTriangle aria-hidden="true" />
+            <span>허위광고 판별</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

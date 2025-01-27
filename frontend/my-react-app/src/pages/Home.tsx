@@ -4,6 +4,7 @@ import '../styles/pages/App.css';
 import { FaArrowUp, FaSearch, FaUniversalAccess, FaExclamationTriangle } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
+import CommunitySection from '../components/Layout/CommunitySection';
 
 // 메인 배너 컴포넌트
 const MainBanner = () => (
@@ -82,55 +83,6 @@ const SearchSection = () => (
     <ImageSearch />
   </div>
 );
-
-// 커뮤니티 버튼 인터페이스
-interface CommunityButtonProps {
-  label: string;
-  path: string;
-  onClick: (path: string) => void;
-}
-
-// 커뮤니티 버튼 컴포넌트
-const CommunityButton = ({ label, path, onClick }: CommunityButtonProps) => (
-  <button 
-    onClick={() => onClick(path)}
-    aria-label={`${label}로 이동`}
-  >
-    {label}
-  </button>
-);
-
-// 커뮤니티 섹션 컴포넌트
-const CommunitySection = ({ navigate }: { navigate: (path: string) => void }) => {
-  const communities = [
-    { label: '커뮤니티 메인', path: '/community-main' },
-    { label: '지체장애 커뮤니티', path: '/PDCcommu' },
-    { label: '뇌병변장애 커뮤니티', path: '/BLDcommu' },
-    { label: '시각장애 커뮤니티', path: '/visual-impairment-community' },
-    { label: '청각장애 커뮤니티', path: '/hearing-impairment-community' },
-    { label: '언어장애 커뮤니티', path: '/speech-impediment-community' },
-    { label: '안면장애 커뮤니티', path: '/facial-disorder-community' },
-    { label: '내부기관 장애 커뮤니티', path: '/internal-organ-disorder-community' },
-    { label: '정신적 장애 커뮤니티', path: '/mental-disability-community' }
-  ];
-
-  return (
-    <nav className="community-container" role="navigation" aria-label="커뮤니티 메뉴">
-      <h2>커뮤니티 바로가기</h2>
-      <p style={{ textAlign: 'center', color: '#666666' }}>
-        같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요 !
-      </p>
-      {communities.map((community) => (
-        <CommunityButton
-          key={community.path}
-          label={community.label}
-          path={community.path}
-          onClick={navigate}
-        />
-      ))}
-    </nav>
-  );
-};
 
 function Home() {
   const navigate = useNavigate();

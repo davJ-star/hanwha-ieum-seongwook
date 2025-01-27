@@ -1,0 +1,159 @@
+/* 커뮤니티 페이지 레이아웃 */
+.community-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.community-content {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 게시판 목록 */
+.board-list {
+  flex: 0 0 250px;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.board-list button {
+  width: 100%;
+  padding: 10px;
+  margin: 4px 0;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* 게시글 목록 */
+.post-list-container {
+  flex: 1;
+  min-width: 0; /* 오버플로우 방지 */
+}
+
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.post-list {
+  display: grid;
+  gap: 16px;
+}
+
+.post-item {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+  .community-content {
+    padding: 12px;
+  }
+
+  .board-list {
+    flex: 0 0 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .community-content {
+    flex-direction: column;
+    padding: 8px;
+  }
+
+  .board-list {
+    flex: none;
+    width: 100%;
+  }
+
+  .post-list-container {
+    width: 100%;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar input,
+  .search-bar button {
+    width: 100%;
+  }
+}
+
+/* 접근성 및 상호작용 스타일 */
+@media (hover: hover) {
+  .board-list button:hover {
+    background: #eee;
+  }
+}
+
+/* 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .board-list {
+    background: #2a2a2a;
+  }
+
+  .post-item {
+    background: #333;
+    border-color: #444;
+  }
+}
+
+/* 접근성을 위한 스타일 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* 키보드 포커스 스타일 */
+:focus-visible {
+  outline: 3px solid #4A90E2;
+  outline-offset: 2px;
+}
+
+/* 고대비 모드 지원 */
+@media (forced-colors: active) {
+  .board-list button {
+    border: 1px solid currentColor;
+  }
+}
+
+/* 동작 감소 모드 지원 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} 

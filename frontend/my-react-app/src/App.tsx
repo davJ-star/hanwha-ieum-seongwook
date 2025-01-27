@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'; // 메인 페이지
 import Login from './pages/Login'; // 로그인 페이지
-import Mypage from './pages/mypage'; // 회원관리 페이지 import
+import Mypage from './pages/Mypage'; // 마이페이지 페이지 import
+import MemberInfo from './pages/MemberInfo'; // 회원관리 페이지 import
 import CommunityMain from './pages/CommunityMain'; // 커뮤니티 메인 페이지
 import PDCcommu from './pages/PDCcommu'; // 시각장애 커뮤니티 페이지
 import BLDcommu from './pages/BLDcommu'; // 청각장애 커뮤니티 페이지
@@ -24,6 +25,7 @@ import WritePost from './pages/writepost'; // 게시글 작성 페이지
 import FADresult from './pages/FADresult'; // 의약품 허위광고 탐색 결과 페이지
 import './assets/fonts/FontSet.css'; // 폰트 설정
 import './styles/common.css'; // 공통 스타일 설정
+import FloatingButtons from './components/Layout/FloatingButtons';
 
 function App() {
   return (
@@ -33,7 +35,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/mypage" element={<Mypage />} /> {/* 회원관리 페이지 */}
+            <Route path="/Mypage" element={<Mypage />} />
+            <Route path="/MemberInfo" element={<MemberInfo />} /> {/* 회원관리 페이지 */}
             <Route path="/community-main" element={<CommunityMain />} />
             <Route path="/PDCcommu" element={<PDCcommu />} />
             <Route path="/BLDcommu" element={<BLDcommu />} />

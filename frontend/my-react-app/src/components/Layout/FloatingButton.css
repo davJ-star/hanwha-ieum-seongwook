@@ -1,0 +1,50 @@
+/* FAB 메인 버튼 */
+.fab-main-button {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  
+  /* 버튼이 펼쳐졌을 때 45도가 아닌 90도로 회전하여 x 모양 만들기 */
+  .fab-main-button:hover,
+  .fab-main-button.active {
+    transform: rotate(90deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* 확대/축소 버튼 컨테이너 */
+  .zoom-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    bottom: 165px;
+    right: 16px;
+  }
+  
+  /* 기능성 버튼 컨테이너 */
+  .fab-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+  }
+  .floating-button span {
+    margin-right: 8px;
+  }
+  
+  /* 접근성 가이드라인과 복용약 알림 버튼 공통 스타일 */
+  .floating-button.accessibility-button,
+  .floating-button.medication-button {
+    background-color: #008200 !important;
+    color: #ffffff !important;
+  }
+  
+  /* 허위광고 판별 버튼 스타일 */
+  .floating-button.fake-ad {
+    background-color: #FF0000 !important;
+    color: #FFFFFF !important;
+  }
