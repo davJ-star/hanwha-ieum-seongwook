@@ -15,6 +15,10 @@ const BoardButton = ({ label, path, onClick }: BoardButtonProps) => (
   <button 
     onClick={() => onClick(path)} 
     aria-label={`${label}으로 이동`}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      window.open(path, '_blank');
+    }}
   >
     {label}
   </button>
