@@ -36,8 +36,7 @@ const Footer: React.FC = () => {
             <h4>복용약 관리 및 알림</h4>
             <ul style={{ listStyle: 'none', padding: 0 }}>
               <li><a href="Mypage" style={{ color: '#666666', textDecoration: 'none' }}>나의 복용약 담기</a></li>
-              <li><a href="Mypage" style={{ color: '#666666', textDecoration: 'none' }}>복용약 관리</a></li>
-              <li><a href="Mypage" style={{ color: '#666666', textDecoration: 'none' }}>복용약 알림</a></li>
+              <li><a href="Mypage" style={{ color: '#666666', textDecoration: 'none' }}>복용약 관리/알림</a></li>
             </ul>
           </div>
 
