@@ -31,7 +31,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
-                .authorizeHttpRequests(auth -> auth //인증, 인가 설정
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 new AntPathRequestMatcher(("/")),
                                 new AntPathRequestMatcher("/login"),
@@ -41,10 +41,18 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/ocr"),
                                 new AntPathRequestMatcher("/ocr/**"),
-                                new AntPathRequestMatcher("/community/**")
-                                ).permitAll()
+                                new AntPathRequestMatcher("/admin/**")
+                        ).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/community/post/*/edit")).authenticated()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/community/write"),
+                                new AntPathRequestMatcher("/community/post/*/delete")
+                        ).hasAnyRole("USER", "ADMIN")
+                        // NOTICE 카테고리 관련 요청은 ADMIN만 가능
+                        .requestMatchers(new AntPathRequestMatcher("/community/notice/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/community/**")).permitAll()
                         .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin //폼 기반 로그인 설정
+                .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/mypage")
                 )

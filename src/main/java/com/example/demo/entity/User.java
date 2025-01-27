@@ -1,10 +1,8 @@
 package com.example.demo.entity;
 
+import com.example.demo.Enum.Role;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +13,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Entity
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,11 +51,7 @@ public class User implements UserDetails {
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
-
-    @Override //권한 반환
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
+    //권한 반환
 
     //사용자의 id 반환 (고유값)
     @Override
@@ -92,6 +87,25 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true; //true -> 사용 가능
+    }
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER; // 기본값은 USER
+
+
+    @Builder
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+        this.role = Role.USER;  // 기본 사용자 권한
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
 

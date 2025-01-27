@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Enum.Role;
 import com.example.demo.component.FileUploadUtil;
 import com.example.demo.dto.AddUserRequest;
 import com.example.demo.dto.PasswordUpdateRequest;
@@ -100,6 +101,16 @@ public class UserService {
         }
 
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public Long createAdmin(AddUserRequest request) {
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                .build();
+        user.setRole(Role.ADMIN);  // 관리자 권한 설정
+        return userRepository.save(user).getId();
     }
 
 

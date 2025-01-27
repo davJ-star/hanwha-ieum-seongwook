@@ -27,7 +27,7 @@ public class Post {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "category", length = 20)
     private PostCategory category;
 
     @Enumerated(EnumType.STRING)

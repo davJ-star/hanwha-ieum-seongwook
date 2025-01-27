@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Enum.DisabilityType;
 import com.example.demo.Enum.PostCategory;
+import com.example.demo.Enum.Role;
 import com.example.demo.dto.CommentRequest;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,8 +46,16 @@ public class CommunityController {
     }
 
     @GetMapping("/community/write")
-    public String writeForm(Model model) {
-        model.addAttribute("categories", PostCategory.values());
+    public String writeForm(@AuthenticationPrincipal User user, Model model) {
+        // admin이 아닌 경우 NOTICE를 제외한 카테고리만 전달
+        if (user.getRole() != Role.ADMIN) {
+            model.addAttribute("categories",
+                    Arrays.stream(PostCategory.values())
+                            .filter(category -> category != PostCategory.NOTICE)
+                            .collect(Collectors.toList()));
+        } else {
+            model.addAttribute("categories", PostCategory.values());
+        }
         model.addAttribute("disabilityTypes", DisabilityType.values());
         return "community/write";
     }

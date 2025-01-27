@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Enum.Role;
 import com.example.demo.dto.CommentResponse;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
@@ -34,6 +35,12 @@ public class PostService {
     public Long createPost(String email, PostRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 공지사항 작성 권한 체크
+        if (request.getCategory() == PostCategory.NOTICE
+                && user.getRole() != Role.ADMIN) {
+            throw new RuntimeException("공지사항 작성 권한이 없습니다.");
+        }
 
         Post post = Post.builder()
                 .title(request.getTitle())

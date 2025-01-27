@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum PostCategory {
     QUESTION("질문"),
-    INFORMATION("정보");
+    INFORMATION("자유"),
+    NOTICE("공지");
+
 
     private final String value;
 
