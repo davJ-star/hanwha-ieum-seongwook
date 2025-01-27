@@ -7,7 +7,7 @@ interface HeaderProps {
 const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
   return (
     <header className="logo-header" role="banner">
-      <h3>MediLink</h3>
+      <a href="/" className="logo" aria-label="홈페이지로 이동">MediLink</a>
       <div className="user-menu" role="navigation" aria-label="사용자 메뉴">
         {isLoggedIn ? (
           <>
