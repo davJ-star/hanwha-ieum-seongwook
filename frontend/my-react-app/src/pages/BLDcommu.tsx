@@ -56,6 +56,7 @@ const PostItem = ({ title, author, date }: PostItemProps) => (
 // 게시판 목록 컴포넌트
 const BoardList = ({ navigate }: { navigate: (path: string) => void }) => {
   const boards = [
+    { label: '커뮤니티 메인', path: '/community-main' },
     { label: '지체장애 게시판', path: '/PDCcommu' },
     { label: '뇌병변장애 게시판', path: '/BLDcommu', isCurrent: true },
     { label: '시각장애 게시판', path: '/VIcommu' },
