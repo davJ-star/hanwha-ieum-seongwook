@@ -216,3 +216,19 @@
     cursor: pointer;
   }
   
+  /* 모바일 화면에서 글쓰기 페이지의 게시판 목록만 숨기기 */
+  @media screen and (max-width: 768px) {
+    .write-post-page .board-list {
+      display: none;
+    }
+
+    .write-post-page .write-post-content {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .write-post-page {
+      padding: 10px;
+    }
+  }
+  
