@@ -17,6 +17,10 @@ const BoardButton = ({ label, path, onClick }: BoardButtonProps) => (
   <button 
     aria-label={`${label}으로 이동`}
     onClick={() => onClick(path)}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      window.open(path, '_blank');
+    }}
   >
     {label}
   </button>
@@ -94,6 +98,10 @@ const PostList = ({ navigate }: { navigate: (path: string) => void }) => (
       <button 
         className="write-button" 
         onClick={() => navigate('/writepost')} 
+        onContextMenu={(e) => {
+          e.preventDefault();
+          window.open('/writepost', '_blank');
+        }}
         style={{ color: '#000000' }}
         aria-label="새 게시글 작성하기"
       >

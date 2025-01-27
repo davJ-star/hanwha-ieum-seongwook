@@ -19,6 +19,10 @@ const BoardButton = ({ label, path, isCurrent, onClick }: BoardButtonProps) => (
     onClick={() => onClick(path)} 
     aria-label={`${label}${isCurrent ? '' : '으로 이동'}`}
     aria-current={isCurrent ? 'page' : undefined}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      window.open(path, '_blank');
+    }}
   >
     {label}
   </button>
@@ -62,6 +66,10 @@ const SearchBar = () => (
       placeholder="게시글 검색"
       className="search-input"
       aria-label="게시글 검색"
+      onContextMenu={(e) => {
+        e.preventDefault();
+        window.open('/writepost', '_blank');
+      }}
       style={{ color: '#000000' }}
     />
     <button 

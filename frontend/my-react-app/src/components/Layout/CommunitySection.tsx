@@ -34,19 +34,28 @@ interface CommunityButtonProps {
   onClick: (path: string) => void;
 }
 
-const CommunityButton: React.FC<CommunityButtonProps> = ({ item, onClick }) => (
-  <button
-    className="community-button"
-    onClick={() => onClick(item.path)}
-    aria-label={`${item.label} 커뮤니티로 이동`}
-    style={{ backgroundColor: '#f5f5f5' }}
-  >
-    <div className="icon-container">
-      {React.cloneElement(item.icon as React.ReactElement, { className: 'community-icon' })}
-    </div>
-    <span className="community-label">{item.label}</span>
-  </button>
-);
+const CommunityButton: React.FC<CommunityButtonProps> = ({ item, onClick }) => {
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    const newTab = window.open(item.path, '_blank');
+    if (newTab) newTab.focus();
+  };
+
+  return (
+    <button
+      className="community-button"
+      onClick={() => onClick(item.path)}
+      onContextMenu={handleContextMenu}
+      aria-label={`${item.label} 커뮤니티로 이동`}
+      style={{ backgroundColor: '#f5f5f5' }}
+    >
+      <div className="icon-container">
+        {React.cloneElement(item.icon as React.ReactElement, { className: 'community-icon' })}
+      </div>
+      <span className="community-label">{item.label}</span>
+    </button>
+  );
+};
 
 interface CommunitySectionProps {
   navigate: (path: string) => void;

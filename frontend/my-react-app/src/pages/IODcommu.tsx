@@ -19,6 +19,10 @@ const BoardButton = ({ label, path, isCurrent, onClick }: BoardButtonProps) => (
     onClick={() => onClick(path)} 
     aria-label={`${label}${isCurrent ? '' : '으로 이동'}`}
     aria-current={isCurrent ? 'page' : undefined}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      window.open(path, '_blank');
+    }}
   >
     {label}
   </button>
@@ -83,7 +87,11 @@ const PostHeader = ({ onWriteClick }: PostHeaderProps) => (
     <h2 id="boardTitle">내부기관장애 게시판</h2>
     <button 
       className="write-button" 
-      onClick={onWriteClick} 
+      onClick={onWriteClick}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        window.open('/writepost', '_blank');
+      }} 
       style={{ color: '#000000' }}
       aria-label="글쓰기"
     >

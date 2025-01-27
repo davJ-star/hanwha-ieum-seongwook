@@ -19,6 +19,10 @@ const BoardButton = ({ label, path, isCurrent, onClick }: BoardButtonProps) => (
     aria-label={`${label}${isCurrent ? '' : '으로 이동'}`}
     aria-current={isCurrent ? 'page' : undefined}
     onClick={() => onClick(path)}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      window.open(path, '_blank');
+    }}
   >
     {label}
   </button>
@@ -114,6 +118,10 @@ const BLDcommu = () => {
               <button 
                 className="write-button" 
                 onClick={() => navigate('/writepost')} 
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  window.open('/writepost', '_blank');
+                }}
                 style={{ color: '#000000' }}
                 aria-label="새 게시글 작성하기"
               >
