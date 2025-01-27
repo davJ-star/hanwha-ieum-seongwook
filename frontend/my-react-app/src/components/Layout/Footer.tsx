@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
         <div className="footer-links">
           <div>
             <h4>
-              <a href="/" style={{ color: '#000000', textDecoration: 'none' }}>
+              <a href="/" style={{ color: '#666666', textDecoration: 'none' }}>
                 홈페이지 바로가기
               </a>
             </h4>
