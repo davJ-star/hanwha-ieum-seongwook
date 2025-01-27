@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.Enum.Role;
 import com.example.demo.component.FileUploadUtil;
-import com.example.demo.dto.AddUserRequest;
-import com.example.demo.dto.PasswordUpdateRequest;
-import com.example.demo.dto.UserDeleteRequest;
-import com.example.demo.dto.UserUpdateRequest;
+import com.example.demo.dto.*;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,19 +25,18 @@ public class UserService {
     private final FileUploadUtil fileUploadUtil;
     private final EmailVerificationService emailVerificationService;
 
+
     @Transactional
-    public Long save(AddUserRequest dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
+    public Long save(SignupRequest request) {  // AddUserRequest → SignupRequest
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-        if (!emailVerificationService.isEmailVerified(dto.getEmail())) {
-            throw new IllegalArgumentException("이메일 인증이 필요합니다.");
-        }
-
         User user = User.builder()
-                .email(dto.getEmail())
-                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .email(request.getEmail())
+                .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                .name(request.getNickname())  // 새로 추가된 필드
+                .profileImage(request.getProfileImage())  // 새로 추가된 필드
                 .build();
 
         return userRepository.save(user).getId();
@@ -103,15 +99,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    @Transactional
-    public Long createAdmin(AddUserRequest request) {
-        User user = User.builder()
-                .email(request.getEmail())
-                .password(bCryptPasswordEncoder.encode(request.getPassword()))
-                .build();
-        user.setRole(Role.ADMIN);  // 관리자 권한 설정
-        return userRepository.save(user).getId();
-    }
 
 
 }

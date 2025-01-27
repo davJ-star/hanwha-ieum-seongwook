@@ -33,9 +33,11 @@ public class User implements UserDetails {
     private String profileImage;
 
     @Builder
-    public User(String email, String password, String auth) {
+    public User(String email, String password, String auth, String name, String profileImage) {
         this.email = email;
         this.password = password;
+        this.name = name;
+        this.profileImage = profileImage;
     }
 
     public void update(String name) {

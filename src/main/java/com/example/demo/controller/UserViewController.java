@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,36 +41,63 @@ public class UserViewController {
         return "login";  // login.html을 보여줌
     }
 
-    @GetMapping("/signup")
-    public String signupForm() {
-        return "signup";
-    }
 
 
 
     @PostMapping("/signup")
-    @ResponseBody  // AJAX 응답을 위해 추가
-    public ResponseEntity<?> signup(@ModelAttribute AddUserRequest request) {
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody SignupRequest request) {
         try {
             // 이메일 인증 상태 확인
             if (!emailVerificationService.isEmailVerified(request.getEmail())) {
-                return ResponseEntity.ok(Map.of(
-                        "success", false,
-                        "message", "이메일 인증이 필요합니다."
-                ));
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("message", "이메일 인증이 필요합니다.");
+                return ResponseEntity.ok(response);
             }
 
             userService.save(request);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "회원가입이 완료되었습니다."
-            ));
+
+            // 성공 시 필드 정보를 포함한 응답
+            Map<String, Object> fieldsInfo = new HashMap<>();
+            fieldsInfo.put("email", "String");
+            fieldsInfo.put("password", "String");
+            fieldsInfo.put("verificationCode", "String (optional)");
+            fieldsInfo.put("nickname", "String");
+            fieldsInfo.put("profileImage", "String (optional)");
+            fieldsInfo.put("passwordConfirm", "String");
+
+            Map<String, Object> signupData = new HashMap<>();
+            signupData.put("path", "src/main/resources/templates/signup.html");
+            signupData.put("fields", fieldsInfo);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "회원가입이 완료되었습니다.");
+            response.put("signup", signupData);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.ok(response);
         }
+    }
+    @GetMapping("/signup")
+    public ResponseEntity<Map<String, Object>> signupForm() {
+        Map<String, Object> fieldsInfo = new HashMap<>();
+        fieldsInfo.put("email", "String");
+        fieldsInfo.put("password", "String");
+        fieldsInfo.put("verificationCode", "String (optional)");
+        fieldsInfo.put("nickname", "String");
+        fieldsInfo.put("profileImage", "String (optional)");
+        fieldsInfo.put("passwordConfirm", "String");
+
+        Map<String, Object> signupData = new HashMap<>();
+        signupData.put("path", "src/main/resources/templates/signup.html");
+        signupData.put("fields", fieldsInfo);
+
+        return ResponseEntity.ok(Collections.singletonMap("signup", signupData));
     }
 
     @GetMapping("/mypage")
