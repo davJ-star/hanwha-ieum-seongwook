@@ -3,7 +3,7 @@ import { Braille } from "./braille";
 
 export const handleBrailleClick = () => {
   // 검색 결과 컨테이너에서 텍스트 추출
-  const resultsContainer = document.querySelector('.results-container');
+  const resultsContainer = document.querySelector('.results-container'); //텍스트를 읽어옴
   if (!resultsContainer) return;
   
   const text = resultsContainer.textContent || '';
@@ -139,7 +139,7 @@ export const handleBrailleRevert = () => {
   fileInput.click();
 };
 
-// BrailleConverter.tsx에서 가져온 필요한 매핑 테이블과 함수들
+//필요한 매핑 테이블과 함수들
 const initialBrailleMap: { [key: string]: string } = {
   ㄱ: "100000",
   ㄴ: "101000",
