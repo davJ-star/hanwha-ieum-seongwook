@@ -9,12 +9,20 @@ interface AccessibilityModalProps {
 const AccessibilityModal = ({ isOpen, onClose }: AccessibilityModalProps) => {
   if (!isOpen) return null;
 
+  // 모달 외부 클릭 처리 함수
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <div
       className="modal-overlay"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
+      onClick={handleOverlayClick}  // 외부 클릭 이벤트 핸들러 추가
     >
       <div className="modal-content" role="document">
         <h2 id="modal-title" className="modal-title">✔️ 접근성 기능 사용 가이드라인</h2>

@@ -84,6 +84,27 @@ export const handleBrailleRevert = () => {
       resultDiv.style.maxHeight = '80vh';
       resultDiv.style.overflow = 'auto';
 
+      // 모달 외부 클릭 시 닫히도록 오버레이 추가
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+      overlay.style.zIndex = '999';
+      
+      // 오버레이 클릭 시 모달 닫기
+      overlay.onclick = () => {
+        document.body.removeChild(overlay);
+        document.body.removeChild(resultDiv);
+      };
+
+      // 모달 내부 클릭 시 이벤트 전파 중단
+      resultDiv.onclick = (e) => {
+        e.stopPropagation();
+      };
+
       // 닫기 버튼 추가
       const closeButton = document.createElement('button');
       closeButton.textContent = '닫기';
@@ -94,7 +115,10 @@ export const handleBrailleRevert = () => {
       closeButton.style.backgroundColor = '#007bff';
       closeButton.style.color = '#000000';
       closeButton.style.cursor = 'pointer';
+      closeButton.style.display = 'block';  // 블록 레벨 요소로 변경
+      closeButton.style.margin = '10px auto';  // 상하 여백 10px, 좌우 auto로 중앙 정렬
       closeButton.onclick = () => {
+        document.body.removeChild(overlay);
         document.body.removeChild(resultDiv);
       };
 
@@ -102,7 +126,8 @@ export const handleBrailleRevert = () => {
       resultDiv.innerHTML = `<h3>변환된 텍스트:</h3><p>${result}</p>`;
       resultDiv.appendChild(closeButton);
 
-      // div를 페이지에 추가
+      // div를 페이지에 추가 (오버레이를 먼저 추가)
+      document.body.appendChild(overlay);
       document.body.appendChild(resultDiv);
 
     } catch (error) {
