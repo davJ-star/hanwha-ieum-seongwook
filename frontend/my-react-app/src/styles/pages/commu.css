@@ -140,17 +140,34 @@
   }
 
   @media screen and (max-width: 768px) {
+    .community-content {
+        padding: 0 10px;
+        flex-direction: column;
+    }
+
     .board-list {
-        width: 150px;
+        /*width: 50%;*/
+        margin-bottom: 15px;
         padding: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 300px;
     }
 
     .board-list button {
-        font-size: 9px;
+        font-size: 7px;
         white-space: pre-line;
         word-break: keep-all;
         line-height: 1.2;
         padding: 6px;
+        /*width: 50%;*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .post-list-container {
+        margin-left: 0;
+        width: 100%;
     }
     
     .search-button {
@@ -159,4 +176,10 @@
         white-space: nowrap;
         margin-left: 10px;
     }
+
+    .post-list {
+        padding: 10px;
+    }
   }
+
+  
