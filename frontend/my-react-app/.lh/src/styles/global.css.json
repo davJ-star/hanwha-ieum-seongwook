@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/styles/global.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1737959522497,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1737959522497,
+            "name": "Commit-0",
+            "content": "@import './variables.css';\r\n@import './breakpoints.css';\r\n\r\n/* 전역 스타일 */\r\n*,\r\n*::before,\r\n*::after {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n\r\nhtml, body, #root {\r\n  width: 100%;\r\n  height: 100vh;\r\n  margin: 0;\r\n  padding: 0;\r\n  overflow: hidden;\r\n}\r\n\r\nbody {\r\n  font-family: Arial, sans-serif;\r\n}\r\n\r\n/* 레이아웃 기본 설정 */\r\n.layout-container {\r\n  width: 100%;\r\n  height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  overflow: auto;\r\n}\r\n\r\nmain {\r\n  flex: 1;\r\n  width: 100%;\r\n  max-width: 1200px;\r\n  margin: 0 auto;\r\n  padding: 16px;\r\n}\r\n\r\n/* 공통 컴포넌트 스타일 */\r\n.button {\r\n  padding: 8px 16px;\r\n  border-radius: 4px;\r\n  border: none;\r\n  cursor: pointer;\r\n  transition: all 0.3s ease;\r\n}\r\n\r\n.input-field {\r\n  width: 100%;\r\n  padding: 8px;\r\n  border: 1px solid #ddd;\r\n  border-radius: 4px;\r\n}\r\n\r\n/* 공통 컨테이너 레이아웃 */\r\n.page-container {\r\n  width: 100%;\r\n  max-width: 1200px;\r\n  margin: 0 auto;\r\n  padding: 20px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n}\r\n\r\n/* 공통 컨텐츠 레이아웃 */\r\n.content-container {\r\n  width: 100%;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  gap: 20px;\r\n}\r\n\r\n/* 공통 입력 필드 그룹 */\r\n.input-group {\r\n  width: 100%;\r\n  max-width: 600px;\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  gap: 10px;\r\n  justify-content: center;\r\n  align-items: center;\r\n}\r\n\r\n/* 반응형 미디어 쿼리 */\r\n@media screen and (max-width: 768px) {\r\n  .page-container {\r\n    padding: 16px;\r\n  }\r\n\r\n  .input-group {\r\n    flex-direction: column;\r\n    max-width: 100%;\r\n  }\r\n\r\n  /* 모바일에서 입력 필드 전체 너비 사용 */\r\n  .input-group input,\r\n  .input-group select,\r\n  .input-group button {\r\n    width: 100%;\r\n    min-width: unset;\r\n  }\r\n}\r\n\r\n/* 공통 폼 스타일 */\r\nform {\r\n  width: 100%;\r\n  max-width: 600px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  gap: 16px;\r\n}\r\n\r\n/* 공통 버튼 스타일 */\r\nbutton {\r\n  min-width: 120px;\r\n  padding: 8px 16px;\r\n  border-radius: 4px;\r\n  border: 2px solid #000000;\r\n  background-color: #FFFF00;\r\n  cursor: pointer;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n/* 공통 입력 필드 스타일 */\r\ninput, select {\r\n  width: 100%;\r\n  padding: 8px;\r\n  border: 2px solid #000000;\r\n  border-radius: 4px;\r\n  background-color: #ffffff;\r\n  color: #000000;\r\n}\r\n"
+        }
+    ]
+}
