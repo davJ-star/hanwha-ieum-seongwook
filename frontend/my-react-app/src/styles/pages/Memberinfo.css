@@ -55,6 +55,11 @@
     text-align: center;
   }
   
+  .actions button {
+    margin: 0 2px;
+    border: 2px solid #000000 !important;
+  }
+  
   .delete-account {
     margin-top: 1rem;
     background-color: red !important;
