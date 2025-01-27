@@ -114,7 +114,7 @@ const BLDcommu = () => {
             <SearchBar />
 
             <header className="post-header">
-              <h2 id="postListTitle">뇌병변장애 게시판</h2>
+              <h3 id="postListTitle">뇌병변장애 게시판</h3>
               <button 
                 className="write-button" 
                 onClick={() => navigate('/writepost')} 

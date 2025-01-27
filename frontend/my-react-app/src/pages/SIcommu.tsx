@@ -88,7 +88,7 @@ interface PostHeaderProps {
 
 const PostHeader = ({ onWriteClick }: PostHeaderProps) => (
   <div className="post-header">
-    <h2 id="boardTitle">언어장애 게시판</h2>
+    <h3 id="boardTitle">언어장애 게시판</h3>
     <button 
       className="write-button" 
       onClick={onWriteClick} 
