@@ -1,3 +1,4 @@
+
 interface HeaderProps {
   isLoggedIn: boolean;
   onLogout: () => void;
@@ -7,7 +8,10 @@ interface HeaderProps {
 const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
   return (
     <header className="logo-header" role="banner">
-      <a href="/" className="logo" aria-label="홈페이지로 이동">MediLink</a>
+      <a href="/" className="logo logo-text" aria-label="홈페이지로 이동">
+        <img src="/hanwha-ieum/frontend/my-react-app/images/mediLinkLOGO.png" alt="mediLink 로고 이미지지" aria-label="mediLink 로고 알약 이미지" />
+        <span>MediLink</span>
+      </a>
       <div className="user-menu" role="navigation" aria-label="사용자 메뉴">
         {isLoggedIn ? (
           <>
