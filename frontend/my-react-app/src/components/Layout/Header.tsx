@@ -11,7 +11,7 @@ const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
   return (
     <header className="logo-header" role="banner">
       <Link to="/" className="logo logo-text" aria-label="홈페이지로 이동">
-        <img src="/hanwha-ieum/frontend/my-react-app/images/mediLinkLOGO.png" alt="mediLink 로고 이미지" />
+        {/* <img src="/hanwha-ieum/frontend/my-react-app/images/mediLinkLOGO.png" alt="mediLink 로고 이미지" /> */}
         <span>MediLink</span>
       </Link>
       <div className="user-menu" role="navigation" aria-label="사용자 메뉴">
