@@ -52,6 +52,7 @@ const Footer: React.FC = () => {
           <div>
             <h4>커뮤니티</h4>
             <ul style={{ listStyle: 'none', padding: 0 }}>
+              <li><a href="community-main" style={{ color: '#666666', textDecoration: 'none' }}>커뮤니티 메인</a></li>
               <li><a href="PDCcommu" style={{ color: '#666666', textDecoration: 'none' }}>지체장애 커뮤니티</a></li>
               <li><a href="BLDcommu" style={{ color: '#666666', textDecoration: 'none' }}>뇌병변장애 커뮤니티</a></li>
               <li><a href="VIcommu" style={{ color: '#666666', textDecoration: 'none' }}>시각장애 커뮤니티</a></li>
