@@ -10,14 +10,14 @@ import CommunitySection from '../components/Layout/CommunitySection';
 const MainBanner = () => (
   <div className="main-banner" role="banner" aria-label="메인 배너">
     <div className="banner-content">
-      <h1>쉬운 의약품 복용 관리 플랫폼 
+      <h2>쉬운 의약품 복용 관리 플랫폼 
         <div style={{ marginTop: '10px' }}>
           <span style={{
             color: '#FFFF00',
             textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
           }}>MediLink</span>입니다!
         </div>
-      </h1>
+      </h2>
       <h4>약 정보 찾기 어려우셨나요?</h4>
       <h4>약국 추천만 믿고 복용하셨던 분들!</h4>
       <h4>내 질환에 딱 맞는 정보를 원하셨던 분들!</h4>
