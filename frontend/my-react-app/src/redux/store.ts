@@ -1,6 +1,6 @@
 /*store.ts: Redux 스토어 설정 파일*/
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './features/counterSlice';
+import counterReducer from '../features/counterSlice';
 
 /*configureStore: Redux Toolkit의 configureStore 함수*/
 export const store = configureStore({
