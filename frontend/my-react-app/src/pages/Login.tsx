@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import '../styles/pages/Login.css';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
+import axios from 'axios';
 
 // 로그인 헤더 컴포넌트
 const LoginHeader = () => (
@@ -107,30 +108,36 @@ function Login() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [error, setError] = useState('');
+  const [logoutMessage, setLogoutMessage] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const logout = params.get('logout');
+    if (logout) {
+      setLogoutMessage('로그아웃되었습니다.');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await fetch('https://your-backend-url.com/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName, userPassword }),
+      const response = await axios.post('https://your-backend-url.com/api/login', {
+        userName,
+        userPassword
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        alert('로그인 성공!');
-        navigate('/mypage');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || '로그인 실패. 다시 시도해주세요.');
-      }
+      localStorage.setItem('token', response.data.token);
+      alert('로그인 성공!');
+      navigate('/mypage');
     } catch (err) {
-      setError('서버에 연결할 수 없습니다.');
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.message || '로그인 실패. 다시 시도해주세요.');
+      } else {
+        setError('서버에 연결할 수 없습니다.');
+      }
     }
   };
 
@@ -139,6 +146,11 @@ function Login() {
       <div className="login-container" role="main">
         <div className="login-wrapper">
           <LoginHeader />
+          {logoutMessage && (
+            <p className="logout-message" role="status">
+              {logoutMessage}
+            </p>
+          )}
           <LoginForm
             userName={userName}
             userPassword={userPassword}
