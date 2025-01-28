@@ -104,12 +104,6 @@ const FADsearch = () => {
     alert('로그아웃 되었습니다.');
   };
 
-  const handleZoom = (zoomType: string) => {
-    const currentZoom = document.body.style.zoom ? parseFloat(document.body.style.zoom) : 1;
-    if (zoomType === 'in') document.body.style.zoom = (currentZoom + 0.1).toString();
-    if (zoomType === 'out') document.body.style.zoom = (currentZoom - 0.1).toString();
-  };
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // 폼 제출 로직

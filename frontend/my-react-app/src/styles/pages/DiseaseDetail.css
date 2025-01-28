@@ -55,7 +55,7 @@
   /* 검색 컨테이너 스타일링 */
   .search-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 20px auto;
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 8px;
@@ -110,7 +110,7 @@
   /* 검색 결과 스타일링 */
   .search-results {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 20px auto;
     padding: 2rem;
   }
   
