@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +37,7 @@ public class PostService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        // 공지사항 작성 권한 체크
-        if (request.getCategory() == PostCategory.NOTICE
-                && user.getRole() != Role.ADMIN) {
+        if (request.getCategory() == PostCategory.NOTICE && user.getRole() != Role.ADMIN) {
             throw new RuntimeException("공지사항 작성 권한이 없습니다.");
         }
 
@@ -72,8 +71,9 @@ public class PostService {
         return posts.map(this::convertToDto);
     }
 
+
     public PostResponse getPost(Long id) {
-        Post post = postRepository.findById(id)
+        Post post = postRepository.findByIdWithAuthorAndComments(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         return convertToDto(post);
     }
@@ -91,17 +91,6 @@ public class PostService {
                 request.getCategory(), request.getDisabilityType());
     }
 
-    @Transactional
-    public void deletePost(Long id, String email) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
-
-        if (!post.getAuthor().getEmail().equals(email)) {
-            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
-        }
-
-        postRepository.delete(post);
-    }
 
     private PostResponse convertToDto(Post post) {
         return PostResponse.builder()
@@ -113,6 +102,7 @@ public class PostService {
                 .disabilityType(post.getDisabilityType())
                 .createdAt(post.getCreatedAt())
                 .comments(post.getComments().stream()
+                        .sorted(Comparator.comparing(Comment::getCreatedAt))
                         .map(this::convertToDto)
                         .collect(Collectors.toList()))
                 .build();
@@ -126,6 +116,21 @@ public class PostService {
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
+
+    @Transactional
+    public void deletePost(Long id, String email) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        if (!post.getAuthor().getEmail().equals(email)) {
+            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
+        }
+
+        postRepository.delete(post);
+    }
+
+
+
 
     public Page<PostResponse> searchPosts(String keyword, PageRequest pageRequest) {
         Page<Post> posts = postRepository.findByTitleContainingOrContentContaining(

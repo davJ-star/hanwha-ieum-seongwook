@@ -7,11 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 public class PostResponse {
     private Long id;
     private String title;
@@ -21,4 +22,16 @@ public class PostResponse {
     private DisabilityType disabilityType;
     private LocalDateTime createdAt;
     private List<CommentResponse> comments;
+
+    public String getCategoryValue() {
+        return category.getValue();
+    }
+
+    public String getDisabilityTypeValue() {
+        return disabilityType.getValue();
+    }
+
+    public String getFormattedCreatedAt() {
+        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
 }

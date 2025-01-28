@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -128,53 +125,75 @@ public class CommunityController {
 
 
     @GetMapping("/community/post/{id}")
-    public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id,
-                                                      @RequestParam(required = false) String message,
-                                                      @RequestParam(required = false) String error) {
+    public ResponseEntity<Map<String, Object>> detail(
+            @PathVariable Long id,
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String error,
+            @RequestParam(required = false) DisabilityType fromBoard) {
 
         PostResponse post = postService.getPost(id);
 
-        Map<String, Object> fields = new HashMap<>();
-        Map<String, Object> postMap = new HashMap<>();
+        // LinkedHashMap을 사용하여 순서 보장
+        Map<String, Object> fields = new LinkedHashMap<>();
+        fields.put("message", message);
+        fields.put("error", error);
 
-        // 선택적 메시지 필드 추가
-        if (message != null) {
-            fields.put("message", message);
-        }
-        if (error != null) {
-            fields.put("error", error);
-        }
-
-        // post 정보 매핑
+        // post 정보
+        Map<String, Object> postMap = new LinkedHashMap<>();
         postMap.put("id", post.getId());
         postMap.put("title", post.getTitle());
         postMap.put("content", post.getContent());
-        postMap.put("category", post.getCategory().getValue());
-        postMap.put("disabilityType", post.getDisabilityType().getValue());
+        postMap.put("category", post.getCategoryValue());
+        postMap.put("disabilityType", post.getDisabilityTypeValue());
         postMap.put("authorName", post.getAuthorName());
-        postMap.put("createdAt", post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        postMap.put("createdAt", post.getFormattedCreatedAt());
 
-        // comments 매핑
+        // actions
+        Map<String, String> actions = new LinkedHashMap<>();
+        actions.put("edit", "/community/post/" + id + "/edit");
+        actions.put("delete", "/community/post/" + id + "/delete");
+        postMap.put("actions", actions);
+
+        // comments
         List<Map<String, Object>> commentsMap = post.getComments().stream()
                 .map(comment -> {
-                    Map<String, Object> commentMap = new HashMap<>();
+                    Map<String, Object> commentMap = new LinkedHashMap<>();
                     commentMap.put("id", comment.getId());
                     commentMap.put("authorName", comment.getAuthorName());
                     commentMap.put("content", comment.getContent());
-                    commentMap.put("createdAt", comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    commentMap.put("createdAt", comment.getFormattedCreatedAt());
+
+                    Map<String, String> commentActions = new LinkedHashMap<>();
+                    commentActions.put("delete",
+                            "/community/post/" + id + "/comment/" + comment.getId() + "/delete");
+                    commentMap.put("actions", commentActions);
+
                     return commentMap;
                 })
                 .collect(Collectors.toList());
         postMap.put("comments", commentsMap);
-
         fields.put("post", postMap);
 
-        return ResponseEntity.ok(Map.of(
-                "detail", Map.of(
-                        "path", "src/main/resources/templates/community/detail.html",
-                        "fields", fields
-                )
-        ));
+        // commentForm
+        Map<String, Object> commentForm = new LinkedHashMap<>();
+        commentForm.put("action", "/community/post/" + id + "/comment");
+        commentForm.put("fields", Map.of("content", "String"));
+        fields.put("commentForm", commentForm);
+
+        // navigation
+        Map<String, String> navigation = new LinkedHashMap<>();
+        if (fromBoard != null) {
+            navigation.put("backToList", "/community/" + fromBoard.name().toLowerCase());
+        } else {
+            navigation.put("backToList", "/community");
+        }
+        fields.put("navigation", navigation);
+
+        Map<String, Object> detail = new LinkedHashMap<>();
+        detail.put("path", "src/main/resources/templates/community/detail.html");
+        detail.put("fields", fields);
+
+        return ResponseEntity.ok(Map.of("detail", detail));
     }
 
     @GetMapping("/community/post/{id}/edit")
