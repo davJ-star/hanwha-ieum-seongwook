@@ -8,6 +8,7 @@ import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -106,19 +108,43 @@ public class UserViewController {
     }
 
     @GetMapping("/{id}/mypage")
-    public String myPage(@PathVariable Long id, @AuthenticationPrincipal User user, Model model) {
+    public ResponseEntity<MyPageResponse> getMyPage(@PathVariable Long id, @AuthenticationPrincipal User user) {
         if (!user.getId().equals(id)) {
-            return "redirect:/";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        MyPageResponse response = new MyPageResponse();
+        MyPageResponse.MypageData mypageData = new MyPageResponse.MypageData();
+        MyPageResponse.FieldsData fieldsData = new MyPageResponse.FieldsData();
+
+        // User 정보 설정
         User userInfo = userService.getMyInfo(user.getEmail());
+        MyPageResponse.UserData userData = new MyPageResponse.UserData();
+        userData.setId(userInfo.getId());
+        userData.setEmail(userInfo.getEmail());
+        userData.setName(userInfo.getName());
+        userData.setProfileImage(userInfo.getProfileImage());
+
+        // Medication 정보 설정
         List<MedicationResponse> medications = medicationService.getUserMedications(user.getEmail());
+        List<MyPageResponse.MedicationData> medicationDataList = medications.stream()
+                .map(med -> {
+                    MyPageResponse.MedicationData medicationData = new MyPageResponse.MedicationData();
+                    medicationData.setDrugName(med.getDrugName());
+                    medicationData.setDosage(med.getDosage());
+                    medicationData.setUnit(med.getUnit());
+                    return medicationData;
+                })
+                .collect(Collectors.toList());
 
-        model.addAttribute("user", userInfo);
-        model.addAttribute("medications", medications);  // 추가
-        return "mypage";
+        fieldsData.setUser(userData);
+        fieldsData.setMedications(medicationDataList);
+        mypageData.setPath("src/main/resources/mypage.html");
+        mypageData.setFields(fieldsData);
+        response.setMypage(mypageData);
+
+        return ResponseEntity.ok(response);
     }
-
     @PostMapping("/{id}/mypage/update")
     public String updateUser(@PathVariable Long id,
                              @AuthenticationPrincipal User user,

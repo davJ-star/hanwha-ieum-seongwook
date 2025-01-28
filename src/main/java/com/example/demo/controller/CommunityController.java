@@ -16,13 +16,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,67 +38,177 @@ public class CommunityController {
     private final CommentService commentService;
 
     @GetMapping("/community")
-    public String communityHome(@RequestParam(required = false) PostCategory category,
-                                @RequestParam(required = false) DisabilityType disabilityType,
-                                @PageableDefault(size = 10, sort = "createdAt",
-                                        direction = Sort.Direction.DESC) Pageable pageable,
-                                Model model) {
+    public ResponseEntity<Map<String, Object>> communityHome(
+            @RequestParam(required = false) PostCategory category,
+            @RequestParam(required = false) DisabilityType disabilityType,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
         Page<PostResponse> posts = postService.getPosts(category, disabilityType, pageable);
-        model.addAttribute("posts", posts);
-        model.addAttribute("categories", PostCategory.values());
-        model.addAttribute("disabilityTypes", DisabilityType.values());
-        return "community/home";
+
+        Map<String, Object> fields = new HashMap<>();
+
+        // 선택적 필드 추가
+        if (category != null) {
+            fields.put("category", category.getValue());
+        }
+        if (disabilityType != null) {
+            fields.put("disabilityType", disabilityType.getValue());
+        }
+
+        // 필수 필드 추가
+        fields.put("categories", Arrays.stream(PostCategory.values())
+                .map(PostCategory::getValue)
+                .collect(Collectors.toList()));
+
+        fields.put("disabilityTypes", Arrays.stream(DisabilityType.values())
+                .map(DisabilityType::getValue)
+                .collect(Collectors.toList()));
+
+        // posts 변환
+        List<Map<String, Object>> postsResponse = posts.getContent().stream()
+                .map(post -> {
+                    Map<String, Object> postMap = new HashMap<>();
+                    postMap.put("id", post.getId());
+                    postMap.put("title", post.getTitle());
+                    postMap.put("category", post.getCategory().getValue());
+                    postMap.put("disabilityType", post.getDisabilityType().getValue());
+                    postMap.put("authorName", post.getAuthorName());
+                    postMap.put("createdAt", post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    postMap.put("commentsCount", post.getComments().size());
+                    return postMap;
+                })
+                .collect(Collectors.toList());
+        fields.put("posts", postsResponse);
+
+        // pagination 정보 추가
+        Map<String, Object> pagination = new HashMap<>();
+        pagination.put("currentPage", pageable.getPageNumber());
+        pagination.put("totalPages", posts.getTotalPages());
+        pagination.put("hasPrevious", posts.hasPrevious());
+        pagination.put("hasNext", posts.hasNext());
+        fields.put("pagination", pagination);
+
+        return ResponseEntity.ok(Map.of(
+                "home", Map.of(
+                        "path", "src/main/resources/templates/community/home.html",
+                        "fields", fields
+                )
+        ));
     }
 
     @GetMapping("/community/write")
-    public String writeForm(@AuthenticationPrincipal User user, Model model) {
-        // admin이 아닌 경우 NOTICE를 제외한 카테고리만 전달
+    public ResponseEntity<Map<String, Object>> writeForm(@AuthenticationPrincipal User user) {
+        Map<String, Object> fields = new HashMap<>();
+
+        // 권한에 따른 카테고리 필터링
+        List<String> categories;
         if (user.getRole() != Role.ADMIN) {
-            model.addAttribute("categories",
-                    Arrays.stream(PostCategory.values())
-                            .filter(category -> category != PostCategory.NOTICE)
-                            .collect(Collectors.toList()));
+            categories = Arrays.stream(PostCategory.values())
+                    .filter(category -> category != PostCategory.NOTICE)
+                    .map(PostCategory::getValue)
+                    .collect(Collectors.toList());
         } else {
-            model.addAttribute("categories", PostCategory.values());
+            categories = Arrays.stream(PostCategory.values())
+                    .map(PostCategory::getValue)
+                    .collect(Collectors.toList());
         }
-        model.addAttribute("disabilityTypes", DisabilityType.values());
-        return "community/write";
+
+        fields.put("categories", categories);
+        fields.put("disabilityTypes", Arrays.stream(DisabilityType.values())
+                .map(DisabilityType::getValue)
+                .collect(Collectors.toList()));
+
+        return ResponseEntity.ok(Map.of(
+                "write", Map.of(
+                        "path", "src/main/resources/templates/community/write.html",
+                        "fields", fields
+                )
+        ));
     }
 
-    @PostMapping("/community/write")
-    public String write(@AuthenticationPrincipal User user,
-                        @ModelAttribute PostRequest request,
-                        RedirectAttributes redirectAttributes) {
-        try {
-            Long postId = postService.createPost(user.getEmail(), request);
-            return "redirect:/community/post/" + postId;
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "게시글 작성 중 오류가 발생했습니다.");
-            return "redirect:/community/write";
-        }
-    }
 
     @GetMapping("/community/post/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id,
+                                                      @RequestParam(required = false) String message,
+                                                      @RequestParam(required = false) String error) {
+
         PostResponse post = postService.getPost(id);
-        model.addAttribute("post", post);
-        return "community/detail";
+
+        Map<String, Object> fields = new HashMap<>();
+        Map<String, Object> postMap = new HashMap<>();
+
+        // 선택적 메시지 필드 추가
+        if (message != null) {
+            fields.put("message", message);
+        }
+        if (error != null) {
+            fields.put("error", error);
+        }
+
+        // post 정보 매핑
+        postMap.put("id", post.getId());
+        postMap.put("title", post.getTitle());
+        postMap.put("content", post.getContent());
+        postMap.put("category", post.getCategory().getValue());
+        postMap.put("disabilityType", post.getDisabilityType().getValue());
+        postMap.put("authorName", post.getAuthorName());
+        postMap.put("createdAt", post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+
+        // comments 매핑
+        List<Map<String, Object>> commentsMap = post.getComments().stream()
+                .map(comment -> {
+                    Map<String, Object> commentMap = new HashMap<>();
+                    commentMap.put("id", comment.getId());
+                    commentMap.put("authorName", comment.getAuthorName());
+                    commentMap.put("content", comment.getContent());
+                    commentMap.put("createdAt", comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    return commentMap;
+                })
+                .collect(Collectors.toList());
+        postMap.put("comments", commentsMap);
+
+        fields.put("post", postMap);
+
+        return ResponseEntity.ok(Map.of(
+                "detail", Map.of(
+                        "path", "src/main/resources/templates/community/detail.html",
+                        "fields", fields
+                )
+        ));
     }
 
     @GetMapping("/community/post/{id}/edit")
-    public String editForm(@PathVariable Long id,
-                           @AuthenticationPrincipal User user,
-                           Model model) {
+    public ResponseEntity<Map<String, Object>> editForm(@PathVariable Long id, @AuthenticationPrincipal User user) {
         PostResponse post = postService.getPost(id);
 
         if (!post.getAuthorName().equals(user.getName())) {
             throw new RuntimeException("수정 권한이 없습니다.");
         }
 
-        model.addAttribute("post", post);
-        model.addAttribute("categories", PostCategory.values());
-        model.addAttribute("disabilityTypes", DisabilityType.values());
-        return "community/edit";
+        Map<String, Object> fields = new HashMap<>();
+        Map<String, Object> postMap = new HashMap<>();
+
+        // post 정보 매핑
+        postMap.put("id", post.getId());
+        postMap.put("title", post.getTitle());
+        postMap.put("content", post.getContent());
+        postMap.put("category", post.getCategory().getValue());
+        postMap.put("disabilityType", post.getDisabilityType().getValue());
+
+        fields.put("post", postMap);
+        fields.put("categories", Arrays.stream(PostCategory.values())
+                .map(PostCategory::getValue)
+                .collect(Collectors.toList()));
+        fields.put("disabilityTypes", Arrays.stream(DisabilityType.values())
+                .map(DisabilityType::getValue)
+                .collect(Collectors.toList()));
+
+        return ResponseEntity.ok(Map.of(
+                "edit", Map.of(
+                        "path", "src/main/resources/templates/community/edit.html",
+                        "fields", fields
+                )
+        ));
     }
 
     @PostMapping("/community/post/{id}/edit")
