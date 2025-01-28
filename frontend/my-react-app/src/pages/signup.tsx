@@ -3,8 +3,6 @@ import '../styles/pages/signup.css'; // 스타일 파일 추가
 import Layout from '../components/Layout/Layout';
 import { FaUpload } from 'react-icons/fa'; // 아이콘 추가
 
-//테스트 전
-
 // 입력 그룹 컴포넌트
 interface InputGroupProps {
   id: string;
