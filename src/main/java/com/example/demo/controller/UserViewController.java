@@ -248,37 +248,37 @@ public class UserViewController {
         return "redirect:/" + id + "/mypage";
     }
 
-    @GetMapping("/{id}/mypage/password")
-    public ResponseEntity<AccountResponse> getPasswordChangePage(@PathVariable Long id,
-                                                                 @AuthenticationPrincipal User user) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        AccountResponse response = new AccountResponse();
-        AccountResponse.AccountData accountData = new AccountResponse.AccountData();
-        AccountResponse.FieldsData fieldsData = new AccountResponse.FieldsData();
-
-        // User 정보 설정
-        AccountResponse.UserData userData = new AccountResponse.UserData();
-        userData.setId(user.getId());
-        userData.setName(user.getName());
-        userData.setEmail(user.getEmail());
-        // emailVerificationCode는 optional이므로 필요한 경우에만 설정
-
-        // PasswordChange 정보 설정
-        AccountResponse.PasswordChangeData passwordChangeData = new AccountResponse.PasswordChangeData();
-        passwordChangeData.setCurrentPassword("");  // 빈 문자열로 초기화
-        passwordChangeData.setNewPassword("");
-        passwordChangeData.setNewPasswordConfirm("");
-
-        // Response 조합
-        fieldsData.setUser(userData);
-        fieldsData.setPasswordChange(passwordChangeData);
-        accountData.setPath("src/main/resources/account.html");
-        accountData.setFields(fieldsData);
-        response.setAccount(accountData);
-
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/{id}/mypage/password")
+//    public ResponseEntity<AccountResponse> getPasswordChangePage(@PathVariable Long id,
+//                                                                 @AuthenticationPrincipal User user) {
+//        if (!user.getId().equals(id)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+//
+//        AccountResponse response = new AccountResponse();
+//        AccountResponse.AccountData accountData = new AccountResponse.AccountData();
+//        AccountResponse.FieldsData fieldsData = new AccountResponse.FieldsData();
+//
+//        // User 정보 설정
+//        AccountResponse.UserData userData = new AccountResponse.UserData();
+//        userData.setId(user.getId());
+//        userData.setName(user.getName());
+//        userData.setEmail(user.getEmail());
+//        // emailVerificationCode는 optional이므로 필요한 경우에만 설정
+//
+//        // PasswordChange 정보 설정
+//        AccountResponse.PasswordChangeData passwordChangeData = new AccountResponse.PasswordChangeData();
+//        passwordChangeData.setCurrentPassword("");  // 빈 문자열로 초기화
+//        passwordChangeData.setNewPassword("");
+//        passwordChangeData.setNewPasswordConfirm("");
+//
+//        // Response 조합
+//        fieldsData.setUser(userData);
+//        fieldsData.setPasswordChange(passwordChangeData);
+//        accountData.setPath("src/main/resources/account.html");
+//        accountData.setFields(fieldsData);
+//        response.setAccount(accountData);
+//
+//        return ResponseEntity.ok(response);
+//    }
 }
