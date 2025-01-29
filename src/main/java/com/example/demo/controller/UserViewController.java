@@ -121,8 +121,7 @@ public class UserViewController {
         User userInfo = userService.getMyInfo(user.getEmail());
         MyPageResponse.UserData userData = new MyPageResponse.UserData();
         userData.setId(userInfo.getId());
-        userData.setEmail(userInfo.getEmail());
-        userData.setName(userInfo.getName());
+        userData.setNickname(userInfo.getName());
         userData.setProfileImage(userInfo.getProfileImage());
 
         // Medication 정보 설정
@@ -131,8 +130,17 @@ public class UserViewController {
                 .map(med -> {
                     MyPageResponse.MedicationData medicationData = new MyPageResponse.MedicationData();
                     medicationData.setDrugName(med.getDrugName());
-                    medicationData.setDosage(med.getDosage());
-                    medicationData.setUnit(med.getUnit());
+                    medicationData.setDosage(med.getDosage().floatValue());
+                    medicationData.setUnit(med.getUnit());  // MedicationResponse에서 이미 String으로 변환된 unit을 사용
+                    medicationData.setFrequency(med.getFrequency());  // 이미 소문자로 변환된 frequency 사용
+
+                    MyPageResponse.TimeData timeData = new MyPageResponse.TimeData();
+                    timeData.setHour(med.getTime().getHour());
+                    timeData.setMinute(med.getTime().getMinute());
+                    medicationData.setTime(timeData);
+
+                    medicationData.setWeekday(med.getWeekday());  // 이미 변환된 weekday 사용
+
                     return medicationData;
                 })
                 .collect(Collectors.toList());
@@ -200,7 +208,7 @@ public class UserViewController {
         return "redirect:/" + id + "/mypage";
     }
 
-    @PostMapping("/{id}/mypage/delete")
+    @DeleteMapping("/{id}/mypage/delete")
     public String deleteUser(@PathVariable Long id,
                              @AuthenticationPrincipal User user,
                              @ModelAttribute UserDeleteRequest request,
@@ -238,5 +246,39 @@ public class UserViewController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/" + id + "/mypage";
+    }
+
+    @GetMapping("/{id}/mypage/password")
+    public ResponseEntity<AccountResponse> getPasswordChangePage(@PathVariable Long id,
+                                                                 @AuthenticationPrincipal User user) {
+        if (!user.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        AccountResponse response = new AccountResponse();
+        AccountResponse.AccountData accountData = new AccountResponse.AccountData();
+        AccountResponse.FieldsData fieldsData = new AccountResponse.FieldsData();
+
+        // User 정보 설정
+        AccountResponse.UserData userData = new AccountResponse.UserData();
+        userData.setId(user.getId());
+        userData.setName(user.getName());
+        userData.setEmail(user.getEmail());
+        // emailVerificationCode는 optional이므로 필요한 경우에만 설정
+
+        // PasswordChange 정보 설정
+        AccountResponse.PasswordChangeData passwordChangeData = new AccountResponse.PasswordChangeData();
+        passwordChangeData.setCurrentPassword("");  // 빈 문자열로 초기화
+        passwordChangeData.setNewPassword("");
+        passwordChangeData.setNewPasswordConfirm("");
+
+        // Response 조합
+        fieldsData.setUser(userData);
+        fieldsData.setPasswordChange(passwordChangeData);
+        accountData.setPath("src/main/resources/account.html");
+        accountData.setFields(fieldsData);
+        response.setAccount(accountData);
+
+        return ResponseEntity.ok(response);
     }
 }

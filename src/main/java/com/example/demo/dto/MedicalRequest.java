@@ -14,4 +14,5 @@ public class MedicalRequest {
     private String situation;
     private String original_info;
     private int target_age;
+
 }

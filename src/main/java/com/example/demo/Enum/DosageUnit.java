@@ -5,6 +5,7 @@ public enum DosageUnit {
     MCG("mcg"),
     G("g"),
     ML("ml"),
+    TABLET("정"), // 추가
     PERCENT("%");
 
     private final String label;
@@ -16,4 +17,6 @@ public enum DosageUnit {
     public String getLabel() {
         return label;
     }
+
+
 }

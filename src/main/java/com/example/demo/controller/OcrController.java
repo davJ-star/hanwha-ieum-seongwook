@@ -5,6 +5,7 @@ import com.example.demo.dto.DrugDetailResponse;
 import com.example.demo.dto.OcrResponse;
 import com.example.demo.service.SearchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class OcrController {
 
     private final WebClient ocrWebClient;
@@ -38,7 +40,7 @@ public class OcrController {
                 .bodyToMono(OcrResponse.class)
                 .map(OcrResponse::getText)
                 .block();
-
+        log.info(ocrText);
         // OCR 결과를 단어로 분리
         String[] words = ocrText.split(" ");
 
