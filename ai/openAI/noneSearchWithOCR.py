@@ -8,7 +8,7 @@ load_dotenv()
 # OpenAI 클라이언트 초기화
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def fetch_medical_info(category, query, ocr_words=None):
+def fetch_medical_info(category, query=None, ocr_words=None):
     """
     특정 질병 또는 의약품에 대한 정보를 검색하고,  
     OCR 결과를 기반으로 유사한 검색어를 유추하는 기능을 포함한 함수.
@@ -105,10 +105,18 @@ def fetch_medical_info(category, query, ocr_words=None):
 
 # ===== 테스트 실행 ===== #
 if __name__ == "__main__":
+    # category = "질병"
+    # query = "일본뇌염"
+    # ocr_words = ["일본", "뇌", "염", "감기", "백신"]
     category = "질병"
-    query = "일본뇌염"
-    ocr_words = ["일본", "뇌", "염", "감기", "백신"]
-
-    print(f"\n\n🔍 '{query}' 검색 결과:")
+    
+    #ocr_words = ["이저", "닞나", "노", "에아", "가나"]
+    #ocr_words = ["아세", "mg", "100", "노펜", "트아미"]
+    ocr_words = None
+    # query = None
+    #query = "Zylophex"
+    query = "자일로펙스"
+    print(f"\n\n🔍 '{query if query else '입력값넣지않음'}' 검색 결과:")
     result = fetch_medical_info(category, query, ocr_words)
+    #result = fetch_medical_info(category, query, ocr_words)
     print(result)
