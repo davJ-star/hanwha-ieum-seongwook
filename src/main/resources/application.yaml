@@ -16,7 +16,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://hanhwa-ieum.ctwwwk4sax4o.ap-northeast-2.rds.amazonaws.com:3306/hanwha?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://hanhwa-ieum.ctwwwk4sax4o.ap-northeast-2.rds.amazonaws.com:3306/hanhwa?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: admin
     password: ac37891313$!
 
