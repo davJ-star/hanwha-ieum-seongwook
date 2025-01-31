@@ -21,7 +21,6 @@ public class WebClientConfig {
                 .build();
     }
 
-
     @Bean
     public WebClient ocrWebClient() {
         return WebClient.builder()
@@ -29,4 +28,10 @@ public class WebClientConfig {
                 .build();
     }
 
+    @Bean
+    public WebClient fastApiClient() {
+        return WebClient.builder()
+                .baseUrl("http://localhost:8001")
+                .build();
+    }
 }

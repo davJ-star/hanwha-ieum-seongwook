@@ -27,8 +27,10 @@ public class HealthSearchController {
     @GetMapping("/search")
     public ResponseEntity<List<DiseaseBasicResponse>> searchDisease(
             @RequestParam String keyword) {
-        return ResponseEntity.ok(healthSearchService.searchDiseaseBasic(keyword));
+        List<DiseaseBasicResponse> results = healthSearchService.searchDiseaseBasic(keyword);
+        return ResponseEntity.ok(results);
     }
+
 
     @GetMapping("/search/{contentId}")
     public ResponseEntity<DiseaseDetailResponse> getDiseaseDetail(

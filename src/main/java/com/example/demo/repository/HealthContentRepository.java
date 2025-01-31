@@ -12,4 +12,5 @@ import java.util.List;
 public interface HealthContentRepository extends JpaRepository<HealthContent, String> {
     @Query(value = "SELECT * FROM health_contents WHERE title LIKE CONCAT('%', :keyword, '%')", nativeQuery = true)
     List<HealthContent> searchByTitleKeyword(@Param("keyword") String keyword);
+    
 }
