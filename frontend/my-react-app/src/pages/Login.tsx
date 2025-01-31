@@ -116,7 +116,6 @@ function Login() {
     const params = new URLSearchParams(window.location.search);
     const logout = params.get('logout');
     if (logout) {
-      // 로그아웃 API 호출 추가(테스트 전)
       const handleLogout = async () => {
         try {
           await axios.post('/logout');
@@ -160,14 +159,13 @@ function Login() {
       return;
     }
 
-    try {
-      const response = await axios.get('http://localhost:8080/login', {
-        params: {
-          userName,
-          userPassword
-        }
-      });
+    const formData = new FormData();
+    formData.append('username', userName);
+    formData.append('password', userPassword);
 
+    try {
+      const response = await axios.post('http://localhost:8080/login', formData);
+      
       localStorage.setItem('token', response.data.token);
       alert('로그인 성공!');
       navigate('/mypage');
