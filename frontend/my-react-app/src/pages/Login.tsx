@@ -66,8 +66,8 @@ const AdditionalButtons = () => (
 
 // 로그인 폼 컴포넌트
 interface LoginFormProps {
-  userName: string;
-  userPassword: string;
+  username: string;
+  password: string;
   error: string;
   onUserNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -75,8 +75,8 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({
-  userName,
-  userPassword,
+  username,
+  password,
   error,
   onUserNameChange,
   onPasswordChange,
@@ -87,7 +87,7 @@ const LoginForm = ({
       type="text"
       name="userName"
       label="이메일 주소를 입력해주세요."
-      value={userName}
+      value={username}
       onChange={onUserNameChange}
       placeholder="이메일"
     />
@@ -95,7 +95,7 @@ const LoginForm = ({
       type="password"
       name="userPassword"
       label="비밀번호를 입력해주세요."
-      value={userPassword}
+      value={password}
       onChange={onPasswordChange}
       placeholder="비밀번호"
     />
@@ -105,8 +105,8 @@ const LoginForm = ({
 );
 
 function Login() {
-  const [userName, setUserName] = useState('');
-  const [userPassword, setUserPassword] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setUserPassword] = useState('');
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [logoutMessage, setLogoutMessage] = useState('');
@@ -155,17 +155,15 @@ function Login() {
     e.preventDefault();
     setError('');
 
-    if (!validateEmail(userName)) {
+    if (!validateEmail(username)) {
       setError('올바른 이메일 형식이 아닙니다.');
       return;
     }
-
+    
     try {
-      const response = await axios.get('http://localhost:8080/login', {
-        params: {
-          userName,
-          userPassword
-        }
+      const response = await axios.post('http://localhost:8080/login', {
+        username: username,
+        password: password
       });
 
       localStorage.setItem('token', response.data.token);
@@ -191,8 +189,8 @@ function Login() {
             </p>
           )}
           <LoginForm
-            userName={userName}
-            userPassword={userPassword}
+            username={username}
+            password={password}
             error={error || emailError}
             onUserNameChange={handleEmailChange}
             onPasswordChange={(e) => setUserPassword(e.target.value)}
