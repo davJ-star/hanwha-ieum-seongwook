@@ -108,6 +108,7 @@ function Login() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [logoutMessage, setLogoutMessage] = useState('');
   const navigate = useNavigate();
 
@@ -115,18 +116,56 @@ function Login() {
     const params = new URLSearchParams(window.location.search);
     const logout = params.get('logout');
     if (logout) {
-      setLogoutMessage('로그아웃되었습니다.');
+      // 로그아웃 API 호출 추가(테스트 전)
+      const handleLogout = async () => {
+        try {
+          await axios.post('/logout');
+          localStorage.removeItem('token');
+          setLogoutMessage('로그아웃되었습니다.');
+        } catch (err) {
+          if (axios.isAxiosError(err) && err.response) {
+            setLogoutMessage('로그아웃 중 오류가 발생했습니다.');
+            console.error('로그아웃 오류:', err.response.data);
+          } else {
+            setLogoutMessage('서버에 연결할 수 없습니다.');
+          }
+        }
+      };
+      handleLogout();
     }
   }, []);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    setUserName(email);
+    
+    if (email && !validateEmail(email)) {
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+    } else {
+      setEmailError('');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
-    try { //테스트 전
-      const response = await axios.post('https://your-backend-url.com/api/login', {
-        userName,
-        userPassword
+    if (!validateEmail(userName)) {
+      setError('올바른 이메일 형식이 아닙니다.');
+      return;
+    }
+
+    try {
+      const response = await axios.get('http://localhost:8080/login', {
+        params: {
+          userName,
+          userPassword
+        }
       });
 
       localStorage.setItem('token', response.data.token);
@@ -154,8 +193,8 @@ function Login() {
           <LoginForm
             userName={userName}
             userPassword={userPassword}
-            error={error}
-            onUserNameChange={(e) => setUserName(e.target.value)}
+            error={error || emailError}
+            onUserNameChange={handleEmailChange}
             onPasswordChange={(e) => setUserPassword(e.target.value)}
             onSubmit={handleSubmit}
           />
