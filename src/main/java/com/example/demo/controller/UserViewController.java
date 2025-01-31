@@ -248,6 +248,7 @@ public class UserViewController {
         return "redirect:/" + id + "/mypage";
     }
 
+
 //    @GetMapping("/{id}/mypage/password")
 //    public ResponseEntity<AccountResponse> getPasswordChangePage(@PathVariable Long id,
 //                                                                 @AuthenticationPrincipal User user) {
