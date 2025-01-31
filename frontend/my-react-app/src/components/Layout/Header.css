@@ -1,0 +1,49 @@
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.2rem;
+}
+
+.logo-link img {
+    max-width: 100%;
+    height: auto;
+    max-height: 50px;
+    margin-right: 8px;
+}
+
+.logo-text {
+    white-space: nowrap;
+}
+
+/* 기본 스타일 (PC) */
+.user-menu-links .separator {
+    margin: 0 8px;  /* PC 버전에서도 구분선 좌우 여백을 8px로 설정 */
+}
+
+/* 모바일 화면에서의 버튼 크기 조정 */
+@media screen and (max-width: 768px) {
+    .user-menu {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .user-menu-links a {
+        font-size: 11px;
+        padding: 2px 4px;
+    }
+
+    .user-menu-links .separator {
+        font-size: 11px;
+        margin: 0 8px;  /* 모바일에서도 동일하게 8px 적용 */
+    }
+
+    .user-menu button {
+        font-size: 10px;
+        padding: 2px 4px;
+        white-space: nowrap;
+    }
+}
+
