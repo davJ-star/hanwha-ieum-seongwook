@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import { FaPlus, FaMinus, FaUpload } from 'react-icons/fa';
 import '../styles/pages/Mypage.css';
+import axios from 'axios';
 
 interface MedicationItem {
   id: string;
@@ -43,11 +44,148 @@ const Mypage = () => {
     }
   };
 
-  const handleProfileUpdate = () => {
-    setProfileImage(tempProfileImage);
-    setNickname(tempNickname);
-    // TODO: 여기에 서버로 프로필 업데이트 요청을 보내는 로직 추가
+  const handleProfileUpdate = async () => {
+    try {
+      const formData = new FormData();
+      if (tempProfileImage && tempProfileImage !== profileImage) {
+        // base64 문자열을 File 객체로 변환
+        const response = await fetch(tempProfileImage);
+        const blob = await response.blob();
+        formData.append('image', blob, 'profile.jpg');
+      }
+      formData.append('nickname', tempNickname);
+      //프로필 이미지 업데이트 API 호출 추가(테스트 전)
+      const response = await axios.post('/{id}/mypage/profile-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+
+      if (response.status === 200) {
+        setProfileImage(tempProfileImage);
+        setNickname(tempNickname);
+        alert('프로필이 성공적으로 업데이트되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '프로필 업데이트에 실패했습니다.');
+      }
+    }
   };
+
+  //의약품 상세 정보 조회 API 호출 추가(테스트 전)
+  const fetchDrugDetail = async (drugId: string) => {
+    try {
+      const response = await axios.get(`/search/{id}/info`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '약물 정보를 가져오는데 실패했습니다.');
+      }
+      return null;
+    }
+  };
+
+  //복용약 알림 설정 API 호출 추가(테스트 전)
+  const setMedicationReminder = async (medication: MedicationItem) => {
+    try {
+      const response = await axios.post('/*추후추가예정*/', {
+        drugId: medication.id,
+        drugName: medication.name,
+        dosage: medication.dosage,
+        unit: medication.unit,
+        frequency: medication.frequency,
+        time: medication.time,
+        weekday: medication.weekday,
+        userEmail: 'user@example.com' // 현재 로그인한 사용자의 이메일
+      });
+
+      if (response.status === 200) {
+        alert('복용 알림이 설정되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '알림 설정에 실패했습니다.');
+      }
+    }
+  };
+
+  const addUserMedication = async (drugId: string) => {
+    try {
+      // 1) 의약품 상세 정보 조회 API 호출 추가(테스트 전) 
+      const drugDetail = await fetchDrugDetail(drugId);
+      if (!drugDetail) {
+        return;
+      }
+
+      // 2) 사용자 복용약 추가 API 호출 추가(테스트 전)
+      const response = await axios.post('/{id}/mypage/medication', {
+        drugId: drugDetail.id,
+        drugName: drugDetail.name,
+        manufacturer: drugDetail.manufacturer,
+        ingredients: drugDetail.ingredients,
+        dosageForm: drugDetail.dosageForm,
+        dosage: '',
+        unit: 'mg',
+        frequency: 'daily',
+        time: {
+          hour: '09',
+          minute: '00'
+        },
+        weekday: '월'
+      });
+
+      if (response.status === 200) {
+        const newMed: MedicationItem = {
+          id: response.data.id,
+          name: drugDetail.name,
+          dosage: '',
+          unit: 'mg',
+          frequency: 'daily',
+          time: { hour: '09', minute: '00' },
+          weekday: '월'
+        };
+        setMedications([...medications, newMed]);
+        
+        // 3) 복용 알림 설정 API 호출 추가(테스트 전)
+        await setMedicationReminder(newMed);
+        
+        alert('복용약이 추가되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '복용약 추가에 실패했습니다.');
+      }
+    }
+  };
+
+  const handleAddMedication = () => {
+    navigate('/drug-search');
+  };
+
+  const handleAddToMyMedications = async (drugId: string) => {
+    await addUserMedication(drugId);
+    navigate('/mypage');
+  };
+
+  React.useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        // 프로필 정보 조회 API 호출 추가(테스트 전)
+        const response = await axios.get('/*추후추가예정*/');
+        if (response.status === 200) {
+          setProfileImage(response.data.profileImage);
+          setNickname(response.data.nickname);
+          setTempProfileImage(response.data.profileImage);
+          setTempNickname(response.data.nickname);
+        }
+      } catch (error) {
+        console.error('프로필 정보 로드 실패:', error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   const addMedication = () => {
     const newMed: MedicationItem = {
@@ -117,7 +255,7 @@ const Mypage = () => {
               <li key={med.id} className="medication-item" role="listitem">
                 <button
                   className="search-drug-button"
-                  onClick={() => navigate('/drug-detail')}
+                  onClick={() => handleAddToMyMedications(med.id)}
                   aria-label="의약품 검색하기"
                 >
                   {med.name || '복용약 이름 추가'}
