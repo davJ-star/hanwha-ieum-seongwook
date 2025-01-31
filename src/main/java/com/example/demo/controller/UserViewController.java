@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -32,18 +36,7 @@ public class UserViewController {
     private final UserService userService;
     private final EmailVerificationService emailVerificationService;
     private final MedicationService medicationService;
-
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";  // login.html을 보여줌
-    }
-
-
+    private final AuthenticationManager authenticationManager;
 
 
     @PostMapping("/signup")

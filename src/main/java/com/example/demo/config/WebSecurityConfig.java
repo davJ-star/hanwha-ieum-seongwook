@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,10 +60,7 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/community/notice/**")).hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/community/**")).permitAll()
                         .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/mypage")
-                )
+                .formLogin(form -> form.disable())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
