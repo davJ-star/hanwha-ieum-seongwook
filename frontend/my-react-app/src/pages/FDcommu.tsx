@@ -4,6 +4,7 @@ import '../styles/pages/commu.css';
 import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
+import axios from 'axios';
 
 // 게시판 버튼 인터페이스
 interface BoardButtonProps {
@@ -59,22 +60,35 @@ const BoardList = ({ navigate }: { navigate: (path: string) => void }) => {
 };
 
 // 검색바 컴포넌트
-const SearchBar = () => (
-  <div className="search-bar" role="search">
-    <input
-      type="text"
-      placeholder="게시글 검색"
-      className="search-input"
-      aria-label="게시글 검색"
-    />
-    <button 
-      className="search-button" 
-      aria-label="검색하기"
-    >
-      검색
-    </button>
-  </div>
-);
+const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchQuery);
+  };
+
+  return (
+    <form className="search-bar" role="search" onSubmit={handleSearch}>
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="게시글 검색"
+        className="search-input"
+        aria-label="게시글 검색"
+        style={{ color: '#000000' }}
+      />
+      <button 
+        type="submit"
+        className="search-button" 
+        aria-label="검색하기"
+      >
+        검색
+      </button>
+    </form>
+  );
+};
 
 // 게시글 헤더 컴포넌트
 interface PostHeaderProps {
@@ -115,20 +129,65 @@ const PostItem = ({ title, author, date }: PostItemProps) => (
 );
 
 // 게시글 목록 컴포넌트
-const PostList = ({ navigate }: { navigate: (path: string) => void }) => (
-  <main className="post-list-container" role="main">
-    <SearchBar />
-    <PostHeader onWriteClick={() => navigate('/writepost')} />
-    <div className="post-list" role="feed" aria-labelledby="boardTitle">
-      <PostItem 
-        title="게시글 제목 예시"
-        author="홍길동"
-        date="2024-03-21"
-      />
-      {/* 추가 게시글들... */}
-    </div>
-  </main>
-);
+const PostList = ({ navigate }: { navigate: (path: string) => void }) => {
+  const [posts, setPosts] = useState<Array<{
+    id: number;
+    title: string;
+    author: string;
+    createdAt: string;
+  }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async () => {
+    try {
+      //게시글 데이터 가져오기(안면장애 게시판)
+      const response = await axios.get('http://localhost:8080/posts/PDC');
+      setPosts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('게시글 로딩 중 오류 발생:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = async (query: string) => {
+    try {
+      //게시글 검색 데이터 가져오기(안면장애 게시판)
+      const response = await axios.get(`http://localhost:8080/posts/PDC/search?query=${query}`);
+      setPosts(response.data);
+    } catch (error) {
+      console.error('게시글 검색 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return <div>게시글을 불러오는 중...</div>;
+  }
+
+  return (
+    <main className="post-list-container" role="main">
+      <SearchBar onSearch={handleSearch} />
+      <PostHeader onWriteClick={() => navigate('/writepost')} />
+      <div className="post-list" role="feed" aria-labelledby="boardTitle">
+        {posts.map((post) => (
+          <PostItem 
+            key={post.id}
+            title={post.title}
+            author={post.author}
+            date={post.createdAt}
+          />
+        ))}
+        {posts.length === 0 && (
+          <p>게시글이 없습니다.</p>
+        )}
+      </div>
+    </main>
+  );
+};
 
 const FDcommu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
