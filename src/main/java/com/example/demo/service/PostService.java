@@ -32,7 +32,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    @Transactional
+    @Transactional(readOnly = false)
     public Long createPost(String email, PostRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -78,7 +78,7 @@ public class PostService {
         return convertToDto(post);
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public void updatePost(Long id, String email, PostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -117,7 +117,7 @@ public class PostService {
                 .build();
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public void deletePost(Long id, String email) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
