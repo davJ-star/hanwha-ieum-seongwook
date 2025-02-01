@@ -41,10 +41,15 @@ const CommunityButton: React.FC<CommunityButtonProps> = ({ item, onClick }) => {
     if (newTab) newTab.focus();
   };
 
+  const handleClick = () => {
+    onClick(item.path);
+    window.scrollTo(0, 0); // 페이지 상단으로 스크롤
+  };
+
   return (
     <button
       className="community-button"
-      onClick={() => onClick(item.path)}
+      onClick={handleClick}
       onContextMenu={handleContextMenu}
       aria-label={`${item.label} 커뮤니티로 이동`}
       style={{ backgroundColor: '#f5f5f5' }}
