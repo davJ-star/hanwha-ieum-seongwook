@@ -52,7 +52,7 @@ const SearchForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent, type: string,
         placeholder="검색어를 입력하세요" 
         aria-label="검색어 입력"
       />
-      <button type="submit" aria-label="검색">검색</button>
+      <button type="submit" aria-label="검색" style={{color: 'black'}}>검색</button>
     </form>
   );
 };
