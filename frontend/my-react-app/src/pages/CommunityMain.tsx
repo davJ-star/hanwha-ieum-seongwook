@@ -251,9 +251,11 @@ const PostList = ({ posts, categories, navigate }: { posts: Post[]; categories: 
       </button>
     </header>
     
+    {/* 카테고리 필터 추가(질문, 자유, 공지) */}
     <div className="category-filter">
       {categories.map((category) => (
-        <button key={category}>{category}</button>
+        <button style={{ margin: "0px 0.35em" }} 
+        key={category}>{category}</button>
       ))}
     </div>
 

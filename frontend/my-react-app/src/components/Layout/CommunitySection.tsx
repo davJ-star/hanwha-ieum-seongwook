@@ -64,7 +64,19 @@ interface CommunitySectionProps {
 const CommunitySection: React.FC<CommunitySectionProps> = ({ navigate }) => {
   return (
     <section className="community-section" role="region" aria-label="커뮤니티 바로가기">
-      <h2 className="community-title">커뮤니티 바로가기</h2>
+      
+      {/* <a> 태그 추가 해서 커뮤니티 바로가기 글씨 클릭하면 커뮤니티 메인으로 이동하게 해두었음*/}
+      <a 
+        href="/community-main" 
+        onClick={(e) => {
+          e.preventDefault();
+          navigate('/community-main');
+        }}
+        style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+      >
+        <h2 className="community-title">커뮤니티 바로가기</h2>
+      </a>
+
       <p className="community-description">
         같은 장애와 질환을 가진 사용자들과 복약 정보와 치료 경험을 나누어보세요!
       </p>
