@@ -8,36 +8,57 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 import { speakPageContent } from '../utils/accessibilityHandleTTS';
+import axios from 'axios';
 
-// 검색 폼 컴포넌트
-interface SearchFormProps {
-  onSubmit: (e: React.FormEvent) => void;
+interface SearchResult {
+  id: number;
+  name: string;
+  type: 'medicine' | 'disease';
+  description: string;
+  details: {
+    symptoms?: string;
+    treatments?: string;
+    causes?: string;
+    prevention?: string;
+  };
 }
 
-const SearchForm = ({ onSubmit }: SearchFormProps) => (
-  <form onSubmit={onSubmit} role="search">
-    <select name="type" aria-label="검색 조건 선택">
-      <option value="" disabled selected>검색 조건</option>
-      <option value="medicine">의약품</option>
-      <option value="disease">질병</option>
-    </select>
-    <input 
-      type="text" 
-      placeholder="검색어를 입력하세요" 
-      aria-label="검색어 입력"
-    />
-    <button 
-      type="submit" 
-      style={{ color: '#000000' }}
-      aria-label="검색"
-    >
-      검색
-    </button>
-  </form>
-);
+// 검색 폼 컴포넌트
+const SearchForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent, type: string, term: string) => void }) => {
+  const [searchType, setSearchType] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(e, searchType, searchTerm);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} role="search">
+      <select 
+        name="type" 
+        value={searchType}
+        onChange={(e) => setSearchType(e.target.value)}
+        aria-label="검색 조건 선택"
+      >
+        <option value="" disabled>검색 조건</option>
+        <option value="medicine">의약품</option>
+        <option value="disease">질병</option>
+      </select>
+      <input 
+        type="text" 
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="검색어를 입력하세요" 
+        aria-label="검색어 입력"
+      />
+      <button type="submit" aria-label="검색">검색</button>
+    </form>
+  );
+};
 
 // 이미지 업로드 컴포넌트
-const ImageUpload = () => (
+const ImageUpload = ({ onUpload }: { onUpload: (file: File) => void }) => (
   <div className="image-search-container">
     <h3>이미지로 검색하기</h3>
     <div 
@@ -50,7 +71,9 @@ const ImageUpload = () => (
         type="file"
         accept="image/*"
         onChange={(e) => {
-          console.log('이미지 업로드:', e.target.files?.[0]);
+          if (e.target.files?.[0]) {
+            onUpload(e.target.files[0]);
+          }
         }}
         aria-label="이미지 파일 선택"
       />
@@ -116,13 +139,14 @@ const AccessibilityTools = ({
 );
 
 // 검색 결과 컴포넌트
-const SearchResult = () => (
+const SearchResult = ({ data }: { data: SearchResult }) => (
   <div className="result-item" role="article">
-    <h3>질병명: 감기</h3>
+    <h3>질병명: {data.name}</h3>
     <div className="result-details">
-      <p><strong>증상:</strong> 발열, 기침, 인후통, 콧물</p>
-      <p><strong>설명:</strong> 바이러스성 상기도 감염으로 인한 급성 호흡기 질환</p>
-      <p><strong>치료방법:</strong> 충분한 휴식과 수분 섭취, 해열제 복용</p>
+      <p><strong>증상:</strong> {data.details.symptoms || 'N/A'}</p>
+      <p><strong>설명:</strong> {data.description || 'N/A'}</p>
+      <p><strong>치료방법:</strong> {data.details.treatments || 'N/A'}</p>
+      <p><strong>예방법:</strong> {data.details.prevention || 'N/A'}</p>
     </div>
   </div>
 );
@@ -132,6 +156,11 @@ function DiseaseSearchResult() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage, setResultsPerPage] = useState(10);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -170,12 +199,64 @@ function DiseaseSearchResult() {
     }
   };
 
+  const handleSearch = async (e: React.FormEvent, searchType: string, searchTerm: string) => {
+    e.preventDefault();
+    if (!searchType || !searchTerm) {
+      alert('검색 조건과 검색어를 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      //검색 요청(테스트 전)
+      const response = await axios.get(`/api/health/search`, {
+        params: {
+          type: searchType,
+          query: searchTerm,
+          page: 1,
+          limit: resultsPerPage
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (response.data && response.data.results) {
+        setSearchResults(response.data.results);
+        setTotalPages(Math.ceil(response.data.total / resultsPerPage));
+        setCurrentPage(1);
+      }
+    } catch (error: any) {
+      handleSearchError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchError = (error: any) => {
+    console.error('검색 중 오류 발생:', error);
+    if (error.response?.status === 401) {
+      alert('로그인이 필요한 서비스입니다.');
+      navigate('/login');
+    } else {
+      alert(error.response?.data?.message || '검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleImageUpload = (file: File) => {
+    // Implementation for handling image upload
+  };
+
+  const handlePageChange = (page: number) => {
+    // Implementation for handling page change
+  };
+
   return (
     <Layout>
       <div className="search-container">
         <h2>질병 정보 검색하기</h2>
-        <SearchForm onSubmit={(e) => e.preventDefault()} />
-        <ImageUpload />
+        <SearchForm onSubmit={handleSearch} />
+        <ImageUpload onUpload={handleImageUpload} />
       </div>
 
       <div className="search-results">
@@ -188,9 +269,40 @@ function DiseaseSearchResult() {
             onBrailleOptionSelect={handleBrailleOptionSelect}
           />
         </div>
-        <div className="results-container">
-          <SearchResult />
-        </div>
+        
+        {loading ? (
+          <div>검색 결과를 불러오는 중...</div>
+        ) : (
+          <div className="results-container">
+            {searchResults.map((result: SearchResult) => (
+              <SearchResult key={result.id} data={result} />
+            ))}
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="pagination" role="navigation" aria-label="페이지 네비게이션">
+            {currentPage > 1 && (
+              <button onClick={() => handlePageChange(currentPage - 1)}>이전</button>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(page => Math.abs(page - currentPage) <= 2)
+              .map(page => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={page === currentPage ? 'active' : ''}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                >
+                  {page}
+                </button>
+              ))
+            }
+            {currentPage < totalPages && (
+              <button onClick={() => handlePageChange(currentPage + 1)}>다음</button>
+            )}
+          </div>
+        )}
       </div>
 
       <AccessibilityModal 

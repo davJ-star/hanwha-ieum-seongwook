@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/pages/writepost.css';
 import Layout from '../components/Layout/Layout';
 
@@ -54,18 +55,31 @@ const BoardList = ({ navigate }: { navigate: (path: string) => void }) => {
 };
 
 // 검색바 컴포넌트
-const SearchBar = () => (
-  <div className="search-bar" role="search">
-    <input
-      type="text"
-      placeholder="게시글 검색"
-      className="search-input"
-      aria-label="게시글 검색"
-      style={{ color: '#000000' }}
-    />
-    <button className="search-button" aria-label="검색하기">검색</button>
-  </div>
-);
+const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchQuery);
+  };
+
+  return (
+    <form className="search-bar" role="search" onSubmit={handleSearch}>
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="게시글 검색"
+        className="search-input"
+        aria-label="게시글 검색"
+        style={{ color: '#000000' }}
+      />
+      <button type="submit" className="search-button" aria-label="검색하기">
+        검색
+      </button>
+    </form>
+  );
+};
 
 // 글쓰기 폼 인터페이스
 interface WriteFormProps {
@@ -75,8 +89,8 @@ interface WriteFormProps {
   subcategory: string;
   tags: string[];
   newTag: string;
-  selectedImage: File | null;
-  imagePreview: string | null;
+  // selectedImage: File | null;
+  // imagePreview: string | null;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onCategoryChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -84,8 +98,8 @@ interface WriteFormProps {
   onNewTagChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAddTag: () => void;
   onDeleteTag: (tag: string) => void;
-  onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onRemoveImage: () => void;
+  // onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onRemoveImage: () => void;
   onSubmit: () => void;
 }
 
@@ -97,8 +111,8 @@ const WriteForm = ({
   subcategory,
   tags,
   newTag,
-  selectedImage,
-  imagePreview,
+  // selectedImage,
+  // imagePreview,
   onTitleChange,
   onContentChange,
   onCategoryChange,
@@ -106,8 +120,8 @@ const WriteForm = ({
   onNewTagChange,
   onAddTag,
   onDeleteTag,
-  onImageUpload,
-  onRemoveImage,
+  // onImageUpload,
+  // onRemoveImage,
   onSubmit
 }: WriteFormProps) => (
   <form className="post-form-container" role="form" aria-label="게시글 작성">
@@ -168,7 +182,7 @@ const WriteForm = ({
     />
 
     <div className="additional-options" role="group" aria-label="추가 옵션">
-      <div className="image-upload-section" role="group" aria-label="이미지 업로드">
+      {/* <div className="image-upload-section" role="group" aria-label="이미지 업로드">
         <input
           type="file"
           id="image-upload"
@@ -202,7 +216,7 @@ const WriteForm = ({
             </button>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="tag-container" role="group" aria-label="태그 관리">
         <input
@@ -258,8 +272,10 @@ const WritePost = () => {
   const [subcategory, setSubcategory] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  // const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -274,7 +290,7 @@ const WritePost = () => {
     setTags(tags.filter((t) => t !== tag));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedImage(file);
@@ -289,11 +305,77 @@ const WritePost = () => {
       URL.revokeObjectURL(imagePreview);
       setImagePreview(null);
     }
+  }; */
+
+  const handleSearch = async (query: string) => {
+    try {
+      setIsLoading(true);
+      // 검색 요청 API 호출 (테스트 전)
+      const response = await axios.get(`/*추후 경로 추가*/`);
+      console.log('검색 결과:', response.data);
+      // 검색 결과 처리 로직 추가
+    } catch (err) {
+      console.error('검색 중 오류 발생:', err);
+      setError('검색 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSubmit = () => {
-    alert('글이 등록되었습니다!');
-    console.log({ title, content, category, subcategory, tags });
+  const handleSubmit = async () => {
+    try {
+      // 유효성 검사
+      if (!title.trim()) {
+        alert('제목을 입력해주세요.');
+        return;
+      }
+      if (!content.trim()) {
+        alert('내용을 입력해주세요.');
+        return;
+      }
+      if (!category) {
+        alert('말머리를 선택해주세요.');
+        return;
+      }
+      if (!subcategory) {
+        alert('게시판을 선택해주세요.');
+        return;
+      }
+
+      setIsLoading(true);
+      
+      // 이미지 업로드 관련 코드 주석 처리
+      /* let imageUrl = null;
+      if (selectedImage) {
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+        // 이미지 업로드 요청 API 호출
+        const imageResponse = await axios.post('/api/upload/image', formData);
+        imageUrl = imageResponse.data.url;
+      } */
+
+      // 게시글 데이터 생성
+      const postData = {
+        title,
+        content,
+        category,
+        subcategory,
+        tags,
+        // imageUrl,
+      };
+
+      // 게시글 등록 요청
+      const response = await axios.post('/api/posts', postData);
+      
+      alert('게시글이 성공적으로 등록되었습니다!');
+      navigate(`/post/${response.data.id}`); // 작성된 게시글로 이동동
+    } catch (err) {
+      console.error('게시글 등록 중 오류 발생:', err);
+      setError('게시글 등록 중 오류가 발생했습니다.');
+      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -301,7 +383,8 @@ const WritePost = () => {
       <div className="write-post-page">
         <BoardList navigate={navigate} />
         <main className="write-post-content" role="main">
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
+          {error && <div className="error-message">{error}</div>}
           <WriteForm
             title={title}
             content={content}
@@ -309,8 +392,8 @@ const WritePost = () => {
             subcategory={subcategory}
             tags={tags}
             newTag={newTag}
-            selectedImage={selectedImage}
-            imagePreview={imagePreview}
+            // selectedImage={selectedImage}
+            // imagePreview={imagePreview}
             onTitleChange={(e) => setTitle(e.target.value)}
             onContentChange={(e) => setContent(e.target.value)}
             onCategoryChange={(e) => setCategory(e.target.value)}
@@ -318,10 +401,11 @@ const WritePost = () => {
             onNewTagChange={(e) => setNewTag(e.target.value)}
             onAddTag={handleAddTag}
             onDeleteTag={handleDeleteTag}
-            onImageUpload={handleImageUpload}
-            onRemoveImage={handleRemoveImage}
+            // onImageUpload={handleImageUpload}
+            // onRemoveImage={handleRemoveImage}
             onSubmit={handleSubmit}
           />
+          {isLoading && <div className="loading-spinner">처리중...</div>}
         </main>
       </div>
     </Layout>

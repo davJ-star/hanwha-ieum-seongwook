@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/pages/Secession.css';
 import Layout from '../components/Layout/Layout';
 
@@ -112,24 +113,66 @@ const Secession = () => {
   const [password, setPassword] = useState('');
   const [reason, setReason] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSecession = () => {
+  const handleSecession = async () => {
+    // 입력값 검증
     if (!password) {
-      alert('비밀번호를 입력해주세요.');
+      setError('비밀번호를 입력해주세요.');
       return;
     }
     if (!reason) {
-      alert('탈퇴 사유를 선택해주세요.');
+      setError('탈퇴 사유를 선택해주세요.');
       return;
     }
     if (!isConfirmed) {
-      alert('안내 사항을 확인하고 동의해주세요.');
+      setError('안내 사항을 확인하고 동의해주세요.');
       return;
     }
 
-    // 여기에 회원 탈퇴 API 호출 로직 추가
-    alert('회원 탈퇴가 완료되었습니다.');
-    navigate('/');
+    try {
+      // 비밀번호 확인 API 호출(테스트 전)
+      const verifyResponse = await axios.post(
+        `/*추후 추가 예정*/`,
+        { password },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+
+      if (!verifyResponse.data.isValid) {
+        setError('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      // 회원 탈퇴 API 호출(테스트 전)
+      const secessionResponse = await axios.post(
+        `/{id}/mypage/delete`,
+        {
+          reason,
+          isConfirmed
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+
+      if (secessionResponse.data.success) {
+        // 로컬 스토리지의 토큰 제거
+        localStorage.removeItem('token');
+        alert('회원 탈퇴가 완료되었습니다.');
+        navigate('/');
+      } else {
+        setError('회원 탈퇴 처리 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('회원 탈퇴 중 오류 발생:', error);
+      setError('회원 탈퇴 처리 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -151,6 +194,11 @@ const Secession = () => {
               checked={isConfirmed}
               onChange={(e) => setIsConfirmed(e.target.checked)}
             />
+            {error && (
+              <div className="error-message" role="alert">
+                {error}
+              </div>
+            )}
           </div>
           <ButtonGroup 
             onCancel={() => navigate('/mypage')}

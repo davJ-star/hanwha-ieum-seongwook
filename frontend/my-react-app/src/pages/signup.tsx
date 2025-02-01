@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // axios import 추가
 import '../styles/pages/signup.css'; // 스타일 파일 추가
 import Layout from '../components/Layout/Layout';
 import { FaUpload } from 'react-icons/fa'; // 아이콘 추가
@@ -67,6 +68,7 @@ interface SignupFormProps {
   onSendCode: () => void;
   onVerifyCode: () => void;
   onSignup: () => void;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SignupForm = ({
@@ -84,7 +86,8 @@ const SignupForm = ({
   onPasswordConfirmChange,
   onSendCode,
   onVerifyCode,
-  onSignup
+  onSignup,
+  onImageChange
 }: SignupFormProps) => (
   <form role="form" aria-labelledby="signupTitle">
     <div className="profile-section" aria-label="커뮤니티 프로필">
@@ -99,16 +102,7 @@ const SignupForm = ({
           <input 
             type="file" 
             accept="image/*" 
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  onProfileImageChange(reader.result as string);
-                };
-                reader.readAsDataURL(file);
-              }
-            }}
+            onChange={onImageChange}
             className="visually-hidden"
           />
         </label>
@@ -183,23 +177,54 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (!email) {
       alert('이메일을 입력해주세요.');
       return;
     }
-    alert('인증 코드가 이메일로 전송되었습니다.');
+    
+    try { //이메일 인증 코드 발송 API 호출 추가(테스트 전)
+      const response = await axios.post('http://localhost:8080/api/email/send-verification', {
+        email: email
+      });
+      
+      if (response.status === 200) {
+        alert('인증 코드가 이메일로 전송되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || '이메일 발송에 실패했습니다.');
+      } else {
+        alert('서버 오류가 발생했습니다.');
+      }
+    }
   };
 
-  const handleVerifyCode = () => {
+  const handleVerifyCode = async () => {
     if (!verificationCode) {
       alert('인증 코드를 입력해주세요.');
       return;
     }
-    alert('인증이 완료되었습니다.');
+    
+    try { //이메일 인증 확인 API 호출 추가(테스트 전)
+      const response = await axios.post('http://localhost:8080/api/email/verify', {
+        email: email,
+        code: verificationCode
+      });
+      
+      if (response.status === 200) {
+        alert('이메일 인증이 완료되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || '인증 코드가 올바르지 않습니다.');
+      } else {
+        alert('서버 오류가 발생했습니다.');
+      }
+    }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!email || !verificationCode || !password || !passwordConfirm || !nickname) {
       alert('모든 필드를 입력해주세요.');
       return;
@@ -208,7 +233,62 @@ const Signup = () => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    alert('회원가입이 완료되었습니다.');
+
+    try { //회원가입 API 호출 추가(테스트 전)
+      const response = await axios.post('http://localhost:8080/signup', {
+        email: email,
+        password: password,
+        nickname: nickname,
+        profileImage: profileImage
+      });
+      
+      if (response.status === 200) {
+        alert('회원가입이 완료되었습니다.');
+        // 로그인 페이지로 이동
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || '회원가입에 실패했습니다.');
+      } else {
+        alert('서버 오류가 발생했습니다.');
+      }
+    }
+  };
+
+  const handleProfileImageUpload = async (imageFile: File) => {
+    try { //프로필 이미지 업로드 API 호출 추가(테스트 전)
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      
+      const response = await axios.post('http://localhost:8080/{id}/mypage/profile-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      
+      if (response.status === 200) {
+        setProfileImage(response.data.imageUrl);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || '이미지 업로드에 실패했습니다.');
+      } else {
+        alert('서버 오류가 발생했습니다.(프로필 이미지)');
+      }
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+        handleProfileImageUpload(file);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -232,6 +312,7 @@ const Signup = () => {
             onSendCode={handleSendCode}
             onVerifyCode={handleVerifyCode}
             onSignup={handleSignup}
+            onImageChange={handleImageChange}
           />
         </div>
       </div>
