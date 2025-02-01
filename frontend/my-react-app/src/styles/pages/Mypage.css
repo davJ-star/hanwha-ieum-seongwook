@@ -121,13 +121,34 @@
   transition: background-color 0.2s;
 }
 
+.remove-button {
+  width: 32px; /* 고정된 가로 길이 */
+  height: 32px; /* 정사각형 모양을 위한 높이 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  color: #dc3545;
+}
+
+.remove-button svg {
+  width: 16px; /* 아이콘 크기 조절 */
+  height: 16px;
+}
+
+
 .add-button {
   color: #28a745;
 }
 
-.remove-button {
+/* .remove-button {
   color: #dc3545;
-}
+} */
 
 .medications-list {
   width: 100%;
