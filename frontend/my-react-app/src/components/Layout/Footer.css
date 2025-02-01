@@ -1,3 +1,5 @@
+
+
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -12,14 +14,50 @@
 }
 
 .footer-links div {
-  text-align: left;
+  position: relative;
 }
 
-.footer-links h4 {
+.footer-links div h4 {
+  display: inline-block;
+  position: relative;
+  color: #666666;
+  padding-bottom: 5px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links div h4::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff; /* 강조할 색상 */
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.footer-links div:hover h4::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.footer-links div:hover h4 {
+  color: #007bff; /* 강조 색상 변경 */
+}
+
+
+
+/* .footer-links div {
+  text-align: left;
+} */
+
+/* .footer-links h4 {
   margin-bottom: 1rem;
   color: #333;
   font-size: 1rem;
-}
+} */
 
 .footer-links ul {
   list-style: none;
