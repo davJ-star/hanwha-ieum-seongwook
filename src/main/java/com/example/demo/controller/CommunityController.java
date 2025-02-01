@@ -123,6 +123,26 @@ public class CommunityController {
         ));
     }
 
+    @PostMapping("/community/write")
+    public String write(
+            @AuthenticationPrincipal User user,
+            @ModelAttribute PostRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            // PostService를 통해 게시글 저장
+            Long postId = postService.createPost(user.getEmail(), request);
+            redirectAttributes.addFlashAttribute("message", "게시글이 등록되었습니다.");
+            return "redirect:/community/post/" + postId;
+        } catch (Exception e) {
+            // 예외 발생 시 에러 메시지를 담아서 글쓰기 페이지로 리다이렉트
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/community/write";
+        }
+    }
+
+
+
 
     @GetMapping("/community/post/{id}")
     public ResponseEntity<Map<String, Object>> detail(

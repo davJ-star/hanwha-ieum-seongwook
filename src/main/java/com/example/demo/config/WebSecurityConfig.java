@@ -12,8 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,9 +37,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 new AntPathRequestMatcher(("/")),
@@ -48,19 +50,27 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/ocr"),
                                 new AntPathRequestMatcher("/ocr/**"),
-                                new AntPathRequestMatcher("/admin/**"),
-                                new AntPathRequestMatcher(("/**"))
+                                new AntPathRequestMatcher("/admin/**")
                         ).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/community/post/*/edit")).authenticated()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/community/write"),
                                 new AntPathRequestMatcher("/community/post/*/delete")
                         ).hasAnyRole("USER", "ADMIN")
-                        // NOTICE 카테고리 관련 요청은 ADMIN만 가능
                         .requestMatchers(new AntPathRequestMatcher("/community/notice/**")).hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/community/**")).permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)  // 세션 항상 생성
+                        .maximumSessions(1)                                   // 동시 세션 제한
+                        .expiredUrl("/login?expired")                        // 세션 만료시 리다이렉트
+                )
                 .formLogin(form -> form.disable())
+                .securityContext(securityContext -> securityContext         // SecurityContext 설정 추가
+                        .requireExplicitSave(false)                        // 자동 저장
+                        .securityContextRepository(new HttpSessionSecurityContextRepository())
+                )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)

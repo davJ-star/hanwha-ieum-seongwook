@@ -4,8 +4,13 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.LoginResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +30,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         log.debug("Login attempt for username: {}", request.getUsername());
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -38,10 +43,19 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = userService.getMyInfo(request.getUsername());
 
-            return ResponseEntity.ok(new LoginResponse(
-                    user.getId(),
-                    "로그인 성공"
-            ));
+            // 세션 생성 및 쿠키 설정
+            HttpSession session = servletRequest.getSession(true);
+            Cookie sessionCookie = new Cookie("JSESSIONID", session.getId());
+            sessionCookie.setPath("/");
+            sessionCookie.setHttpOnly(true);
+            servletResponse.addCookie(sessionCookie);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, String.format("JSESSIONID=%s; Path=/; HttpOnly", session.getId()))
+                    .body(new LoginResponse(
+                            user.getId(),
+                            "로그인 성공"
+                    ));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new LoginResponse(null, "로그인 실패: " + e.getMessage()));
