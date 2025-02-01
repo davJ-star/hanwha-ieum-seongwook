@@ -5,6 +5,7 @@ import { FaUniversalAccess } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
+import axios from 'axios';
 
 // 입력 필드 컴포넌트
 interface InputFieldProps {
@@ -275,7 +276,7 @@ const PasswordSection = ({
   </section>
 );
 
-const Mypage = () => {
+const MemberInfo = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('홍길동');
   const [phone, setPhone] = useState('010-1234-5678');
@@ -296,23 +297,80 @@ const Mypage = () => {
     // 인증번호 발송 로직 추가
   };
 
-  const handleEmailVerify = () => {
-    alert('이메일로 인증번호가 발송되었습니다.');
-    // 이메일 인증번호 발송 로직 추가
-  };
-
-  const handlePasswordVerify = () => {
-    // 현재 비밀번호 확인 로직 추가
-    if (currentPassword === 'your_current_password') {
-      setIsPasswordValid(true);
-      alert('비밀번호가 확인되었습니다.');
-    } else {
-      setIsPasswordValid(false);
-      alert('비밀번호가 일치하지 않습니다.');
+  // 이메일 인증번호 발송 API 호출 추가(테스트 전)
+  const handleEmailVerify = async () => {
+    try {
+      const response = await axios.post('/api/email/send-verification', {
+        email: email
+      });
+      
+      if (response.status === 200) {
+        alert('이메일로 인증번호가 발송되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '인증번호 발송에 실패했습니다.');
+      }
     }
   };
 
-  const handleConfirmNewPassword = () => {
+  // 이메일 인증번호 확인 및 이메일 수정 API 호출 추가(테스트 전)
+  const handleEmailCodeVerify = async () => {
+    try {
+      const response = await axios.post('/api/email/verify', {
+        email: email,
+        verificationCode: emailCode
+      });
+
+      if (response.status === 200) {
+        setIsEmailVerified(true);
+        alert('이메일이 성공적으로 변경되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '인증번호가 일치하지 않습니다.');
+      }
+    }
+  };
+
+  // 이름 수정 API 호출 추가(테스트 전)
+  const handleNameUpdate = async () => {
+    try {
+      const response = await axios.put('/*추후추가예정*/', {
+        name: name
+      });
+
+      if (response.status === 200) {
+        alert('이름이 성공적으로 변경되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '이름 변경에 실패했습니다.');
+      }
+    }
+  };
+
+  // 현재 비밀번호 확인 API 호출 추가(테스트 전)
+  const handlePasswordVerify = async () => {
+    try {
+      const response = await axios.post('/*추후추가예정*/', {
+        currentPassword: currentPassword
+      });
+
+      if (response.status === 200) {
+        setIsPasswordValid(true);
+        alert('비밀번호가 확인되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setIsPasswordValid(false);
+        alert(error.response?.data?.message || '현재 비밀번호가 일치하지 않습니다.');
+      }
+    }
+  };
+
+  // 새 비밀번호 설정
+  const handleConfirmNewPassword = async () => {
     if (newPassword !== confirmPassword) {
       setPasswordError('새 비밀번호가 일치하지 않습니다.');
       return;
@@ -321,13 +379,63 @@ const Mypage = () => {
       setPasswordError('비밀번호는 8자 이상이어야 합니다.');
       return;
     }
-    setPasswordError('');
-    alert('새 비밀번호가 설정되었습니다.');
+    // 비밀번호 변경 API 호출 추가(테스트 전)
+    try {
+      const response = await axios.post('/{id}/mypage/password', {
+        currentPassword: currentPassword,
+        newPassword: newPassword
+      });
+
+      if (response.status === 200) {
+        setPasswordError('');
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        // 비밀번호 관련 상태 초기화
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setIsPasswordValid(false);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setPasswordError(error.response?.data?.message || '비밀번호 변경에 실패했습니다.');
+      }
+    }
   };
 
-  const handleSave = () => {
-    // 저장 로직 추가
-    alert('회원 정보가 저장되었습니다.');
+  // 회원 탈퇴
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm('정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+    // 회원 탈퇴 API 호출 추가(테스트 전)
+    if (confirmDelete) {
+      try {
+        const response = await axios.delete('/{id}/mypage/delete');
+        
+        if (response.status === 200) {
+          alert('회원 탈퇴가 완료되었습니다.');
+          // 로그아웃 처리 및 로그인 페이지로 이동
+          localStorage.removeItem('token'); // 토큰 제거
+          navigate('/login');
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          alert(error.response?.data?.message || '회원 탈퇴에 실패했습니다.');
+        }
+      }
+    }
+  };
+
+  // 변경사항 저장 API 호출 추가(테스트 전)
+  const handleSave = async () => {
+    try {
+      // 이름 업데이트
+      if (name) {
+        await handleNameUpdate();
+      }
+
+      alert('모든 변경사항이 저장되었습니다.');
+    } catch (error) {
+      alert('변경사항 저장에 실패했습니다.');
+    }
   };
 
   const handleZoom = (zoomType: string) => {
@@ -366,14 +474,7 @@ const Mypage = () => {
                 alert('인증번호가 일치하지 않습니다.');
               }
             }}
-            onEmailCodeVerify={() => {
-              if (emailCode === '654321') {
-                setIsEmailVerified(true);
-                alert('이메일 인증이 완료되었습니다.');
-              } else {
-                alert('인증번호가 일치하지 않습니다.');
-              }
-            }}
+            onEmailCodeVerify={handleEmailCodeVerify}
           />
 
           <PasswordSection
@@ -393,8 +494,8 @@ const Mypage = () => {
             <button onClick={handleSave} aria-label="변경사항 저장">저장</button>
             <button 
               className="delete-account" 
-              onClick={() => navigate('/secession')}
-              aria-label="회원 탈퇴 페이지로 이동"
+              onClick={handleDeleteAccount}
+              aria-label="회원 탈퇴"
               style={{ color: '#000000' }}
             >
               회원 탈퇴
@@ -411,4 +512,4 @@ const Mypage = () => {
   );
 };
 
-export default Mypage;
+export default MemberInfo;

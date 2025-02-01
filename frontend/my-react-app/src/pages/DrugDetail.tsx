@@ -8,56 +8,119 @@ import Layout from '../components/Layout/Layout';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { speakPageContent } from '../utils/accessibilityHandleTTS';
+import axios from 'axios';
 
-// 검색 폼 컴포넌트
-interface SearchFormProps {
-  onSubmit: (e: React.FormEvent) => void;
+// 타입 정의 수정
+interface DrugData {
+  id: number;
+  name: string;
+  ingredient: string;
+  effects: string;
+  dosage: string[];
+  precautions: string[];
 }
 
-const SearchForm = ({ onSubmit }: SearchFormProps) => (
-  <form role="search" onSubmit={onSubmit}>
-    <select name="type" aria-label="검색 조건 선택">
-      <option value="" disabled selected>검색 조건</option>
-      <option value="medicine">의약품</option>
-      <option value="disease">질병</option>
-    </select>
-    <input 
-      type="text" 
-      placeholder="검색어를 입력하세요" 
-      aria-label="검색어 입력"
-    />
-    <button 
-      type="submit" 
-      style={{ color: '#000000' }}
-      aria-label="검색"
-    >
-      검색
-    </button>
-  </form>
-);
+// SearchForm 컴포넌트 수정
+const SearchForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) => {
+  const [searchType, setSearchType] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-// 이미지 업로드 컴포넌트
-const ImageUpload = () => (
-  <div className="image-search-container">
-    <h3>이미지로 검색하기</h3>
-    <div 
-      className="image-upload-box"
-      role="button"
-      tabIndex={0}
-      aria-label="이미지 업로드 영역"
-    >
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          console.log('이미지 업로드:', e.target.files?.[0]);
-        }}
-        aria-label="이미지 파일 선택"
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim() || !searchType) {
+      alert('검색 조건과 검색어를 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      //검색 요청(테스트 전)
+      const response = await axios.get(`/search/{keyword}`, {
+        params: {
+          type: searchType,
+          keyword: searchTerm
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      onSubmit(e);
+    } catch (error: any) {
+      console.error('검색 중 오류 발생:', error);
+      alert(error.response?.data?.message || '검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  return (
+    <form role="search" onSubmit={handleSubmit}>
+      <select 
+        name="type" 
+        value={searchType}
+        onChange={(e) => setSearchType(e.target.value)}
+        aria-label="검색 조건 선택"
+      >
+        <option value="" disabled>검색 조건</option>
+        <option value="medicine">의약품</option>
+        <option value="disease">질병</option>
+      </select>
+      <input 
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="검색어를 입력하세요" 
+        aria-label="검색어 입력"
       />
-      <p>이미지를 드래그하거나 클릭하여 업로드하세요</p>
+      <button type="submit" style={{ color: '#000000' }} aria-label="검색">검색</button>
+    </form>
+  );
+};
+
+// ImageUpload 컴포넌트 수정
+const ImageUpload = () => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      //이미지 검색 요청(테스트 전)
+      const response = await axios.post(`/*추후 추가 예정*/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      console.log('이미지 검색 결과:', response.data);
+    } catch (error: any) {
+      console.error('이미지 검색 중 오류 발생:', error);
+      alert(error.response?.data?.message || '이미지 검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  return (
+    <div className="image-search-container">
+      <h3>이미지로 검색하기</h3>
+      <div 
+        className="image-upload-box"
+        role="button"
+        tabIndex={0}
+        aria-label="이미지 업로드 영역"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          aria-label="이미지 파일 선택"
+        />
+        <p>이미지를 드래그하거나 클릭하여 업로드하세요</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // 접근성 도구 컴포넌트
 interface AccessibilityToolsProps {
@@ -115,34 +178,76 @@ const AccessibilityTools = ({
   </div>
 );
 
-// 의약품 상세 정보 컴포넌트
-const DrugInfo = () => (
-  <div className="result-item" role="article">
-    <h2>의약품명: 타이레놀</h2>
-    <div className="result-details">
-      <p><strong>성분:</strong> 아세트아미노펜</p>
-      <p><strong>효능/효과:</strong> 해열, 감기로 인한 통증 완화</p>
-      <p><strong>용법/용량:</strong></p>
-      <ul role="list">
-        <li role="listitem">성인: 1회 1~2정, 1일 3~4회</li>
-        <li role="listitem">복용간격 4~6시간</li>
-        <li role="listitem">식후 30분 복용 권장</li>
-      </ul>
-      <p><strong>주의사항:</strong></p>
-      <ul role="list">
-        <li role="listitem">과다복용 시 간손상 위험</li>
-        <li role="listitem">알코올 섭취 시 주의</li>
-        <li role="listitem">임산부는 의사와 상담 후 복용</li>
-      </ul>
+// DrugInfo 컴포넌트 수정
+const DrugInfo = () => {
+  const [drugData, setDrugData] = useState<DrugData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDrugDetail = async () => {
+      try {
+        const drugId = new URLSearchParams(window.location.search).get('id');
+        if (!drugId) {
+          setError('의약품 ID가 없습니다.');
+          return;
+        }
+
+        //의약품 상세 정보 요청(테스트 전)
+        const response = await axios.get(`/*추후 추가 예정*/`,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
+        setDrugData(response.data);
+      } catch (error: any) {
+        console.error('의약품 정보 조회 중 오류 발생:', error);
+        setError(error.response?.data?.message || '의약품 정보를 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDrugDetail();
+  }, []);
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>에러: {error}</div>;
+  if (!drugData) return <div>데이터가 없습니다.</div>;
+
+  return (
+    <div className="result-item" role="article">
+      <h2>의약품명: {drugData.name}</h2>
+      <div className="result-details">
+        <p><strong>성분:</strong> {drugData.ingredient}</p>
+        <p><strong>효능/효과:</strong> {drugData.effects}</p>
+        <p><strong>용법/용량:</strong></p>
+        <ul role="list">
+          {drugData.dosage.map((item, index) => (
+            <li key={index} role="listitem">{item}</li>
+          ))}
+        </ul>
+        <p><strong>주의사항:</strong></p>
+        <ul role="list">
+          {drugData.precautions.map((item, index) => (
+            <li key={index} role="listitem">{item}</li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 function DrugDetail() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
+  const [drugData, setDrugData] = useState<DrugData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -181,11 +286,17 @@ function DrugDetail() {
     }
   };
 
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // 검색 결과 페이지로 이동
+    navigate('/drug-search-result');
+  };
+
   return (
     <Layout>
       <section className="search-container" role="search">
         <h2>의약품 정보 검색하기</h2>
-        <SearchForm onSubmit={(e) => e.preventDefault()} />
+        <SearchForm onSubmit={handleSearch} />
         <ImageUpload />
       </section>
 

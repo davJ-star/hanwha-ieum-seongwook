@@ -1,18 +1,59 @@
-.community-section {
+/* .community-section {
   padding: 2rem;
   background-color: #ffffff;
   margin: 2rem auto;
   max-width: 1200px;
   border-radius: 12px;
+} */
+
+.community-section {
+  display: flex; /* Flexbox 활성화 */
+  flex-direction: column; /* 세로 방향 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  height: 100vh; /* 화면 전체 높이 */
+  text-align: center; /* 텍스트 가운데 정렬 */
 }
 
-.community-title {
+
+/* .community-title {
   text-align: center;
   margin-bottom: 1rem;
   font-size: 1.75rem;
   color: #333;
   font-weight: 600;
+} */
+
+.community-title {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.75rem;
+  padding-bottom: 5px;
+  transition: color 0.3s ease;
 }
+
+.community-title::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #007bff;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.community-title:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+
 
 .community-description {
   text-align: center;
