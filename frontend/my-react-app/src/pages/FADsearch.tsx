@@ -20,8 +20,8 @@ interface SearchFormProps {
 
 const SearchForm = ({ onSubmit }: SearchFormProps) => {
   const [adContent, setAdContent] = useState('');
-  const [result, setResult] = useState<SearchResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,14 +33,20 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
     setIsLoading(true);
     try {
       // 광고 분석 API 호출(테스트 전)
-      const response = await axios.post(`/*추후 추가 예정*/`,
-        { content: adContent }
-      );
-
-      setResult(response.data);
+      const response = await axios.post('http://localhost:8080/api/v1/search', {
+        medicineName: adContent
+      });
+      
+      // 검색 결과를 state로 저장하고 결과 페이지로 이동
+      navigate('/FADresult', { 
+        state: { 
+          searchResult: response.data 
+        }
+      });
+      
     } catch (error) {
-      console.error('광고 분석 중 오류 발생:', error);
-      alert('광고 분석 중 오류가 발생했습니다.');
+      console.error('검색 오류:', error);
+      alert('검색 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -67,14 +73,6 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
           {isLoading ? '분석 중...' : '판별하기'}
         </button>
       </form>
-      {result && (
-        <div className="result-container" role="alert">
-          <h3>분석 결과</h3>
-          <p>판별 결과: {result.isDeceptive ? '허위광고' : '정상광고'}</p>
-          <p>신뢰도: {result.confidence}%</p>
-          <p>상세 설명: {result.details}</p>
-        </div>
-      )}
     </div>
   );
 };

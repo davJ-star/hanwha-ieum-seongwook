@@ -24,7 +24,7 @@ const Header = ({ isLoggedIn, onLogout, onNavigate }: HeaderProps) => {
               >
                 회원관리
               </a>
-              <span className="separator">|</span>
+              <span className="separator"></span>
               <a 
                 onClick={() => onNavigate('/Mypage')} 
                 aria-label="마이페이지로 이동"

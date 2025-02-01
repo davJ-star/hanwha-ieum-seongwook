@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/pages/FADresult.css';
 import { FaSearch, FaUniversalAccess, FaExclamationTriangle, FaBraille } from 'react-icons/fa';
 import AccessibilityModal from '../components/AccessibilityModal';
@@ -9,51 +9,124 @@ import { MdCheckCircle, MdError } from "react-icons/md";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { speakPageContent } from '../utils/accessibilityHandleTTS';
+import axios from 'axios';
+
+// 결과 데이터 타입 정의
+interface HealthFoodResult {
+  productName: string;
+  certificationNumber: string;
+  manufacturer: string;
+  certificationDate: string;
+  isCertified: boolean;
+}
+
+interface MedicineResult {
+  isPermitted: boolean;
+  analysisResult: string;
+  precautions: string;
+  recommendations: string;
+}
 
 // 검색 폼 컴포넌트
 interface SearchFormProps {
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (searchTerm: string) => void;
+  isLoading: boolean;
+  setHealthFoodResult: (result: HealthFoodResult | null) => void;
+  setMedicineResult: (result: MedicineResult | null) => void;
+  setError: (error: string | null) => void;
 }
 
-const SearchForm = ({ onSubmit }: SearchFormProps) => (
-  <form role="search" onSubmit={onSubmit}>
-    <input 
-      type="text" 
-      placeholder="검색어를 입력하세요" 
-      aria-label="검색어 입력"
-    />
-    <button 
-      type="submit" 
-      style={{ color: '#000000' }} 
-      aria-label="검색"
-    >
-      검색
-    </button>
-  </form>
-);
+const SearchForm = ({ 
+  onSubmit, 
+  isLoading, 
+  setHealthFoodResult, 
+  setMedicineResult,
+  setError 
+}: SearchFormProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      // 의약품 검색 axios 로직
+      const response = await axios.post('http://localhost:8080/api/v1/search', {
+        medicineName: searchTerm
+      });
+      
+      if (response.data) {
+        const { healthFoodCertification, medicineLicense } = response.data;
+        onSubmit(searchTerm);
+        setHealthFoodResult(healthFoodCertification);
+        setMedicineResult(medicineLicense);
+      }
+      
+    } catch (error) {
+      console.error('검색 오류:', error);
+      setError('검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="의약품명을 입력하세요"
+        disabled={isLoading}
+      />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? '검색중...' : '검색'}
+      </button>
+    </form>
+  );
+};
 
 // 이미지 업로드 컴포넌트
-const ImageUpload = () => (
-  <div className="image-search-container">
-    <h3 id="image-search-title">이미지로 검색하기</h3>
-    <div 
-      className="image-upload-box"
-      role="button"
-      tabIndex={0}
-      aria-labelledby="image-search-title"
-    >
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          console.log('이미지 업로드:', e.target.files?.[0]);
-        }}
-        aria-label="이미지 파일 선택"
-      />
-      <p>이미지를 드래그하거나 클릭하여 업로드하세요</p>
+const ImageUpload = () => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      // 이미지 검색 axios 로직
+      const response = await axios.post('/api/medicine/image-search', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('이미지 검색 결과:', response.data);
+      // 여기서 검색 결과를 처리할 수 있습니다
+    } catch (error) {
+      console.error('이미지 검색 오류:', error);
+      alert('이미지 검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  return (
+    <div className="image-search-container">
+      <h3 id="image-search-title">이미지로 검색하기</h3>
+      <div 
+        className="image-upload-box"
+        role="button"
+        tabIndex={0}
+        aria-labelledby="image-search-title"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          aria-label="이미지 파일 선택"
+        />
+        <p>이미지를 드래그하거나 클릭하여 업로드하세요</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // 접근성 도구 컴포넌트
 interface AccessibilityToolsProps {
@@ -109,59 +182,91 @@ const AccessibilityTools = ({
 );
 
 // 건강기능식품 인증 결과 컴포넌트
-const HealthFoodCertification = () => (
+const HealthFoodCertification = ({ result }: { result: HealthFoodResult | null }) => (
   <article className="result-item" role="article" aria-labelledby="health-food-title">
     <h3 id="health-food-title">건강기능식품 인증내역 분석</h3>
     <div className="result-details">
       <div className="status-indicator" role="status" aria-live="polite">
-        <MdCheckCircle style={{ color: '#4CAF50', fontSize: '24px' }} aria-hidden="true" />
-        <span>인증 확인됨</span>
+        {result?.isCertified ? (
+          <>
+            <MdCheckCircle style={{ color: '#4CAF50', fontSize: '24px' }} aria-hidden="true" />
+            <span>인증 확인됨</span>
+          </>
+        ) : (
+          <>
+            <MdError style={{ color: '#f44336', fontSize: '24px' }} aria-hidden="true" />
+            <span>인증 내역 없음</span>
+          </>
+        )}
       </div>
       <dl>
         <dt>제품명:</dt>
-        <dd>비타민C 1000</dd>
+        <dd>{result?.productName || '정보 없음'}</dd>
         <dt>인증번호:</dt>
-        <dd>제2023-12345호</dd>
+        <dd>{result?.certificationNumber || '정보 없음'}</dd>
         <dt>제조업체:</dt>
-        <dd>건강식품(주)</dd>
+        <dd>{result?.manufacturer || '정보 없음'}</dd>
         <dt>인증일자:</dt>
-        <dd>2023.01.15</dd>
+        <dd>{result?.certificationDate || '정보 없음'}</dd>
       </dl>
     </div>
   </article>
 );
 
 // 의약품 허가 결과 컴포넌트
-const MedicinePermission = () => (
+const MedicinePermission = ({ result }: { result: MedicineResult | null }) => (
   <article className="result-item" role="article" aria-labelledby="medicine-title">
     <h3 id="medicine-title">의약품 허가내역 분석</h3>
     <div className="result-details">
       <div className="status-indicator" role="status" aria-live="polite">
-        <MdError style={{ color: '#f44336', fontSize: '24px' }} aria-hidden="true" />
-        <span>허가 내역 없음</span>
+        {result?.isPermitted ? (
+          <>
+            <MdCheckCircle style={{ color: '#4CAF50', fontSize: '24px' }} aria-hidden="true" />
+            <span>허가 확인됨</span>
+          </>
+        ) : (
+          <>
+            <MdError style={{ color: '#f44336', fontSize: '24px' }} aria-hidden="true" />
+            <span>허가 내역 없음</span>
+          </>
+        )}
       </div>
       <dl>
         <dt>분석결과:</dt>
-        <dd>의약품 허가 이력이 확인되지 않았습니다.</dd>
+        <dd>{result?.analysisResult || '정보가 없습니다.'}</dd>
         <dt>주의사항:</dt>
-        <dd>해당 제품은 의약품으로 허가되지 않은 제품입니다.</dd>
+        <dd>{result?.precautions || '정보가 없습니다.'}</dd>
         <dt>권고사항:</dt>
-        <dd>의약품으로서의 효능·효과를 표방하는 광고는 허위광고에 해당될 수 있습니다.</dd>
+        <dd>{result?.recommendations || '정보가 없습니다.'}</dd>
       </dl>
     </div>
   </article>
 );
 
 function FADresult() {
+  const location = useLocation();
+  const searchResult = location.state?.searchResult;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [healthFoodResult, setHealthFoodResult] = useState<HealthFoodResult | null>(null);
+  const [medicineResult, setMedicineResult] = useState<MedicineResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    if (searchResult) {
+      const { healthFoodCertification, medicineLicense } = searchResult;
+      setHealthFoodResult(healthFoodCertification);
+      setMedicineResult(medicineLicense);
+    }
+  }, [searchResult]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -195,12 +300,44 @@ function FADresult() {
     }
   };
 
+  const handleSearch = async (searchTerm: string) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // 건강기능식품 인증 결과 axios 로직
+      const healthFoodResponse = await axios.get(`/api/health-food/search?term=${searchTerm}`);
+      setHealthFoodResult(healthFoodResponse.data);
+      
+      // 의약품 허가 결과 axios 로직
+      const medicineResponse = await axios.get(`/api/medicine/search?term=${searchTerm}`);
+      setMedicineResult(medicineResponse.data);
+    } catch (err) {
+      setError('검색 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      console.error('검색 오류:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <section className="search-container" role="search" aria-label="의약품 허위광고 검색">
-        <SearchForm onSubmit={(e) => e.preventDefault()} />
+        <SearchForm 
+          onSubmit={handleSearch} 
+          isLoading={isLoading}
+          setHealthFoodResult={setHealthFoodResult}
+          setMedicineResult={setMedicineResult}
+          setError={setError}
+        />
         <ImageUpload />
       </section>
+
+      {error && (
+        <p role="alert" style={{ color: 'red', textAlign: 'center' }}>
+          {error}
+        </p>
+      )}
 
       <section className="search-results" role="region" aria-label="허위광고 판별 결과">
         <div className="result-header">
@@ -216,8 +353,8 @@ function FADresult() {
           건강기능식품, 의약품 인증 및 허가 여부를 통해 제품의 효능을 검증할 수 있어요.
         </p>
         <div className="results-container">
-          <HealthFoodCertification />
-          <MedicinePermission />
+          <HealthFoodCertification result={healthFoodResult} />
+          <MedicinePermission result={medicineResult} />
         </div>
       </section>
 
