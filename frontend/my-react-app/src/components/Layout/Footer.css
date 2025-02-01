@@ -70,9 +70,38 @@
   text-decoration: none;
 }
 
-.footer-links a:hover {
-  text-decoration: underline;
+.footer-links a {
+  color: #666666; /* 기본 텍스트 색상 */
+  text-decoration: none; /* 기본 밑줄 제거 */
+  font-size: 1rem; /* 기본 글자 크기 */
+  position: relative; /* 가상 요소 위치 기준 */
+  transition: color 0.3s ease, font-size 0.3s ease; /* 부드러운 전환 효과 */
 }
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #666666;
+  bottom: -2px;
+  left: 0;
+  transform: scaleX(0); /* 초기 상태에서 언더바 숨김 */
+  transform-origin: bottom right;
+  /*transition: transform 0.3s ease-out;*/ /* 언더바 애니메이션 */
+}
+
+.footer-links a:hover {
+  color: #000000; /* 마우스 호버 시 텍스트 색상 변경 */
+  font-size: 1.1rem; /* 마우스 호버 시 글자 크기 확대 */
+}
+
+.footer-links a:hover::after {
+  /*transform: scaleX(1);*/ /* 언더바 확장 */
+  transform-origin: bottom left;
+}
+
+
 
 .copyright {
   text-align: center;
