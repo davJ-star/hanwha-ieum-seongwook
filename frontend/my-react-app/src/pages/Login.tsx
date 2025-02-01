@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
-import '../styles/pages/Login.css';
-import AccessibilityModal from '../components/AccessibilityModal';
-import Layout from '../components/Layout/Layout';
 import axios from 'axios';
+import '../styles/pages/Login.css';
+import Layout from '../components/Layout/Layout';
 
 // 로그인 헤더 컴포넌트
 const LoginHeader = () => (
@@ -116,6 +114,7 @@ function Login() {
     const params = new URLSearchParams(window.location.search);
     const logout = params.get('logout');
     if (logout) {
+      // 로그아웃 API 호출
       const handleLogout = async () => {
         try {
           await axios.post('/logout');
@@ -142,7 +141,6 @@ function Login() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     setUserName(email);
-    
     if (email && !validateEmail(email)) {
       setEmailError('올바른 이메일 형식이 아닙니다.');
     } else {
@@ -153,22 +151,23 @@ function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-
     if (!validateEmail(username)) {
       setError('올바른 이메일 형식이 아닙니다.');
       return;
     }
-    
     try {
-      const response = await axios.post('http://localhost:8080/login', {
-        username: username,
-        password: password
-      });
-
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(
+        'http://localhost:8080/login',
+        { username, password },
+        { withCredentials: true }
+      );
+      const token = response.data.token;
+      console.log("Login 성공! 받은 토큰:", token);
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       alert('로그인 성공!');
       navigate('/mypage');
-    } catch (err) {
+    } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.message || '로그인 실패. 다시 시도해주세요.');
       } else {
@@ -182,11 +181,7 @@ function Login() {
       <div className="login-container" role="main">
         <div className="login-wrapper">
           <LoginHeader />
-          {logoutMessage && (
-            <p className="logout-message" role="status">
-              {logoutMessage}
-            </p>
-          )}
+          {logoutMessage && <p className="logout-message" role="status">{logoutMessage}</p>}
           <LoginForm
             username={username}
             password={password}
