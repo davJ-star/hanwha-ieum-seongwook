@@ -1,196 +1,220 @@
+/* 전체 페이지 레이아웃 */
 .community-page {
-    width: 100%;
-    min-height: 100vh;
-  }
-  
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.community-content {
+  display: flex;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+/* 사이드바 (게시판 목록) */
+.board-list {
+  width: 240px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.board-list h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.board-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #eaeaea;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.board-button:hover {
+  background-color: #d5d5d5;
+}
+
+/* 게시글 목록 컨테이너 */
+.post-list-container {
+  flex: 1;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.post-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.write-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.write-button:hover {
+  background-color: #0069d9;
+}
+
+/* 카테고리 필터 */
+.category-filter {
+  margin-bottom: 20px;
+}
+
+.category-button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.category-button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* 게시글 카드 리스트 */
+.post-list {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* 게시글 카드 */
+.post-item {
+  background-color: #fdfdfd;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.post-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.post-item-header {
+  margin-bottom: 10px;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.post-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.post-tags span {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.post-item-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.post-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-comments {
+  font-size: 12px;
+}
+
+/* 검색 바 */
+.search-bar {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: #43a047;
+}
+
+/* 반응형 스타일 */
+@media screen and (max-width: 768px) {
   .community-content {
-    display: flex;
-    margin-top: 20px;
-    padding: 0 20px;
+    flex-direction: column;
+    padding: 0 10px;
   }
-  
+
   .board-list {
-    width: 200px;
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  .board-list button {
-    display: block;
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
+    margin-bottom: 15px;
   }
-  
+
   .post-list-container {
-    flex: 1;
-    margin-left: 20px;
+    margin-left: 0;
+    width: 100%;
   }
-  
-  .post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .write-button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
+
   .post-list {
-    background-color: #fff;
-    border-radius: 4px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  
-  .post-item {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-  }
-  
-  .post-item h4 {
-    margin: 0 0 10px 0;
-  }
-  
-  .post-item p {
-    margin: 5px 0;
-    color: #666;
-  }
-  
-  .floating-button.round {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #666666;
-    color: #ffffff;
-  }
-  
-  .floating-button.round span {
-    font-size: 12px;
-    margin-top: 4px;
-  }
-  
-  .floating-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 5px #00000033;
-    transition: transform 0.2s;
-    font-size: 14px;
-    white-space: nowrap;
-  }
-  
-  .floating-button:hover {
-    transform: scale(1.05);
-  }
-  
-  .floating-buttons {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-  }
-  
-  .search-bar {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  .search-input {
-    flex: 1;
-    padding: 10px;
-    /* margin: 1em;
-    margin-left: 19em; */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    border-color: #000000;
-
-    color: #000000;
-    /* height: 4em;     */
-    height: 40px;    
-    box-sizing: border-box;
-  }
-  
-  .search-button {
-    /* min-width: 8em;
-    min-height: 4em; */
-    margin-left: 10px;
-    /* margin-right: 30px; */
-    padding: 0 24px;
-    border: none;
-    background-color: #4caf50;
-    color: white;
-    border-radius: 4px;
-    border-color: #000000;
-    cursor: pointer;
-    /* height: 3.5em; */
-    height: 40px;
-
-    box-sizing: border-box;
-  }
-
-  @media screen and (max-width: 768px) {
-    .community-content {
-        padding: 0 10px;
-        flex-direction: column;
-    }
-
-    .board-list {
-        /*width: 50%;*/
-        margin-bottom: 15px;
-        padding: 15px;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 300px;
-    }
-
-    .board-list button {
-        font-size: 7px;
-        white-space: pre-line;
-        word-break: keep-all;
-        line-height: 1.2;
-        padding: 6px;
-        /*width: 50%;*/
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .post-list-container {
-        margin-left: 0;
-        width: 100%;
-    }
-    
-    .search-button {
-        padding: 12px 8px !important;
-        font-size: 12px;
-        white-space: nowrap;
-        margin-left: 10px;
-    }
-
-    .post-list {
-        padding: 10px;
-    }
-  }
-
-  
+}
