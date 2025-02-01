@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/pages/commu.css';
 import Layout from '../components/Layout/Layout';
 
@@ -56,7 +57,18 @@ const SearchBar = () => (
 );
 
 const PostItem = ({ post }: { post: Post }) => (
-  <div className="post-item" role="article">
+  // 게시글 아이템 컴포넌트
+  <div 
+    className="post-item" 
+    role="article"
+    // 게시글 클릭 시 게시글 상세 페이지로 이동
+    onClick={() => {
+      window.location.href = `/post/${post.id}`;
+    }}
+    style={{ cursor: 'pointer' }}
+    //
+  >
+
     <h4>{post.title}</h4>
     <p>카테고리: {post.category}</p>
     <p>장애 유형: {post.disabilityType}</p>
@@ -114,7 +126,7 @@ const PostList = ({ posts, categories, navigate }: { posts: Post[]; categories: 
       </button>
     </header>
     
-    {/* 카테고리 필터 추가(질문, 자유, 공지) */}
+    {/* 카테고리 필터 추가(질문, 자유, 공지 컴포넌트) */}
     <div className="category-filter">
       {categories.map((category) => (
         <button style={{ margin: "0px 0.35em" }} 
@@ -138,10 +150,10 @@ const CommunityMain = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-
-    fetch('http://localhost:8080/community')
-      .then(response => response.json())
-      .then(data => setCommunityData(data.home.fields))
+    
+    // 커뮤니티 데이터 가져오기
+    axios.get('http://localhost:8080/community')
+      .then(response => setCommunityData(response.data.home.fields))
       .catch(error => console.error('Error fetching community data:', error));
   }, []);
 

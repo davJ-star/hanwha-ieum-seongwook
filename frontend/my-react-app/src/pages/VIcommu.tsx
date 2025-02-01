@@ -120,13 +120,27 @@ interface PostItemProps {
   date: string;
 }
 
-const PostItem = ({ title, author, date }: PostItemProps) => (
-  <article className="post-item">
-    <h4>{title}</h4>
-    <p>작성자: {author}</p>
-    <p>작성일: {date}</p>
-  </article>
-);
+const PostItem = ({ title, author, date, id }: PostItemProps & { id: number }) => {
+  const handlePostClick = async () => {
+    try {
+      //게시글 상세 조회 axios 로직
+      const response = await axios.get(`http://localhost:8080/posts/${id}`);
+      if (response.data) {
+        window.location.href = `/post/${id}`;
+      }
+    } catch (error) {
+      console.error('게시글 조회 중 오류 발생:', error);
+    }
+  };
+
+  return (
+    <article className="post-item" onClick={handlePostClick} style={{ cursor: 'pointer' }}>
+      <h4>{title}</h4>
+      <p>작성자: {author}</p>
+      <p>작성일: {date}</p>
+    </article>
+  );
+};
 
 // 게시글 목록 컴포넌트
 const PostList = ({ navigate }: { navigate: (path: string) => void }) => {
@@ -176,6 +190,7 @@ const PostList = ({ navigate }: { navigate: (path: string) => void }) => {
         {posts.map((post) => (
           <PostItem 
             key={post.id}
+            id={post.id}
             title={post.title}
             author={post.author}
             date={post.createdAt}
