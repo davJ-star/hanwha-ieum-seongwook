@@ -170,17 +170,27 @@ body {
 .image-search-container {
   margin-top: 20px;
   padding: 20px;
-  border: 1px solid #000000; /* 버튼 테두리 색 변경 */
+  border: 1px solid #000000;
   border-radius: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .image-upload-box {
-  border: 2px dashed #ccc; /* 버튼 테두리 색 변경 */
+  border: 2px dashed #ccc;
   padding: 20px;
   text-align: center;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.image-upload-box input[type="file"] {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .image-upload-box:hover {

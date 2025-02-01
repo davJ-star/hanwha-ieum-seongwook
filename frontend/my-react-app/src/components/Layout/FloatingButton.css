@@ -21,6 +21,7 @@
     position: absolute;
     bottom: 165px;
     right: 16px;
+    pointer-events: auto;
   }
   
   /* 기능성 버튼 컨테이너 */
@@ -30,7 +31,8 @@
     gap: 16px;
     position: absolute;
     bottom: 70px;
-    right: 0;
+    right: 16px;
+    pointer-events: auto;
   }
   .floating-button span {
     margin-right: 8px;
@@ -48,3 +50,22 @@
     background-color: #FF0000 !important;
     color: #FFFFFF !important;
   }
+
+/* 모바일 화면 대응 */
+@media screen and (max-width: 768px) {
+  .zoom-controls {
+    bottom: 140px;
+    right: 12px;
+    gap: 12px;
+  }
+  
+  .fab-options {
+    bottom: 60px;
+    right: 12px;
+    gap: 12px;
+  }
+  
+  .floating-button {
+    transform: scale(0.9);
+  }
+}
