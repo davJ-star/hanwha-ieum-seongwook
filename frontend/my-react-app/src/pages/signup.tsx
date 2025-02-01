@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // axios import 추가
-import '../styles/pages/signup.css'; // 스타일 파일 추가
+import { useDispatch, useSelector } from 'react-redux';
+import '../styles/pages/signup.css';
 import Layout from '../components/Layout/Layout';
-import { FaUpload } from 'react-icons/fa'; // 아이콘 추가
+import { FaUpload } from 'react-icons/fa';
+import { registerUser, sendVerificationCode, verifyCode } from '../store/userSlice';
+import { AppDispatch, RootState } from '../store/store';
 
-// 입력 그룹 컴포넌트
 interface InputGroupProps {
   id: string;
   title: string;
@@ -14,6 +15,7 @@ interface InputGroupProps {
   placeholder: string;
   onButtonClick?: () => void;
   buttonText?: string;
+  disabled?: boolean;
 }
 
 const InputGroup = ({
@@ -24,7 +26,8 @@ const InputGroup = ({
   onChange,
   placeholder,
   onButtonClick,
-  buttonText
+  buttonText,
+  disabled
 }: InputGroupProps) => (
   <div role="group" aria-labelledby={id}>
     <h4 id={id}>{title}</h4>
@@ -37,12 +40,14 @@ const InputGroup = ({
         aria-required="true"
         aria-label={placeholder}
         style={{ color: '#000000' }}
+        disabled={disabled}
       />
       {buttonText && onButtonClick && (
         <button 
           onClick={onButtonClick}
           type="button"
           aria-label={buttonText}
+          disabled={disabled}
         >
           {buttonText}
         </button>
@@ -51,7 +56,6 @@ const InputGroup = ({
   </div>
 );
 
-// 회원가입 폼 컴포넌트
 interface SignupFormProps {
   profileImage: string;
   nickname: string;
@@ -68,7 +72,9 @@ interface SignupFormProps {
   onSendCode: () => void;
   onVerifyCode: () => void;
   onSignup: () => void;
-  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isEmailVerified: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const SignupForm = ({
@@ -87,7 +93,9 @@ const SignupForm = ({
   onSendCode,
   onVerifyCode,
   onSignup,
-  onImageChange
+  isEmailVerified,
+  isLoading,
+  error,
 }: SignupFormProps) => (
   <form role="form" aria-labelledby="signupTitle">
     <div className="profile-section" aria-label="커뮤니티 프로필">
@@ -126,19 +134,22 @@ const SignupForm = ({
       onChange={onEmailChange}
       placeholder="이메일 주소"
       onButtonClick={onSendCode}
-      buttonText="인증코드 받기"
+      buttonText={isEmailVerified ? "인증완료" : "인증코드 받기"}
+      disabled={isEmailVerified}
     />
 
-    <InputGroup
-      id="verificationTitle"
-      title="인증코드"
-      type="text"
-      value={verificationCode}
-      onChange={onVerificationCodeChange}
-      placeholder="인증코드 입력"
-      onButtonClick={onVerifyCode}
-      buttonText="확인"
-    />
+    {!isEmailVerified && (
+      <InputGroup
+        id="verificationTitle"
+        title="인증코드"
+        type="text"
+        value={verificationCode}
+        onChange={onVerificationCodeChange}
+        placeholder="인증코드 입력"
+        onButtonClick={onVerifyCode}
+        buttonText="확인"
+      />
+    )}
 
     <InputGroup
       id="passwordTitle"
@@ -158,45 +169,43 @@ const SignupForm = ({
       placeholder="비밀번호 재확인"
     />
     
+    {error && <p className="error-message">{error}</p>}
+    
     <button 
       className="signup-button"
       onClick={onSignup}
       type="submit"
       aria-label="가입하기"
+      disabled={isLoading || !isEmailVerified}
     >
-      가입하기
+      {isLoading ? '처리 중...' : '가입하기'}
     </button>
   </form>
 );
 
 const Signup = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error } = useSelector((state: RootState) => state.user);
+
   const [profileImage, setProfileImage] = useState('');
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   
   const handleSendCode = async () => {
     if (!email) {
       alert('이메일을 입력해주세요.');
       return;
     }
-    
-    try { //이메일 인증 코드 발송 API 호출 추가(테스트 전)
-      const response = await axios.post('http://localhost:8080/api/email/send-verification', {
-        email: email
-      });
-      
-      if (response.status === 200) {
-        alert('인증 코드가 이메일로 전송되었습니다.');
-      }
+    try {
+      await dispatch(sendVerificationCode(email)).unwrap();
+      alert('인증 코드가 이메일로 전송되었습니다.');
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        alert(error.response.data.message || '이메일 발송에 실패했습니다.');
-      } else {
-        alert('서버 오류가 발생했습니다.');
-      }
+      alert('인증 코드 발송에 실패했습니다.');
+      console.error(error);
     }
   };
 
@@ -205,27 +214,19 @@ const Signup = () => {
       alert('인증 코드를 입력해주세요.');
       return;
     }
-    
-    try { //이메일 인증 확인 API 호출 추가(테스트 전)
-      const response = await axios.post('http://localhost:8080/api/email/verify', {
-        email: email,
-        code: verificationCode
-      });
-      
-      if (response.status === 200) {
-        alert('이메일 인증이 완료되었습니다.');
-      }
+    try {
+      await dispatch(verifyCode({ email, code: verificationCode })).unwrap();
+      setIsEmailVerified(true);
+      alert('이메일 인증이 완료되었습니다.');
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        alert(error.response.data.message || '인증 코드가 올바르지 않습니다.');
-      } else {
-        alert('서버 오류가 발생했습니다.');
-      }
+      alert('인증 코드 확인에 실패했습니다.');
+      console.error(error);
+
     }
   };
 
   const handleSignup = async () => {
-    if (!email || !verificationCode || !password || !passwordConfirm || !nickname) {
+    if (!email || !password || !passwordConfirm || !nickname) {
       alert('모든 필드를 입력해주세요.');
       return;
     }
@@ -233,61 +234,18 @@ const Signup = () => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-
-    try { //회원가입 API 호출 추가(테스트 전)
-      const response = await axios.post('http://localhost:8080/signup', {
-        email: email,
-        password: password,
-        nickname: nickname,
-        profileImage: profileImage
-      });
-      
-      if (response.status === 200) {
-        alert('회원가입이 완료되었습니다.');
-        // 로그인 페이지로 이동
-        window.location.href = '/login';
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        alert(error.response.data.message || '회원가입에 실패했습니다.');
-      } else {
-        alert('서버 오류가 발생했습니다.');
-      }
+    if (!isEmailVerified) {
+      alert('이메일 인증을 완료해주세요.');
+      return;
     }
-  };
-
-  const handleProfileImageUpload = async (imageFile: File) => {
-    try { //프로필 이미지 업로드 API 호출 추가(테스트 전)
-      const formData = new FormData();
-      formData.append('image', imageFile);
-      
-      const response = await axios.post('http://localhost:8080/{id}/mypage/profile-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-      
-      if (response.status === 200) {
-        setProfileImage(response.data.imageUrl);
-      }
+    try {
+      await dispatch(registerUser({ nickname, email, password, profileImage })).unwrap();
+      alert('회원가입이 완료되었습니다.');
+      // 여기에 회원가입 성공 후 처리 (예: 로그인 페이지로 리다이렉트)
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        alert(error.response.data.message || '이미지 업로드에 실패했습니다.');
-      } else {
-        alert('서버 오류가 발생했습니다.(프로필 이미지)');
-      }
-    }
-  };
+      alert('회원가입에 실패했습니다.');
+      console.error(error);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-        handleProfileImageUpload(file);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -312,7 +270,9 @@ const Signup = () => {
             onSendCode={handleSendCode}
             onVerifyCode={handleVerifyCode}
             onSignup={handleSignup}
-            onImageChange={handleImageChange}
+            isEmailVerified={isEmailVerified}
+            isLoading={loading}
+            error={error}
           />
         </div>
       </div>

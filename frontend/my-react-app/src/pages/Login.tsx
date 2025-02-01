@@ -116,7 +116,6 @@ function Login() {
     const params = new URLSearchParams(window.location.search);
     const logout = params.get('logout');
     if (logout) {
-      // 로그아웃 API 호출 추가(테스트 전)
       const handleLogout = async () => {
         try {
           await axios.post('/logout');
