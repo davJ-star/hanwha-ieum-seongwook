@@ -379,3 +379,67 @@
   background-color: #ffffff;
   color: #000000;
 }
+
+.reminder-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.reminder-button:hover {
+  background-color: #f0f0f0;
+}
+
+.reminder-button.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.reminder-button.active:hover {
+  background-color: #45a049;
+}
+
+.reminder-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.frequency-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.time-selector {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.send-reminder-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: auto;
+  max-width: 150px;
+}
+
+.send-reminder-button:hover {
+  background-color: #0056b3;
+  color: #000000;
+}
