@@ -410,7 +410,7 @@
 // // Mypage.tsx
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
-// import { FaMinus, FaUpload } from 'react-icons/fa';
+// import { FaMinus, FaUpload, FaSearch } from 'react-icons/fa';
 // import Layout from '../components/Layout/Layout';
 // import axios from 'axios';
 // import '../styles/pages/Mypage.css';
@@ -433,6 +433,89 @@
 //   name: string;
 //   // 기타 필요한 필드가 있다면 추가
 // }
+
+// interface MedicationSearchModalProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+//   onSelect: (medication: { id: string, name: string }) => void;
+// }
+
+// const MedicationSearchModal: React.FC<MedicationSearchModalProps> = ({ isOpen, onClose, onSelect }) => {
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [searchResults, setSearchResults] = useState<Array<{ id: string, name: string }>>([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const handleSearch = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!searchTerm.trim()) {
+//       alert('검색어를 입력해주세요.');
+//       return;
+//     }
+
+//     try {
+//       setLoading(true);
+//       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+//         params: { type: 'medicine' }
+//       });
+
+//       // 응답에서 의약품 이름만 추출하여 검색 결과 설정
+//       const results = response.data.map((item: any) => ({
+//         id: item.id,
+//         name: item.itemName || item.name || '이름 없음'
+//       }));
+//       setSearchResults(results);
+//     } catch (error) {
+//       console.error('의약품 검색 중 오류 발생:', error);
+//       alert('검색 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="modal-overlay">
+//       <div className="modal-content">
+//         <h2>의약품 검색</h2>
+//         <form onSubmit={handleSearch} className="search-form">
+//           <input
+//             type="text"
+//             value={searchTerm}
+//             onChange={(e) => setSearchTerm(e.target.value)}
+//             placeholder="의약품 이름을 입력하세요"
+//             className="search-input"
+//           />
+//           <button type="submit" className="search-button">
+//             <FaSearch /> 검색
+//           </button>
+//         </form>
+
+//         <div className="search-results">
+//           {loading ? (
+//             <p>검색 중...</p>
+//           ) : (
+//             <ul>
+//               {searchResults.map((result) => (
+//                 <li
+//                   key={result.id}
+//                   onClick={() => onSelect(result)}
+//                   className="search-result-item"
+//                 >
+//                   {result.name}
+//                 </li>
+//               ))}
+//             </ul>
+//           )}
+//         </div>
+
+//         <button onClick={onClose} className="close-button">
+//           닫기
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
 // const Mypage = () => {
 //   // 프로필/복용약 관련 상태
@@ -697,41 +780,15 @@
 //           </div>
 //         </section>
 
-//         {/* 의약품 검색 영역 (PC에서는 복용약 관리 영역 위에 위치) */}
-//         <section className="drug-search-section" aria-label="의약품 검색">
-//           <h2>의약품 검색</h2>
-//           <form onSubmit={handleDrugSearch} className="drug-search-form">
-//             <input
-//               type="text"
-//               value={drugSearchTerm}
-//               onChange={(e) => setDrugSearchTerm(e.target.value)}
-//               placeholder="의약품 검색어 입력"
-//               aria-label="의약품 검색어"
-//               className="drug-search-input"
-//             />
-//             <button type="submit" className="drug-search-button">검색</button>
-//           </form>
-//           {drugSearchResults.length > 0 && (
-//             <div className="drug-search-results">
-//               <select
-//                 value={selectedDrugId}
-//                 onChange={handleSelectDrug}
-//                 aria-label="검색 결과 선택"
-//                 className="drug-search-select"
-//               >
-//                 <option value="">검색 결과 선택</option>
-//                 {drugSearchResults.map((drug) => (
-//                   <option key={drug.id} value={drug.id}>
-//                     {drug.name}
-//                   </option>
-//                 ))}
-//               </select>
-//               <button onClick={handleAddSelectedDrug} className="drug-add-button">
-//                 추가
-//               </button>
-//             </div>
-//           )}
-//         </section>
+//         {/* 의약품 검색 모달 */}
+//         <MedicationSearchModal
+//           isOpen={showDrugSearch}
+//           onClose={() => setShowDrugSearch(false)}
+//           onSelect={(medication) => {
+//             addUserMedication(medication.id);
+//             setShowDrugSearch(false);
+//           }}
+//         />
 
 //         {/* 복용약 관리 영역 */}
 //         <section className="medications-section" aria-label="복용약 관리">
@@ -798,6 +855,71 @@
 //                         }}
 //                         aria-label="요일 선택"
 //                       >
+//                         {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
+//                           <option key={day} value={day}>{day}요일</option>
+//                         ))}
+//                       </select>
+//                     )}
+//                   </div>
+//                   <div className="time-selector">
+//                     <select
+//                       value={med.time.hour}
+//                       onChange={(e) => {
+//                         const updated = medications.map((m) =>
+//                           m.id === med.id ? { ...m, time: { ...m.time, hour: e.target.value } } : m
+//                         );
+//                         setMedications(updated);
+//                       }}
+//                       aria-label="시간"
+//                     >
+//                       {Array.from({ length: 24 }).map((_, i) => (
+//                         <option key={i} value={i.toString().padStart(2, '0')}>
+//                           {i.toString().padStart(2, '0')}시
+//                         </option>
+//                       ))}
+//                     </select>
+//                     <select
+//                       value={med.time.minute}
+//                       onChange={(e) => {
+//                         const updated = medications.map((m) =>
+//                           m.id === med.id ? { ...m, time: { ...m.time, minute: e.target.value } } : m
+//                         );
+//                         setMedications(updated);
+//                       }}
+//                       aria-label="분"
+//                     >
+//                       {Array.from({ length: 60 }).map((_, i) => (
+//                         <option key={i} value={i.toString().padStart(2, '0')}>
+//                           {i.toString().padStart(2, '0')}분
+//                         </option>
+//                       ))}
+//                     </select>
+//                   </div>
+//                 </div>
+//                 <button
+//                   onClick={() => removeMedication(med.id)}
+//                   className="remove-button"
+//                   aria-label="약 삭제하기"
+//                 >
+//                   <FaMinus />
+//                 </button>
+//               </li>
+//             ))}
+//           </ul>
+//           <button
+//             onClick={handleToggleDrugSearch}
+//             aria-label="약 추가하기"
+//             className="add-medication-button"
+//           >
+//             복용약 추가
+//           </button>
+//         </section>
+//       </main>
+//     </Layout>
+//   );
+// };
+
+// export default Mypage;
 //                         {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
 //                           <option key={day} value={day}>
 //                             {day}요일
@@ -888,32 +1010,31 @@ interface MedicationSearchModalProps {
 
 const MedicationSearchModal: React.FC<MedicationSearchModalProps> = ({ isOpen, onClose, onSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Array<{ id: string, name: string }>>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchTerm) {
+    if (!searchTerm.trim()) {
       alert('검색어를 입력해주세요.');
       return;
     }
 
     try {
       setLoading(true);
-       // 의약품 검색 API 호출 추가(테스트 전)
-       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
-        params: {
-          type: 'searchType',
-          query: searchTerm,
-        }
+      const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+        params: { type: 'medicine' }
       });
 
-      if (response.data && response.data.results) {
-        setSearchResults(response.data.results);
-      }
+      // 응답에서 의약품 이름만 추출하여 검색 결과 설정
+      const results = response.data.map((item: any) => ({
+        id: item.id,
+        name: item.itemName || item.name || '이름 없음'
+      }));
+      setSearchResults(results);
     } catch (error) {
-      console.error('검색 중 오류 발생:', error);
-      alert('검색 중 오류가 발생했습니다.');
+      console.error('의약품 검색 중 오류 발생:', error);
+      alert('검색 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setLoading(false);
     }
@@ -944,15 +1065,11 @@ const MedicationSearchModal: React.FC<MedicationSearchModalProps> = ({ isOpen, o
                 <li 
                   key={result.id}
                   onClick={() => {
-                    onSelect({ 
-                      id: result.id.toString(), 
-                      name: result.itemName || result.name 
-                    });
+                    onSelect(result);
                     onClose();
                   }}
                 >
-                  {result.itemName || result.name}
-                  {result.entpName && <span className="manufacturer">({result.entpName})</span>}
+                  {result.name}
                 </li>
               ))}
             </ul>
