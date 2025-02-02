@@ -200,7 +200,7 @@ const CommunityMain = () => {
 
     //검색 게시물 목록 불러오기(검색했을때) axios 로직
 
-    // http://localhost:8080/community/search?keyword=test
+    // 게시글 검색 API: /community/search
     axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}`)
       .then(response => {
         console.log(response.data)
