@@ -291,36 +291,38 @@ const Mypage = () => {
                 </div>
 
                 <div className="reminder-container">
-                  <select
-                    value={med.frequency}
-                    onChange={(e) => {
-                      const updated = medications.map(m =>
-                        m.id === med.id ? {...m, frequency: e.target.value} : m
-                      );
-                      setMedications(updated);
-                    }}
-                    aria-label="복용 주기"
-                  >
-                    <option value="daily">매일</option>
-                    <option value="weekly">매주</option>
-                  </select>
-
-                  {med.frequency === 'weekly' && (
+                  <div className="frequency-row">
                     <select
-                      value={med.weekday}
+                      value={med.frequency}
                       onChange={(e) => {
                         const updated = medications.map(m =>
-                          m.id === med.id ? {...m, weekday: e.target.value} : m
+                          m.id === med.id ? {...m, frequency: e.target.value} : m
                         );
                         setMedications(updated);
                       }}
-                      aria-label="요일 선택"
+                      aria-label="복용 주기"
                     >
-                      {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
-                        <option key={day} value={day}>{day}요일</option>
-                      ))}
+                      <option value="daily">매일</option>
+                      <option value="weekly">매주</option>
                     </select>
-                  )}
+
+                    {med.frequency === 'weekly' && (
+                      <select
+                        value={med.weekday}
+                        onChange={(e) => {
+                          const updated = medications.map(m =>
+                            m.id === med.id ? {...m, weekday: e.target.value} : m
+                          );
+                          setMedications(updated);
+                        }}
+                        aria-label="요일 선택"
+                      >
+                        {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
+                          <option key={day} value={day}>{day}요일</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
 
                   <div className="time-selector">
                     <select
