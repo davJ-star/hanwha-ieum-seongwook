@@ -34,60 +34,66 @@ const BoardButton = ({ label, path, onClick }: { label: string; path: string; on
       e.preventDefault();
       window.open(path, '_blank');
     }}
-    className="board-button"
   >
     {label}
   </button>
 );
 
-const SearchBar = () => (
-  <div className="search-bar" role="search">
-    <input
-      type="text"
-      placeholder="게시글 검색"
-      className="search-input"
-      aria-label="게시글 검색"
-    />
-    <button 
-      className="search-button" 
-      aria-label="검색하기"
-    >
-      검색
-    </button>
-  </div>
-);
+const SearchBar = ({ onSearch }: { onSearch: (keyword: string) => void }) => {
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  const handleSearch = () => {
+    onSearch(searchKeyword);
+  };
+
+  return (
+    <div className="search-bar" role="search">
+      <input
+        type="text"
+        placeholder="게시글 검색"
+        className="search-input"
+        aria-label="게시글 검색"
+        value={searchKeyword}
+        onChange={(e) => setSearchKeyword(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') handleSearch();
+        }}
+      />
+      <button 
+        className="search-button" 
+        aria-label="검색하기"
+        onClick={handleSearch}
+      >
+        검색
+      </button>
+    </div>
+  );
+};
 
 const PostItem = ({ post }: { post: Post }) => (
+  // 게시글 아이템 컴포넌트
   <div 
     className="post-item" 
     role="article"
+    // 게시글 클릭 시 게시글 상세 페이지로 이동
     onClick={() => {
       window.location.href = `/post/${post.id}`;
     }}
+    style={{ cursor: 'pointer' }}
+    //
   >
-    <div className="post-item-header">
-      <h4 className="post-title">{post.title}</h4>
-      <div className="post-tags">
-        <span className="post-category">{post.category}</span>
-        <span className="post-disability">{post.disabilityType}</span>
-      </div>
-    </div>
-    <div className="post-item-body">
-      <div className="post-info">
-        <span className="post-author">작성자: {post.authorName || '익명'}</span>
-        <span className="post-date">
-          <time dateTime={post.createdAt}>{post.createdAt}</time>
-        </span>
-      </div>
-      <div className="post-comments">
-        댓글 수: {post.commentsCount}
-      </div>
-    </div>
+
+    <h4>{post.title}</h4>
+    <p>카테고리: {post.category}</p>
+    <p>장애 유형: {post.disabilityType}</p>
+    <p>작성자: {post.authorName || '익명'}</p>
+    <p>작성일: <time dateTime={post.createdAt}>{post.createdAt}</time></p>
+    <p>댓글 수: {post.commentsCount}</p>
   </div>
 );
 
 const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string[]; navigate: (path: string) => void }) => {
-  // 장애 유형별 URL 매핑
+  // 장애 유형별 URL 매핑 추가
   const disabilityTypeToPath: { [key: string]: string } = {
     '지체장애': 'PDC',
     '뇌병변장애': 'BLD',
@@ -115,9 +121,9 @@ const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string[]; n
   );
 };
 
-const PostList = ({ posts, categories, navigate }: { posts: Post[]; categories: string[]; navigate: (path: string) => void }) => (
+const PostList = ({ posts, categories, navigate, onSearch }: { posts: Post[]; categories: string[]; navigate: (path: string) => void; onSearch: (keyword: string) => void }) => (
   <section className="post-list-container" aria-labelledby="postListTitle">
-    <SearchBar />
+    <SearchBar onSearch={onSearch} />
     <header className="post-header">
       <h2 id="postListTitle">전체 게시글</h2>
       <button 
@@ -127,16 +133,21 @@ const PostList = ({ posts, categories, navigate }: { posts: Post[]; categories: 
           e.preventDefault();
           window.open('/writepost', '_blank');
         }}
+        style={{ color: '#000000' }}
         aria-label="새 게시글 작성하기"
       >
         글쓰기
       </button>
     </header>
+    
+    {/* 카테고리 필터 추가(질문, 자유, 공지 컴포넌트) */}
     <div className="category-filter">
       {categories.map((category) => (
-        <button key={category} className="category-button">{category}</button>
+        <button style={{ margin: "0px 0.35em" }} 
+        key={category}>{category}</button>
       ))}
     </div>
+
     <article className="post-list">
       {posts.map((post) => (
         <PostItem key={post.id} post={post} />
@@ -150,14 +161,39 @@ const CommunityMain = () => {
   const [communityData, setCommunityData] = useState<CommunityData | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-    
+  const fetchCommunityData = () => {
+    //전체 게시물 목록 불러오기 axios 로직
     axios.get('http://localhost:8080/community')
       .then(response => setCommunityData(response.data.home.fields))
       .catch(error => console.error('Error fetching community data:', error));
+  };
+
+  const handleSearch = (keyword: string) => {
+    if (!keyword.trim()) {
+      fetchCommunityData(); // 검색어가 비어있으면 전체 데이터 다시 로드
+      return;
+    }
+
+    //검색 게시물 목록 불러오기(검색했을때) axios 로직
+    axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}`)
+      .then(response => setCommunityData(response.data.home.fields))
+      .catch(error => {
+        console.error('Error searching posts:', error);
+        alert('검색 중 오류가 발생했습니다.');
+      });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+    fetchCommunityData();
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    alert('로그아웃 되었습니다.');
+  };
 
   if (!communityData) {
     return <div>Loading...</div>;
@@ -168,7 +204,12 @@ const CommunityMain = () => {
       <main className="community-page" role="main">
         <div className="community-content">
           <BoardList disabilityTypes={communityData.disabilityTypes} navigate={navigate} />
-          <PostList posts={communityData.posts} categories={communityData.categories} navigate={navigate} />
+          <PostList 
+            posts={communityData.posts} 
+            categories={communityData.categories} 
+            navigate={navigate}
+            onSearch={handleSearch}  
+          />
         </div>
       </main>
     </Layout>
