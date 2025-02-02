@@ -5,7 +5,6 @@ import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
 import axios, { AxiosError } from 'axios';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import SignLanguageIcon from '@mui/icons-material/SignLanguage';
 import { FaBraille } from 'react-icons/fa';
 import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
 import { speakText } from '../utils/accessibilityHandleTTS';
@@ -174,11 +173,6 @@ function DrugDetail() {
               style={{ cursor: 'pointer' }}
               role="button"
               aria-label="텍스트 음성 변환"
-            />
-            <SignLanguageIcon 
-              className="icon" 
-              role="button" 
-              aria-label="수어 번역" 
             />
             <div className="braille-dropdown">
               <FaBraille
