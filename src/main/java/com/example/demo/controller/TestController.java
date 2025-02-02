@@ -17,6 +17,7 @@ import java.util.Optional;
 @Transactional
 public class TestController {
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/test")
     @ResponseBody
@@ -29,5 +30,11 @@ public class TestController {
     public String dbtest(){
         Optional<User> user = userRepository.findById(1);
         return user.get().getEmail();
+    }
+
+    @GetMapping("/encode_test")
+    @ResponseBody
+    public String encode() {
+        return userService.encode("test");
     }
 }

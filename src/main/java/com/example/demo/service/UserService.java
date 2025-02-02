@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.Enum.Role;
 import com.example.demo.component.FileUploadUtil;
+import com.example.demo.config.S3Config;
 import com.example.demo.dto.*;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
@@ -23,7 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final FileUploadUtil fileUploadUtil;
+    private final S3Service s3Service;
     private final EmailVerificationService emailVerificationService;
+
+    @Transactional
+    public String encode(String encode){
+        return bCryptPasswordEncoder.encode(encode);
+    }
 
 
     @Transactional
@@ -81,8 +88,9 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        String fileUrl = fileUploadUtil.saveFile(email, file);
-        user.updateProfileImage(fileUrl);
+        // 파일 저장 및 URL 받기
+        String imageUrl = s3Service.uploadFile(file);
+        user.setProfileImage(imageUrl);
     }
 
 

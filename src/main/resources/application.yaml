@@ -13,12 +13,11 @@ spring:
           starttls:
             enable: true
 
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://hanhwa-ieum.ctwwwk4sax4o.ap-northeast-2.rds.amazonaws.com:3306/hanhwa?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: admin
-    password: ac37891313$!
+    password: ${db_password}
 
   jpa:
     hibernate:
@@ -63,3 +62,17 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+cloud:
+  aws:
+    s3:
+      bucket: medilink-hanhwa
+      path:
+        profile: profileImage
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}

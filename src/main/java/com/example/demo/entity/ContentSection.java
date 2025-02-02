@@ -19,5 +19,8 @@ public class ContentSection {
     private String sectionName;
 
     private String sectionId;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 }
