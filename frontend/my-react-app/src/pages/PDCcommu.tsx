@@ -1,25 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/pages/commu.css';
-import { FaSearch, FaUniversalAccess } from 'react-icons/fa';
-import AccessibilityModal from '../components/AccessibilityModal';
 import Layout from '../components/Layout/Layout';
-import axios, { AxiosError } from 'axios';
 
-// 게시판 버튼 인터페이스
-interface BoardButtonProps {
-  label: string;
-  path: string;
-  isCurrent?: boolean;
-  onClick: (path: string) => void;
+// interface Post {
+//   id: number;
+//   title: string;
+//   category: string;
+//   disabilityType: string;
+//   authorName: string | null;
+//   createdAt: string;
+//   commentsCount: number;
+// }
+
+//LocalDateTime
+interface Post {  
+  id: number;
+  title: string;
+  content: string;
+  authorName: string | null;
+  category: string;
+  disabilityType: string;
+  createdAt: string;
+  comments: string [];
+  disabilityTypeValue: string;
+  formattedCreatedAt: string;
+  categoryValue: string;
+
 }
 
-// 게시판 버튼 컴포넌트
-const BoardButton = ({ label, path, isCurrent, onClick }: BoardButtonProps) => (
+interface CommunityData {
+// pagination: {
+//   totalPages: number;
+//   // hasPrevious: boolean;
+//   // hasNext: boolean;
+//   currentPage: number;
+// };
+totalPages: number;
+keyword: string;
+currentPage: number;
+// disabilityTypes: string[];
+// categories: string[];
+posts: Post[]; 
+}
+
+// interface disabilityTypes {
+//   disabilityTypes: string[];
+// }
+
+const BoardButton = ({ label, path, onClick }: { label: string; path: string; onClick: (path: string) => void }) => (
   <button 
-    onClick={() => onClick(path)} 
-    aria-label={`${label}${isCurrent ? '' : '으로 이동'}`}
-    aria-current={isCurrent ? 'page' : undefined}
+    aria-label={`${label}으로 이동`}
+    onClick={() => onClick(path)}
     onContextMenu={(e) => {
       e.preventDefault();
       window.open(path, '_blank');
@@ -29,380 +62,246 @@ const BoardButton = ({ label, path, isCurrent, onClick }: BoardButtonProps) => (
   </button>
 );
 
-// 게시판 목록 컴포넌트
-const BoardList = ({ navigate }: { navigate: (path: string) => void }) => {
-  const boards = [
-    { label: '커뮤니티 메인', path: '/community-main' },
-    { label: '지체장애 게시판', path: '/PDCcommu', isCurrent: true },
-    { label: '뇌병변장애 게시판', path: '/BLDcommu' },
-    { label: '시각장애 게시판', path: '/VIcommu' },
-    { label: '청각장애 게시판', path: '/HIcommu' },
-    { label: '언어장애 게시판', path: '/SIcommu' },
-    { label: '안면장애 게시판', path: '/FDcommu' },
-    { label: '내부기관장애 게시판', path: '/IODcommu' },
-    { label: '정신적장애 게시판', path: '/MDcommu' }
-  ];
+const SearchBar = ({ onSearch }: { onSearch: (keyword: string) => void }) => {
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  const handleSearch = () => {
+    onSearch(searchKeyword);
+  };
 
   return (
-    <div className="board-list" role="navigation" aria-label="게시판 메뉴">
-      <h3 id="boardListTitle">게시판<br />목록</h3>
-      {boards.map((board) => (
-        <BoardButton
-          key={board.path}
-          label={board.label}
-          path={board.path}
-          isCurrent={board.isCurrent}
-          onClick={navigate}
-        />
-      ))}
+    <div className="search-bar" role="search">
+      <input
+        type="text"
+        placeholder="게시글 검색"
+        className="search-input"
+        aria-label="게시글 검색"
+        value={searchKeyword}
+        onChange={(e) => setSearchKeyword(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') handleSearch();
+        }}
+      />
+      <button 
+        className="search-button" 
+        aria-label="검색하기"
+        onClick={handleSearch}
+      >
+        검색
+      </button>
     </div>
   );
 };
 
-// 검색바 컴포넌트
-const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(searchQuery);
-  };
-
-  return (
-    <form className="search-bar" role="search" onSubmit={handleSearch}>
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="게시글 검색"
-        className="search-input"
-        aria-label="게시글 검색"
-        style={{ color: '#000000' }}
-      />
-      <button 
-        type="submit"
-        className="search-button" 
-        aria-label="검색하기"
-      >
-        검색
-      </button>
-    </form>
-  );
-};
-
-// 게시글 헤더 컴포넌트
-interface PostHeaderProps {
-  onWriteClick: () => void;
-}
-
-const PostHeader = ({ onWriteClick }: PostHeaderProps) => (
-  <div className="post-header">
-    <h3 id="boardTitle">지체장애 게시판</h3>
-    <button 
-      className="write-button" 
-      onClick={onWriteClick} 
-      onContextMenu={(e) => {
-        e.preventDefault();
-        window.open('/writepost', '_blank');
-      }}
-      style={{ color: '#000000' }}
-      aria-label="글쓰기"
-    >
-      글쓰기
-    </button>
-  </div>
-);
-
-interface Comment {
-  id: number;
-  content: string;
-  authorName: string | null;
-  createdAt: string;
-}
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  authorName: string | null;
-  category: string;
-  disabilityType: string;
-  createdAt: string;
-  comments: string[];
-  disabilityTypeValue: string;
-  formattedCreatedAt: string;
-  categoryValue: string;
-}
-
-interface CommunityData {
-  totalPages: number;
-  keyword: string;
-  currentPage: number;
-  posts: Post[];
-}
-
-// PostItem 컴포넌트 수정
 const PostItem = ({ post }: { post: Post }) => (
+  // 게시글 아이템 컴포넌트
   <div 
     className="post-item" 
     role="article"
+    // 게시글 클릭 시 게시글 상세 페이지로 이동
     onClick={() => {
       window.location.href = `/post/${post.id}`;
     }}
     style={{ cursor: 'pointer' }}
+    //
   >
+
     <h4>{post.title}</h4>
-    <p>카테고리: {post.categoryValue}</p>
-    <p>장애 유형: {post.disabilityTypeValue}</p>
+    <p>카테고리: {post.category}</p>
+    <p>장애 유형: {post.disabilityType}</p>
     <p>작성자: {post.authorName || '익명'}</p>
-    <p>작성일: <time dateTime={post.createdAt}>{post.formattedCreatedAt}</time></p>
-    <p>댓글 수: {post.comments.length}</p>
+    <p>작성일: <time dateTime={post.createdAt}>{post.createdAt}</time></p>
+    <p>댓글 수: {post.comments?.length} </p>
   </div>
 );
 
-// 페이지네이션 컴포넌트 추가
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
+const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string []; navigate: (path: string) => void }) => {
+  // 장애 유형별 URL 매핑 추가
+  const disabilityTypeToPath: { [key: string]: string } = {
+    '지체장애': 'PDC',
+    '뇌병변장애': 'BLD',
+    '시각장애': 'VI',
+    '청각장애': 'HI',
+    '언어장애': 'SI',
+    '안면장애': 'FD',
+    '내부기관장애': 'IOD',
+    '정신적장애': 'MD'
+  };
 
-const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    const maxVisiblePages = 10; // 한 번에 보여줄 최대 페이지 번호 수
-    
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  return (
+    <nav className="board-list" role="navigation" aria-label="게시판 메뉴">
+      <h3 id="boardListTitle">게시판<br />목록</h3>
+      <BoardButton label="커뮤니티 메인" path="/community-main" onClick={navigate} />
+      {disabilityTypes.map((type) => (
+        <BoardButton
+          key={type}
+          label={`${type} 게시판`}
+          path={`/${disabilityTypeToPath[type]}commu`}
+          onClick={navigate}
+        />
+      ))}
+    </nav>
+  );
+};
+
+/*페이지네이션*/
+const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (page: number) => void }) => {
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    // 화면에 표시되는 페이지 번호는 1부터 시작하도록 조정
+    const displayPage = currentPage + 1;
+    let startPage = Math.max(1, displayPage - 2);
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-    // 시작 페이지 조정
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
-    // "이전" 버튼
-    pageNumbers.push(
-      <button
-        key="prev"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="page-nav"
-      >
-        이전
-      </button>
-    );
-
-    // 페이지 번호들
     for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => onPageChange(i)}
-          className={`page-number ${currentPage === i ? 'active' : ''}`}
-          aria-current={currentPage === i ? 'page' : undefined}
-        >
-          {i}
-        </button>
-      );
+      pages.push(i);
     }
 
-    // "다음" 버튼
-    pageNumbers.push(
-      <button
-        key="next"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="page-nav"
-      >
-        다음
-      </button>
-    );
-
-    return pageNumbers;
+    return pages;
   };
 
   return (
     <div className="pagination" role="navigation" aria-label="페이지 네비게이션">
-      {renderPageNumbers()}
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 0}
+        aria-label="이전 페이지"
+      >
+        이전
+      </button>
+      
+      {getPageNumbers().map((pageNum) => (
+        <button
+          key={pageNum}
+          onClick={() => onPageChange(pageNum - 1)}
+          className={currentPage === pageNum - 1 ? 'active' : ''}
+          aria-label={`${pageNum} 페이지`}
+          aria-current={currentPage === pageNum - 1 ? 'page' : undefined}
+        >
+          {pageNum}
+        </button>
+      ))}
+      
+      {totalPages > getPageNumbers()[getPageNumbers().length - 1] && (
+        <>
+          <span>...</span>
+          <button
+            onClick={() => onPageChange(totalPages - 1)}
+            aria-label={`${totalPages} 페이지`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages - 1}
+        aria-label="다음 페이지"
+      >
+        다음
+      </button>
     </div>
   );
 };
 
-// PostList 컴포넌트 수정
-const PostList = ({ navigate }: { navigate: (path: string) => void }) => {
-  const [communityData, setCommunityData] = useState<CommunityData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchKeyword, setSearchKeyword] = useState('');
+const PostList = ({ posts = [], categories, navigate, onSearch, currentPage, totalPages, onPageChange }: 
+  { posts: Post[]; categories: string[]; navigate: (path: string) => void; onSearch: (keyword: string) => void; 
+    currentPage: number; totalPages: number; onPageChange: (page: number) => void }) => (
+  <section className="post-list-container" aria-labelledby="postListTitle">
+    <SearchBar onSearch={onSearch} />
+    <header className="post-header">
+      <h2 id="postListTitle">지체장애 게시판</h2>
+      <button 
+        className="write-button" 
+        onClick={() => navigate('/writepost')} 
+        onContextMenu={(e) => {
+          e.preventDefault();
+          window.open('/writepost', '_blank');
+        }}
+        style={{ color: '#000000' }}
+        aria-label="새 게시글 작성하기"
+      >
+        글쓰기
+      </button>
+    </header>
 
-  const fetchPosts = async (page: number = 1) => {
-    try {
-      const response = await axios.get('http://localhost:8080/community', {
-        params: {
-          disabilityType: 'PHYSICAL',
-          page: page - 1,
-          size: 9 // 페이지당 9개의 게시물
-        }
-      });
-      console.log('Response data:', response.data);
-      if (response.data && typeof response.data === 'object') {
-        setCommunityData({
-          totalPages: response.data.totalPages || 0,
-          keyword: response.data.keyword || '',
-          currentPage: page,
-          posts: Array.isArray(response.data.posts) ? response.data.posts : []
-        });
-      } else {
-        setCommunityData({
-          totalPages: 0,
-          keyword: '',
-          currentPage: 1,
-          posts: []
-        });
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error('게시글 로딩 중 오류 발생:', error);
-      setCommunityData({
-        totalPages: 0,
-        keyword: '',
-        currentPage: 1,
-        posts: []
-      });
-      setLoading(false);
-    }
+    <article className="post-list">
+      {posts && posts.length > 0 ? (
+        posts.map((post) => (
+          <PostItem key={post.id} post={post} />
+        ))
+      ) : (
+        <div>검색 결과가 없습니다.</div>
+      )}
+    </article>
+    
+    <Pagination 
+      currentPage={currentPage} 
+      totalPages={totalPages} 
+      onPageChange={onPageChange}
+    />
+  </section>
+);
+
+const CommunityMain = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [communityData, setCommunityData] = useState<CommunityData | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
+ 
+  const fetchCommunityData = (page: number = 0) => {
+    // 페이지 네이션 추가
+    // 게시글 목록 조회 API 호출
+    axios.get(`http://localhost:8080/community/PHYSICAL?page=${page}&size=9`)
+      .then(response => setCommunityData(response.data.home.fields))
+      .catch(error => console.error('Error fetching community data:', error));
   };
-  
-  const handleSearch = async (keyword: string) => {
-    setSearchKeyword(keyword);
+
+  const handleSearch = (keyword: string) => {
     if (!keyword.trim()) {
-      fetchPosts(1);
+      fetchCommunityData(currentPage);
       return;
     }
 
-    try {
-      const response = await axios.get('http://localhost:8080/community/search', {
-        params: {
-          disabilityType: 'PHYSICAL',
-          keyword: keyword,
-          page: 0,
-          size: 10
+    axios.get(`http://localhost:8080/community/PHYSICAL/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
+      .then(response => {
+        const searchData = response.data.fields;
+        if (searchData) {
+          setCommunityData({
+            posts: searchData.posts || [],
+            totalPages: searchData.pagination.totalPages || 1,
+            currentPage: searchData.pagination.currentPage || 0,
+            keyword: searchData.keyword
+          });
         }
-      });
-      console.log('Search response:', response.data);
-      if (response.data && typeof response.data === 'object') {
+      })
+      .catch(error => {
+        console.error('검색 중 오류 발생:', error);
         setCommunityData({
-          totalPages: response.data.totalPages || 0,
-          keyword: keyword,
-          currentPage: 1,
-          posts: Array.isArray(response.data.posts) ? response.data.posts : []
+          posts: [],
+          totalPages: 1,
+          currentPage: 0,
+          keyword: keyword
         });
-        setCurrentPage(1);
-      } else {
-        setCommunityData({
-          totalPages: 0,
-          keyword: keyword,
-          currentPage: 1,
-          posts: []
-        });
-      }
-    } catch (error) {
-      console.error('게시글 검색 중 오류 발생:', error);
-      setCommunityData({
-        totalPages: 0,
-        keyword: keyword,
-        currentPage: 1,
-        posts: []
       });
-      alert('검색 중 오류가 발생했습니다.');
-    }
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    if (searchKeyword.trim()) {
-      handleSearchWithPage(searchKeyword, page);
-    } else {
-      fetchPosts(page);
-    }
+    fetchCommunityData(page);
   };
-
-  const handleSearchWithPage = async (keyword: string, page: number) => {
-    try {
-      const response = await axios.get('http://localhost:8080/community/search', {
-        params: {
-          disabilityType: 'PHYSICAL',
-          keyword: keyword,
-          page: page - 1,
-          size: 10
-        }
-      });
-      if (response.data && typeof response.data === 'object') {
-        setCommunityData({
-          totalPages: response.data.totalPages || 0,
-          keyword: keyword,
-          currentPage: page,
-          posts: Array.isArray(response.data.posts) ? response.data.posts : []
-        });
-      }
-    } catch (error) {
-      console.error('검색 페이지 로딩 중 오류 발생:', error);
-      alert('페이지 로딩 중 오류가 발생했습니다.');
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts(currentPage);
-  }, []);
-
-  if (loading || !communityData) {
-    return (
-      <main className="post-list-container" role="main">
-        <SearchBar onSearch={handleSearch} />
-        <PostHeader onWriteClick={() => navigate('/writepost')} />
-        <div className="post-list" role="status" aria-live="polite">
-          <p style={{ textAlign: 'center', padding: '20px' }}>
-            게시글을 불러오는 중...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="post-list-container" role="main">
-      <SearchBar onSearch={handleSearch} />
-      <PostHeader onWriteClick={() => navigate('/writepost')} />
-      <div className="post-list" role="feed" aria-labelledby="boardTitle">
-        {Array.isArray(communityData.posts) && communityData.posts.length > 0 ? (
-          communityData.posts.map((post) => (
-            <PostItem key={post.id} post={post} />
-          ))
-        ) : (
-          <p style={{ textAlign: 'center', padding: '20px' }}>
-            게시글이 없습니다.
-          </p>
-        )}
-      </div>
-      {communityData.totalPages > 0 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={communityData.totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
-    </main>
-  );
-};
-
-const PDCcommu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-  }, []);
+    fetchCommunityData(currentPage);
+  }, [currentPage]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -410,74 +309,28 @@ const PDCcommu = () => {
     alert('로그아웃 되었습니다.');
   };
 
+  if (!communityData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Layout>
-      <div className="community-page">
+      <main className="community-page" role="main">
         <div className="community-content">
-          <BoardList navigate={navigate} />
-          <PostList navigate={navigate} />
+          <BoardList disabilityTypes={['지체장애', '뇌병변장애', '시각장애', '청각장애', '언어장애', '안면장애', '내부기관장애', '정신적장애']} navigate={navigate} /> {/*  communityData.disabilityTypes */}
+          <PostList 
+            posts={communityData.posts} 
+            categories={['질문', '자유', '공지']} // communityData.categories
+            navigate={navigate}
+            onSearch={handleSearch}
+            currentPage={currentPage}
+            totalPages={communityData.totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
-      </div>
+      </main>
     </Layout>
   );
 }
 
-export default PDCcommu;
-
-// CSS 스타일 추가를 위한 스타일 태그
-const styles = `
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    gap: 5px;
-  }
-
-  .pagination button {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    background-color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .pagination button:hover:not(:disabled) {
-    background-color: #f0f0f0;
-  }
-
-  .pagination button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-
-  .pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .pagination .page-nav {
-    font-weight: bold;
-  }
-
-  .pagination .page-number {
-    color: #333;
-  }
-
-  .pagination .page-number.active {
-    background-color: #007bff;
-    color: white;
-  }
-`;
-
-// 스타일 태그를 문서에 추가
-const styleSheet = document.createElement('style');
-styleSheet.type = 'text/css';
-styleSheet.innerText = styles;
-document.head.appendChild(styleSheet);
+export default CommunityMain;

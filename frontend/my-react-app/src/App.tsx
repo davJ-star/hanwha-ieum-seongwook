@@ -31,7 +31,7 @@ function App() {
   return (
     <Router>
       <div role="application" aria-label="메인 애플리케이션">
-        <main>파파
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
