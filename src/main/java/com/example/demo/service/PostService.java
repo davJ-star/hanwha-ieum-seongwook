@@ -153,4 +153,19 @@ public class PostService {
 
         return posts.map(this::convertToDto);
     }
+
+    public Page<PostResponse> searchPostsByDisabilityType(
+            DisabilityType disabilityType,
+            String keyword,
+            Pageable pageable) {
+
+        Page<Post> posts = postRepository.findByDisabilityTypeAndTitleContainingOrContentContaining(
+                disabilityType,
+                keyword,
+                keyword,
+                pageable
+        );
+
+        return posts.map(this::convertToDto);
+    }
 }

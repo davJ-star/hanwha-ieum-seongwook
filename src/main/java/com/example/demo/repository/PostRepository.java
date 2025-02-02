@@ -27,4 +27,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                                                PostCategory category,
                                                Pageable pageable);
 
+    Page<Post> findByDisabilityTypeAndTitleContainingOrContentContaining(
+            DisabilityType disabilityType,
+            String titleKeyword,
+            String contentKeyword,
+            Pageable pageable
+    );
+
 }

@@ -354,4 +354,45 @@ public class CommunityController {
                 )
         ));
     }
+
+
+    @GetMapping("/{disabilityType}/search")
+    public ResponseEntity<Map<String, Object>> searchByDisabilityType(
+            @PathVariable(name = "disabilityType") String disabilityTypeStr,
+            @RequestParam String keyword,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        DisabilityType disabilityType = DisabilityType.valueOf(disabilityTypeStr);
+
+        Page<PostResponse> posts = postService.searchPostsByDisabilityType(disabilityType, keyword, pageable);
+
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("disabilityType", disabilityType.getValue());
+        fields.put("keyword", keyword);
+
+        // posts 변환
+        List<Map<String, Object>> postsResponse = posts.getContent().stream()
+                .map(post -> {
+                    Map<String, Object> postMap = new HashMap<>();
+                    postMap.put("id", post.getId());
+                    postMap.put("title", post.getTitle());
+                    postMap.put("category", post.getCategory().getValue());
+                    postMap.put("authorName", post.getAuthorName());
+                    postMap.put("createdAt", post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    postMap.put("commentsCount", post.getComments().size());
+                    return postMap;
+                })
+                .collect(Collectors.toList());
+        fields.put("posts", postsResponse);
+
+        // pagination 정보 추가
+        Map<String, Object> pagination = new HashMap<>();
+        pagination.put("currentPage", pageable.getPageNumber());
+        pagination.put("totalPages", posts.getTotalPages());
+        pagination.put("hasPrevious", posts.hasPrevious());
+        pagination.put("hasNext", posts.hasNext());
+        fields.put("pagination", pagination);
+
+        return ResponseEntity.ok(Map.of("fields", fields));
+    }
 }
