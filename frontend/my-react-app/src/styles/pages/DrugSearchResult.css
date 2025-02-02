@@ -135,6 +135,16 @@
     padding: 1.5rem;
     background-color: #f8f9fa;
   }
+
+  .result-item a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  
+  .result-item a :hover h4 {
+    
+  }
   
   .result-item h3 {
     color: #007bff;

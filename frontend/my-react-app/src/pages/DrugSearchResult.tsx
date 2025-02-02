@@ -32,20 +32,23 @@ const DrugSearchResultItem = ({ data }: { data: SearchResult }) => {
   const name = data.itemName || data.name || '이름 없음';
   // 효과 정보: details가 있으면 details.effects, 없으면 efcyQesitm
   const effect = data.details?.effects || data.efcyQesitm || '효과 정보 없음';
-  const ingredients = data.details?.ingredients || 'N/A';
-  const dosage = data.details?.dosage || 'N/A';
-  const cautions = data.details?.cautions || 'N/A';
+  // const ingredients = data.details?.ingredients || 'N/A';
+  // const dosage = data.details?.dosage || 'N/A';
+  // const cautions = data.details?.cautions || 'N/A';
   
+  // 상세페이지 api 상세페이지 url
   return (
     <div className="result-item" role="article">
-      <h3>{name}</h3>
-      <div className="result-details">
-        <p><strong>효능/효과:</strong> {effect}</p>
-        <p><strong>성분:</strong> {ingredients}</p>
-        <p><strong>용법/용량:</strong> {dosage}</p>
-        <p><strong>주의사항:</strong> {cautions}</p>
-        {data.entpName && <p><strong>제조사:</strong> {data.entpName}</p>}
-      </div>
+      <a href={`/drug/${data.id}`} role="link" aria-label={`${name} 상세 정보 보기`}>
+        <h3>{name}</h3>
+        <div className="result-details">
+          <p><h4>효능/효과:</h4> {effect}</p>
+          {/* <p><strong>성분:</strong> {ingredients}</p>
+          <p><strong>용법/용량:</strong> {dosage}</p>
+          <p><strong>주의사항:</strong> {cautions}</p> */}
+          {data.entpName && <p><h4>제조사:</h4> {data.entpName}</p>}
+        </div>
+      </a>
     </div>
   );
 };
