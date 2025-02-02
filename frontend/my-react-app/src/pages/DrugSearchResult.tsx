@@ -7,23 +7,19 @@ import Layout from '../components/Layout/Layout';
 import AccessibilityModal from '../components/AccessibilityModal';
 import SearchForm from '../components/common/SearchForm';
 import ImageSearch from '../components/common/ImageSearch';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import SignLanguageIcon from '@mui/icons-material/SignLanguage';
-import { FaBraille } from 'react-icons/fa';
-import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
-import { speakPageContent } from '../utils/accessibilityHandleTTS';
 
 interface SearchResult {
   id: number;
-  name?: string;
   itemName?: string;
-  efcyQesitm?: string;
+  name?: string;
   entpName?: string;
-  description?: string;
+  efcyQesitm?: string;
+  // 필요 시 추가 필드...
 }
 
 const DrugSearchResultItem = ({ data }: { data: SearchResult }) => {
   const name = data.itemName || data.name || '이름 없음';
+
   return (
     <div className="result-item" role="article">
       <Link to={`/DrugDetail?id=${data.id}`} role="link" aria-label={`${name} 상세 정보 보기`}>
@@ -39,48 +35,39 @@ function DrugSearchResult() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Home에서 전달한 검색 결과
-  const initialResults: SearchResult[] = (location.state as { results?: SearchResult[] } | null)?.results || [];
+  // Home.tsx or OCR 등에서 전달한 검색 결과 (state.results)
+  const initialResults: SearchResult[] = (location.state as { results?: SearchResult[] })?.results || [];
   const [searchResults, setSearchResults] = useState<SearchResult[]>(initialResults);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Home에서 전달한 결과가 있으면 세팅
     if (location.state && (location.state as any).results) {
       setSearchResults((location.state as any).results);
     }
   }, [location.state]);
 
-  // [DrugSearchResult]에서 검색 (searchType을 'medicine'으로 고정)
+  // (추가) 만약 DrugSearchResult 페이지에서도 직접 검색을 가능하게 한다면:
   const handleSearch = async (e: FormEvent, _searchType: string, searchTerm: string) => {
     e.preventDefault();
     if (!searchTerm.trim()) {
       alert('검색어를 입력하세요.');
       return;
     }
-
-    console.log('[DrugSearchResult] 검색 요청 >>', {
-      searchType: 'medicine',
-      searchTerm: searchTerm.trim(),
-    });
-
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
-        params: { type: 'medicine' },
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      console.log('[DrugSearchResult] 검색 요청 >>', searchTerm);
 
+      const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+        params: { type: 'medicine' }, // 의약품 고정
+      });
       console.log('[DrugSearchResult] 검색 응답 <<', response.data);
 
-      if (response.data?.length > 0) {
-        // 백엔드 응답 구조가 배열이라면,
+      // 응답 구조에 따라 state 업데이트
+      if (Array.isArray(response.data)) {
         setSearchResults(response.data);
-      } else if (response.data?.results) {
-        // 백엔드 응답 구조가 { results: [] } 라면,
+      } else if (Array.isArray(response.data.results)) {
         setSearchResults(response.data.results);
       } else {
-        // 결과가 없는 경우
         setSearchResults([]);
       }
     } catch (error) {
@@ -94,29 +81,27 @@ function DrugSearchResult() {
 
   const handleImageUpload = async (file: File) => {
     const formData = new FormData();
-    formData.append('image', file);
-
-    console.log('[DrugSearchResult] 이미지 검색 요청 >>', formData);
+    formData.append('file', file);
 
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8080/api/health/image-search`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+      console.log('[DrugSearchResult] 이미지 검색 요청 >>', file);
+
+      const response = await axios.post(`http://localhost:8080/ocr`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('[DrugSearchResult] 이미지 검색 응답 <<', response.data);
 
-      if (response.data?.results) {
-        setSearchResults(response.data.results);
+      // OCR 응답 구조에 따라 검색 결과 업데이트
+      if (response.data.success === true && response.data.drugList?.length > 0) {
+        setSearchResults(response.data.drugList);
       } else {
         setSearchResults([]);
+        alert('이미지 검색 결과가 없습니다.');
       }
     } catch (error) {
-      const err = error as AxiosError;
-      console.error('[DrugSearchResult] 이미지 검색 오류:', err);
-      alert(err.response?.data?.message || '이미지 검색 중 오류가 발생했습니다.');
+      console.error('[DrugSearchResult] 이미지 검색 오류:', error);
+      alert('이미지 검색 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
@@ -126,15 +111,16 @@ function DrugSearchResult() {
     <Layout>
       <div className="search-container">
         <h2>의약품 정보 검색하기</h2>
-        <SearchForm onSubmit={handleSearch} defaultSearchType="medicine" disableSearchType />
+        {/* 이미 Home에서 type이 고정되어 들어온 경우라면, defaultSearchType="medicine" + disableSearchType={true} 가능 */}
+        <SearchForm onSubmit={handleSearch} defaultSearchType="medicine" disableSearchType={true} />
         <ImageSearch onUpload={handleImageUpload} />
       </div>
 
       <div className="search-results">
         <div className="result-header">
           <h2>검색 결과</h2>
-          {/* 접근성 도구 아이콘은 생략 */}
         </div>
+
         {loading ? (
           <div>검색 중...</div>
         ) : searchResults.length === 0 ? (
@@ -147,12 +133,170 @@ function DrugSearchResult() {
           </div>
         )}
       </div>
+
       <AccessibilityModal isOpen={false} onClose={() => {}} />
     </Layout>
   );
 }
 
 export default DrugSearchResult;
+
+
+// // src/pages/DrugSearchResult.tsx
+// import React, { useEffect, useState, FormEvent } from 'react';
+// import { useNavigate, useLocation, Link } from 'react-router-dom';
+// import axios, { AxiosError } from 'axios';
+// import '../styles/pages/DrugSearchResult.css';
+// import Layout from '../components/Layout/Layout';
+// import AccessibilityModal from '../components/AccessibilityModal';
+// import SearchForm from '../components/common/SearchForm';
+// import ImageSearch from '../components/common/ImageSearch';
+// import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+// import SignLanguageIcon from '@mui/icons-material/SignLanguage';
+// import { FaBraille } from 'react-icons/fa';
+// import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityHandleBraille';
+// import { speakPageContent } from '../utils/accessibilityHandleTTS';
+
+// interface SearchResult {
+//   id: number;
+//   name?: string;
+//   itemName?: string;
+//   efcyQesitm?: string;
+//   entpName?: string;
+//   description?: string;
+// }
+
+// const DrugSearchResultItem = ({ data }: { data: SearchResult }) => {
+//   const name = data.itemName || data.name || '이름 없음';
+//   return (
+//     <div className="result-item" role="article">
+//       <Link to={`/DrugDetail?id=${data.id}`} role="link" aria-label={`${name} 상세 정보 보기`}>
+//         <h3>{name}</h3>
+//         {data.efcyQesitm && <p>효능/효과: {data.efcyQesitm}</p>}
+//         {data.entpName && <p>제조사: {data.entpName}</p>}
+//       </Link>
+//     </div>
+//   );
+// };
+
+// function DrugSearchResult() {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+
+//   // Home에서 전달한 검색 결과
+//   const initialResults: SearchResult[] = (location.state as { results?: SearchResult[] } | null)?.results || [];
+//   const [searchResults, setSearchResults] = useState<SearchResult[]>(initialResults);
+//   const [loading, setLoading] = useState(false);
+
+//   useEffect(() => {
+//     // Home에서 전달한 결과가 있으면 세팅
+//     if (location.state && (location.state as any).results) {
+//       setSearchResults((location.state as any).results);
+//     }
+//   }, [location.state]);
+
+//   // [DrugSearchResult]에서 검색 (searchType을 'medicine'으로 고정)
+//   const handleSearch = async (e: FormEvent, _searchType: string, searchTerm: string) => {
+//     e.preventDefault();
+//     if (!searchTerm.trim()) {
+//       alert('검색어를 입력하세요.');
+//       return;
+//     }
+
+//     console.log('[DrugSearchResult] 검색 요청 >>', {
+//       searchType: 'medicine',
+//       searchTerm: searchTerm.trim(),
+//     });
+
+//     try {
+//       setLoading(true);
+//       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+//         params: { type: 'medicine' },
+//         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+//       });
+
+//       console.log('[DrugSearchResult] 검색 응답 <<', response.data);
+
+//       if (response.data?.length > 0) {
+//         // 백엔드 응답 구조가 배열이라면,
+//         setSearchResults(response.data);
+//       } else if (response.data?.results) {
+//         // 백엔드 응답 구조가 { results: [] } 라면,
+//         setSearchResults(response.data.results);
+//       } else {
+//         // 결과가 없는 경우
+//         setSearchResults([]);
+//       }
+//     } catch (error) {
+//       const err = error as AxiosError;
+//       console.error('[DrugSearchResult] 검색 오류:', err);
+//       alert(err.response?.data?.message || '검색 중 오류가 발생했습니다.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleImageUpload = async (file: File) => {
+//     const formData = new FormData();
+//     formData.append('image', file);
+
+//     console.log('[DrugSearchResult] 이미지 검색 요청 >>', formData);
+
+//     try {
+//       setLoading(true);
+//       const response = await axios.post(`http://localhost:8080/api/health/image-search`, formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         },
+//       });
+//       console.log('[DrugSearchResult] 이미지 검색 응답 <<', response.data);
+
+//       if (response.data?.results) {
+//         setSearchResults(response.data.results);
+//       } else {
+//         setSearchResults([]);
+//       }
+//     } catch (error) {
+//       const err = error as AxiosError;
+//       console.error('[DrugSearchResult] 이미지 검색 오류:', err);
+//       alert(err.response?.data?.message || '이미지 검색 중 오류가 발생했습니다.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <Layout>
+//       <div className="search-container">
+//         <h2>의약품 정보 검색하기</h2>
+//         <SearchForm onSubmit={handleSearch} defaultSearchType="medicine" disableSearchType />
+//         <ImageSearch onUpload={handleImageUpload} />
+//       </div>
+
+//       <div className="search-results">
+//         <div className="result-header">
+//           <h2>검색 결과</h2>
+//           {/* 접근성 도구 아이콘은 생략 */}
+//         </div>
+//         {loading ? (
+//           <div>검색 중...</div>
+//         ) : searchResults.length === 0 ? (
+//           <div>검색 결과가 없습니다.</div>
+//         ) : (
+//           <div className="results-container">
+//             {searchResults.map((result) => (
+//               <DrugSearchResultItem key={result.id} data={result} />
+//             ))}
+//           </div>
+//         )}
+//       </div>
+//       <AccessibilityModal isOpen={false} onClose={() => {}} />
+//     </Layout>
+//   );
+// }
+
+// export default DrugSearchResult;
 
 // import React, { useEffect, useState, FormEvent } from 'react';
 // import { useNavigate, useLocation, Link } from 'react-router-dom';
