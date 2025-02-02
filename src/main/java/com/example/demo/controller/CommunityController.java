@@ -285,4 +285,73 @@ public class CommunityController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/{disabilityType}")
+    public ResponseEntity<Map<String, Object>> getCommunityByType(
+            @PathVariable(name = "disabilityType") String disabilityTypeStr,  // String으로 받고
+            @RequestParam(required = false) PostCategory category,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        // String을 DisabilityType으로 변환
+        DisabilityType disabilityType;
+        try {
+            disabilityType = DisabilityType.valueOf(disabilityTypeStr);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Invalid disability type: " + disabilityTypeStr
+            ));
+        }
+
+        log.info("Getting posts for disability type: {}", disabilityType);
+
+        Page<PostResponse> posts = postService.getPostsByDisabilityType(disabilityType, category, pageable);
+
+        Map<String, Object> fields = new HashMap<>();
+
+        // 선택적 필드 추가
+        fields.put("disabilityType", disabilityType.getValue());
+        if (category != null) {
+            fields.put("category", category.getValue());
+        }
+
+        // 필수 필드 추가
+        fields.put("categories", Arrays.stream(PostCategory.values())
+                .map(PostCategory::getValue)
+                .collect(Collectors.toList()));
+
+        fields.put("disabilityTypes", Arrays.stream(DisabilityType.values())
+                .map(DisabilityType::getValue)
+                .collect(Collectors.toList()));
+
+        // posts 변환
+        List<Map<String, Object>> postsResponse = posts.getContent().stream()
+                .map(post -> {
+                    Map<String, Object> postMap = new HashMap<>();
+                    postMap.put("id", post.getId());
+                    postMap.put("title", post.getTitle());
+                    postMap.put("category", post.getCategory().getValue());
+                    postMap.put("disabilityType", post.getDisabilityType().getValue());
+                    postMap.put("authorName", post.getAuthorName());
+                    postMap.put("createdAt", post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    postMap.put("commentsCount", post.getComments().size());
+                    return postMap;
+                })
+                .collect(Collectors.toList());
+        fields.put("posts", postsResponse);
+
+        // pagination 정보 추가
+        Map<String, Object> pagination = new HashMap<>();
+        pagination.put("currentPage", pageable.getPageNumber());
+        pagination.put("totalPages", posts.getTotalPages());
+        pagination.put("hasPrevious", posts.hasPrevious());
+        pagination.put("hasNext", posts.hasNext());
+        fields.put("pagination", pagination);
+
+        return ResponseEntity.ok(Map.of(
+                "home", Map.of(
+                        "path", "src/main/resources/templates/community/home.html",
+                        "fields", fields
+                )
+        ));
+    }
 }

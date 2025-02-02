@@ -50,7 +50,9 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/ocr"),
                                 new AntPathRequestMatcher("/ocr/**"),
-                                new AntPathRequestMatcher("/admin/**")
+                                new AntPathRequestMatcher("/admin/**"),
+                                new AntPathRequestMatcher("/community/post/{id}"),
+                                new AntPathRequestMatcher("/community/{disabilityType}")
                         ).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/community/post/*/edit")).authenticated()
                         .requestMatchers(

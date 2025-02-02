@@ -21,4 +21,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByDisabilityType(DisabilityType disabilityType, Pageable pageable);
     Page<Post> findByCategoryAndDisabilityType(PostCategory category, DisabilityType disabilityType, Pageable pageable);
     Page<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
+
+
+    Page<Post> findByDisabilityTypeAndCategory(DisabilityType disabilityType,
+                                               PostCategory category,
+                                               Pageable pageable);
+
 }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.*;
 import com.example.demo.entity.Search;
 import com.example.demo.repository.SearchRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,9 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,6 +65,8 @@ public class SearchService {
                 return new ArrayList<>();
             }
         }
+        
+        
 
         return response.getBody().getItems().stream()
                 .map(item -> {
@@ -107,4 +108,55 @@ public class SearchService {
                 item.getDepositMethodQesitm()
         );
     }
+
+
+
+    public List<DrugBasicResponse> ocrSearchAndSave(String word) {
+        List<DrugBasicResponse> results = new ArrayList<>();
+        DrugResponse response = drugSearch(word);
+
+        // 검색 결과가 없는 경우 빈 리스트 반환
+        if (response == null || response.getBody() == null || response.getBody().getItems() == null ||
+                response.getBody().getItems().isEmpty()) {
+            return results;
+        }
+
+        // 검색 결과가 있는 경우
+        List<SearchDto> items = response.getBody().getItems();
+        Set<String> processedItems = new HashSet<>();
+
+        for (SearchDto item : items) {
+            // 중복 체크
+            if (processedItems.contains(item.getItemName())) {
+                continue;
+            }
+            processedItems.add(item.getItemName());
+
+            Search search;
+            if (!searchRepository.existsByItemName(item.getItemName())) {
+                search = Search.builder()
+                        .entpName(item.getEntpName())
+                        .itemName(item.getItemName())
+                        .efcyQesitm(item.getEfcyQesitm())
+                        .build();
+                search = searchRepository.save(search);
+            } else {
+                search = searchRepository.findByItemName(item.getItemName());
+            }
+
+            DrugBasicResponse drugResponse = DrugBasicResponse.builder()
+                    .id(search.getId())
+                    .entpName(item.getEntpName())
+                    .itemName(item.getItemName())
+                    .efcyQesitm(item.getEfcyQesitm())
+                    .build();
+
+            results.add(drugResponse);
+        }
+
+        return results;
+    }
+
+
+
 }

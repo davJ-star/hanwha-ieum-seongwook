@@ -47,7 +47,7 @@ public class OcrController {
         // 각 단어로 의약품 검색
         List<DrugBasicResponse> results = new ArrayList<>();
         for (String word : words) {
-            List<DrugBasicResponse> searchResult = searchService.searchAndSave(word);
+            List<DrugBasicResponse> searchResult = searchService.ocrSearchAndSave(word);
             results.addAll(searchResult);
         }
 

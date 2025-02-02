@@ -137,4 +137,20 @@ public class PostService {
                 keyword, keyword, pageRequest);
         return posts.map(this::convertToDto);
     }
+
+    public Page<PostResponse> getPostsByDisabilityType(DisabilityType disabilityType,
+                                                       PostCategory category,
+                                                       Pageable pageable) {
+        Page<Post> posts;
+
+        if (category != null) {
+            // 카테고리와 장애유형 모두로 필터링
+            posts = postRepository.findByDisabilityTypeAndCategory(disabilityType, category, pageable);
+        } else {
+            // 장애유형으로만 필터링
+            posts = postRepository.findByDisabilityType(disabilityType, pageable);
+        }
+
+        return posts.map(this::convertToDto);
+    }
 }
