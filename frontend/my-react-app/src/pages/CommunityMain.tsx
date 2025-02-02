@@ -144,7 +144,75 @@ const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string []; 
   );
 };
 
-const PostList = ({ posts, categories, navigate, onSearch }: { posts: Post[]; categories: string[]; navigate: (path: string) => void; onSearch: (keyword: string) => void }) => (
+/*페이지네이션*/
+const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (page: number) => void }) => {
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    // 화면에 표시되는 페이지 번호는 1부터 시작하도록 조정
+    const displayPage = currentPage + 1;
+    let startPage = Math.max(1, displayPage - 2);
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
+  return (
+    <div className="pagination" role="navigation" aria-label="페이지 네비게이션">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 0}
+        aria-label="이전 페이지"
+      >
+        이전
+      </button>
+      
+      {getPageNumbers().map((pageNum) => (
+        <button
+          key={pageNum}
+          onClick={() => onPageChange(pageNum - 1)}
+          className={currentPage === pageNum - 1 ? 'active' : ''}
+          aria-label={`${pageNum} 페이지`}
+          aria-current={currentPage === pageNum - 1 ? 'page' : undefined}
+        >
+          {pageNum}
+        </button>
+      ))}
+      
+      {totalPages > getPageNumbers()[getPageNumbers().length - 1] && (
+        <>
+          <span>...</span>
+          <button
+            onClick={() => onPageChange(totalPages - 1)}
+            aria-label={`${totalPages} 페이지`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages - 1}
+        aria-label="다음 페이지"
+      >
+        다음
+      </button>
+    </div>
+  );
+};
+
+const PostList = ({ posts, categories, navigate, onSearch, currentPage, totalPages, onPageChange }: 
+  { posts: Post[]; categories: string[]; navigate: (path: string) => void; onSearch: (keyword: string) => void; 
+    currentPage: number; totalPages: number; onPageChange: (page: number) => void }) => (
   <section className="post-list-container" aria-labelledby="postListTitle">
     <SearchBar onSearch={onSearch} />
     <header className="post-header">
@@ -176,37 +244,38 @@ const PostList = ({ posts, categories, navigate, onSearch }: { posts: Post[]; ca
         <PostItem key={post.id} post={post} />
       ))}
     </article>
+    
+    {/*페이지네이션*/}
+    <Pagination 
+      currentPage={currentPage} 
+      totalPages={totalPages} 
+      onPageChange={onPageChange}
+    />
   </section>
 );
 
 const CommunityMain = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [communityData, setCommunityData] = useState<CommunityData | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();
  
-  // 지금 상황에서는 전체 게시물 목록 불러오기 성공! 게시글 검색부분이랑 어떻게 연결?
-  const fetchCommunityData = () => {
-    //전체 게시물 목록 불러오기 axios 로직
-    axios.get('http://localhost:8080/community')
+  const fetchCommunityData = (page: number = 0) => {
+    axios.get(`http://localhost:8080/community?page=${page}&size=9`)
       .then(response => setCommunityData(response.data.home.fields))
       .catch(error => console.error('Error fetching community data:', error));
   };
 
   const handleSearch = (keyword: string) => {
     if (!keyword.trim()) {
-      fetchCommunityData(); // 검색어가 비어있으면 전체 데이터 다시 로드
+      fetchCommunityData(currentPage);
       return;
     }
 
-    //검색 게시물 목록 불러오기(검색했을때) axios 로직
-
-    // 게시글 검색 API: /community/search
-    axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}`)
+    axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
       .then(response => {
         console.log(response.data)
         setCommunityData(response.data)
-        // setCommunityData(response.data.home.fields) 
-        // console.log(response.data.home.fields)
       })
       .catch(error => {
         console.error('Error searching posts:', error);
@@ -214,11 +283,16 @@ const CommunityMain = () => {
       });
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchCommunityData(page);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-    fetchCommunityData();
-  }, []);
+    fetchCommunityData(currentPage);
+  }, [currentPage]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -239,7 +313,10 @@ const CommunityMain = () => {
             posts={communityData.posts} 
             categories={['질문', '자유', '공지']} // communityData.categories
             navigate={navigate}
-            onSearch={handleSearch}  
+            onSearch={handleSearch}
+            currentPage={currentPage}
+            totalPages={communityData.totalPages}
+            onPageChange={handlePageChange}
           />
         </div>
       </main>
