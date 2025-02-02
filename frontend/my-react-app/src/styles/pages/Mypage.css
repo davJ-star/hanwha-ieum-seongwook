@@ -290,3 +290,92 @@
 .profile-update-button:hover {
   background-color: #0056b3;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+}
+
+.modal-content form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content input,
+.modal-content select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #000000;
+}
+
+.modal-content input {
+  flex: 1;
+}
+
+.modal-content button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content .close-button {
+  display: block;
+  margin: 1rem auto 0;
+  background-color: #f8f9fa;
+}
+
+.modal-content .search-results ul {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-content .search-results li {
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.modal-content .search-results li:hover {
+  background-color: #f8f9fa;
+}
+
+.modal-content .search-results .manufacturer {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+.modal-content select {
+  background-color: #ffffff;
+  color: #000000;
+}
