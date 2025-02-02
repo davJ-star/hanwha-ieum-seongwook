@@ -4,27 +4,50 @@ import axios from 'axios';
 import '../styles/pages/commu.css';
 import Layout from '../components/Layout/Layout';
 
-interface Post {
+// interface Post {
+//   id: number;
+//   title: string;
+//   category: string;
+//   disabilityType: string;
+//   authorName: string | null;
+//   createdAt: string;
+//   commentsCount: number;
+// }
+
+//LocalDateTime
+interface Post {  
   id: number;
   title: string;
+  content: string;
+  authorName: string | null;
   category: string;
   disabilityType: string;
-  authorName: string | null;
   createdAt: string;
-  commentsCount: number;
+  comments: string [];
+  disabilityTypeValue: string;
+  formattedCreatedAt: string;
+  categoryValue: string;
+
 }
 
 interface CommunityData {
-  pagination: {
-    totalPages: number;
-    hasPrevious: boolean;
-    hasNext: boolean;
-    currentPage: number;
-  };
-  disabilityTypes: string[];
-  categories: string[];
-  posts: Post[];
+// pagination: {
+//   totalPages: number;
+//   // hasPrevious: boolean;
+//   // hasNext: boolean;
+//   currentPage: number;
+// };
+totalPages: number;
+keyword: string;
+currentPage: number;
+// disabilityTypes: string[];
+// categories: string[];
+posts: Post[]; 
 }
+
+// interface disabilityTypes {
+//   disabilityTypes: string[];
+// }
 
 const BoardButton = ({ label, path, onClick }: { label: string; path: string; onClick: (path: string) => void }) => (
   <button 
@@ -88,11 +111,11 @@ const PostItem = ({ post }: { post: Post }) => (
     <p>장애 유형: {post.disabilityType}</p>
     <p>작성자: {post.authorName || '익명'}</p>
     <p>작성일: <time dateTime={post.createdAt}>{post.createdAt}</time></p>
-    <p>댓글 수: {post.commentsCount}</p>
+    <p>댓글 수: {post.comments?.length} </p>
   </div>
 );
 
-const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string[]; navigate: (path: string) => void }) => {
+const BoardList = ({ disabilityTypes, navigate }: { disabilityTypes: string []; navigate: (path: string) => void }) => {
   // 장애 유형별 URL 매핑 추가
   const disabilityTypeToPath: { [key: string]: string } = {
     '지체장애': 'PDC',
@@ -160,7 +183,8 @@ const CommunityMain = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [communityData, setCommunityData] = useState<CommunityData | null>(null);
   const navigate = useNavigate();
-
+ 
+  // 지금 상황에서는 전체 게시물 목록 불러오기 성공! 게시글 검색부분이랑 어떻게 연결?
   const fetchCommunityData = () => {
     //전체 게시물 목록 불러오기 axios 로직
     axios.get('http://localhost:8080/community')
@@ -175,8 +199,15 @@ const CommunityMain = () => {
     }
 
     //검색 게시물 목록 불러오기(검색했을때) axios 로직
+
+    // http://localhost:8080/community/search?keyword=test
     axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}`)
-      .then(response => setCommunityData(response.data.home.fields))
+      .then(response => {
+        console.log(response.data)
+        setCommunityData(response.data)
+        // setCommunityData(response.data.home.fields) 
+        // console.log(response.data.home.fields)
+      })
       .catch(error => {
         console.error('Error searching posts:', error);
         alert('검색 중 오류가 발생했습니다.');
@@ -203,10 +234,10 @@ const CommunityMain = () => {
     <Layout>
       <main className="community-page" role="main">
         <div className="community-content">
-          <BoardList disabilityTypes={communityData.disabilityTypes} navigate={navigate} />
+          <BoardList disabilityTypes={['지체장애', '뇌병변장애', '시각장애', '청각장애', '언어장애', '안면장애', '내부기관장애', '정신적장애']} navigate={navigate} /> {/*  communityData.disabilityTypes */}
           <PostList 
             posts={communityData.posts} 
-            categories={communityData.categories} 
+            categories={['질문', '자유', '공지']} // communityData.categories
             navigate={navigate}
             onSearch={handleSearch}  
           />
