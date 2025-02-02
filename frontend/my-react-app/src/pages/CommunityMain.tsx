@@ -152,7 +152,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: nu
     // 화면에 표시되는 페이지 번호는 1부터 시작하도록 조정
     const displayPage = currentPage + 1;
     let startPage = Math.max(1, displayPage - 2);
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);

@@ -280,6 +280,7 @@ const Home = () => {
         params: { type: searchType }
       });
       if (response.data) {
+        // 
         console.log('검색 결과:', response.data);
         // 검색 결과 페이지로 이동
         navigate('/search-results', { state: { results: response.data } });
