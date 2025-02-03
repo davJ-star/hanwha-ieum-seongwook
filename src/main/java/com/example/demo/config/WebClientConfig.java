@@ -24,14 +24,14 @@ public class WebClientConfig {
     @Bean
     public WebClient ocrWebClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8001")
+                .baseUrl("http://13.125.219.74:8001")
                 .build();
     }
 
     @Bean
     public WebClient fastApiClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8001")
+                .baseUrl("http://13.125.219.74:8001")
                 .build();
     }
 }
