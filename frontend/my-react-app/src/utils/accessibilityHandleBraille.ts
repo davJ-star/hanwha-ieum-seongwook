@@ -1,23 +1,10 @@
 import { HanBraille } from "./hanbraille";
 import { Braille } from "./braille";
 
-export const handleBrailleClick = () => {
-  // 검색 결과 컨테이너에서 텍스트 추출
-  const resultsContainer = document.querySelector('.results-container'); //텍스트를 읽어옴
-  if (!resultsContainer) return;
-  
-  const text = resultsContainer.textContent || '';
-  if (!text.trim()) return;
-
-  // 언어 설정 (기본값: 'ko')
-  const language: "ko" | "en" = "ko";
-
+export const handleBrailleClick = (text: string): string => {
   // 점자 변환
-  const converter = language === "ko" ? new HanBraille() : new Braille();
+  const converter = new HanBraille();
   const brailleText = converter.UnifiedBrl(text);
-
-  // 결과 알림
-  alert(`변환된 점자 텍스트:\n${brailleText}`);
 
   // BRF 파일 생성 및 다운로드
   const brfBlob = new Blob([brailleText], { type: "text/plain" });
@@ -27,6 +14,8 @@ export const handleBrailleClick = () => {
   a.download = "output.brf";
   a.click();
   URL.revokeObjectURL(url);
+
+  return brailleText; // 변환된 점자 텍스트 반환
 };
 
 export const handleBrailleRevert = () => {

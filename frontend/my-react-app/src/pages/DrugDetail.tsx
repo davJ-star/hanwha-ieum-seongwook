@@ -10,6 +10,7 @@ import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityH
 import { speakText } from '../utils/accessibilityHandleTTS';
 import { HanBraille } from '../utils/HanBraille';
 import { Braille } from '../utils/Braille';
+import EasyModal from '../components/easyModal';
 
 /**
  * 백엔드 응답 구조 예시
@@ -44,6 +45,8 @@ function DrugDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
+  const [easyExplanation, setEasyExplanation] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchDrugDetail = async () => {
@@ -144,6 +147,29 @@ function DrugDetail() {
     setShowBrailleOptions(false);
   };
 
+  const handleEasyExplanationClick = async () => {
+    if (!id) {
+      alert('의약품 ID가 없습니다.');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`http://13.125.219.74:8080/search/${id}/info/openai`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log('OpenAI API 응답:', response.data);
+      setEasyExplanation(response.data.simplified_text);
+      setIsModalOpen(true);
+    } catch (err) {
+      const errorObj = err as AxiosError;
+      console.error('[DrugDetail] 쉬운 설명 오류:', errorObj);
+      alert('쉬운 설명을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
+
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>에러: {error}</div>;
   if (!drugData) return <div>데이터가 없습니다.</div>;
@@ -194,36 +220,43 @@ function DrugDetail() {
                 </div>
               )}
             </div>
+            
+            <button
+              className="easy-explanation-button"
+              onClick={handleEasyExplanationClick}
+              role="button"
+              aria-label="쉬운 설명"
+            >
+              쉬운 설명
+            </button>
+
           </div>
 
           <div className="result-details">
-            {/* 효능/효과 */}
+            {/* 기존 상세 정보 */}
             <p><strong>효능/효과:</strong></p>
             <p>{drugData.efcyQesitm}</p>
-
-            {/* 경고사항 */}
             <p><strong>경고사항:</strong></p>
             <p>{drugData.atpnWarnQesitm}</p>
-
-            {/* 주의사항 */}
             <p><strong>주의사항:</strong></p>
             <p>{drugData.atpnQesitm}</p>
-
-            {/* 상호작용 */}
             <p><strong>상호작용:</strong></p>
             <p>{drugData.intrcQesitm}</p>
-
-            {/* 보관방법 */}
             <p><strong>보관방법:</strong></p>
             <p>{drugData.depositMethodQesitm}</p>
-
-            {/* 이상반응 */}
             <p><strong>이상반응:</strong></p>
             <p>{drugData.seQesitm}</p>
           </div>
         </div>
       </section>
       <AccessibilityModal isOpen={false} onClose={() => {}} />
+
+      {/* 쉬운 설명 모달 */}
+      <EasyModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        content={easyExplanation}
+      />
     </Layout>
   );
 }
