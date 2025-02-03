@@ -33,7 +33,7 @@ public class OcrController {
 
         // OCR API 호출
         String ocrText = ocrWebClient.post()
-                .uri("http://13.125.219.74:8001/ocr")
+                .uri("http://172.31.36.66:8001/ocr")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
