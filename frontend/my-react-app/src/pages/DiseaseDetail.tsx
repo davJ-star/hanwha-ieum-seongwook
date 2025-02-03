@@ -62,12 +62,16 @@ function DiseaseDetail() {
         console.log('[DiseaseDetail] 상세정보 응답 <<', response.data);
 
         const sections = response.data.sections;
+        const cleanContent = sections.map((section: { sectionName: string; content: string; }) => ({
+          ...section,
+          content: section.content.replace(/<img[^>]*>/gi, ''),
+        }));
         setDiseaseData({
           diseaseName: response.data.title,
-          symptoms: sections.find((section: { sectionName: string; content: string; }) => section.sectionName === '증상')?.content || '',
-          causes: sections.find((section: { sectionName: string; content: string; }) => section.sectionName === '원인')?.content || '',
-          treatments: sections.find((section: { sectionName: string; content: string; }) => section.sectionName === '치료')?.content || '',
-          sections,
+          symptoms: cleanContent.find((section: { sectionName: string; content: string; }) => section.sectionName === '증상')?.content || '',
+          causes: cleanContent.find((section: { sectionName: string; content: string; }) => section.sectionName === '원인')?.content || '',
+          treatments: cleanContent.find((section: { sectionName: string; content: string; }) => section.sectionName === '치료')?.content || '',
+          sections: cleanContent,
         });
       } catch (err) {
         const errorObj = err as AxiosError<{ message: string }>;
