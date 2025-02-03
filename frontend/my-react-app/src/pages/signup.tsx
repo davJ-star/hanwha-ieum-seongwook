@@ -5,6 +5,7 @@ import Layout from '../components/Layout/Layout';
 import { FaUpload } from 'react-icons/fa';
 import { registerUser, sendVerificationCode, verifyCode } from '../store/userSlice';
 import { AppDispatch, RootState } from '../store/store';
+import axios from 'axios';
 
 interface InputGroupProps {
   id: string;
@@ -210,10 +211,15 @@ const Signup = () => {
       return;
     }
     try {
-      await dispatch(sendVerificationCode(email)).unwrap();
-      alert('인증 코드가 이메일로 전송되었습니다.');
+      //인증 메일 발송 axios 로직
+      const response = await axios.post('http://localhost:8080/api/email/send-verification', { email });
+      if (response.data.success) {
+        alert(response.data.message);
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      alert('인증 코드 발송에 실패했습니다.');
+      alert(error instanceof Error ? error.message : '인증 코드 발송에 실패했습니다.');
       console.error(error);
     }
   };
@@ -224,13 +230,45 @@ const Signup = () => {
       return;
     }
     try {
-      await dispatch(verifyCode({ email, code: verificationCode })).unwrap();
-      setIsEmailVerified(true);
-      alert('이메일 인증이 완료되었습니다.');
+      //인증 코드 확인 axios 로직
+      const response = await axios.post('http://localhost:8080/api/email/verify', {
+        email,
+        code: verificationCode
+      });
+      
+      if (response.data.success) {
+        setIsEmailVerified(true);
+        alert(response.data.message);
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      alert('인증 코드 확인에 실패했습니다.');
+      alert(error instanceof Error ? error.message : '인증 코드 확인에 실패했습니다.');
       console.error(error);
+    }
+  };
 
+  const uploadProfileImage = async (userId: string) => {
+    if (!profileImage) return;
+
+    try {
+      // Base64 문자열을 Blob으로 변환
+      const base64Response = await fetch(profileImage);
+      const blob = await base64Response.blob();
+
+      // FormData 생성 및 이미지 추가
+      const formData = new FormData();
+      formData.append('image', blob, 'profile.jpg');
+
+      // 프로필 이미지 업로드 axios 로직
+      await axios.post(`http://localhost:8080/${userId}/mypage/profile-image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.error('프로필 이미지 업로드 실패:', error);
+      throw error;
     }
   };
 
@@ -247,14 +285,25 @@ const Signup = () => {
       alert('이메일 인증을 완료해주세요.');
       return;
     }
-    try {
-      await dispatch(registerUser({ nickname, email, password, profileImage })).unwrap();
-      alert('회원가입이 완료되었습니다.');
-      // 여기에 회원가입 성공 후 처리 (예: 로그인 페이지로 리다이렉트)
-    } catch (error) {
-      alert('회원가입에 실패했습니다.');
-      console.error(error);
 
+    try {
+      // 회원가입 요청 axios 로직
+      const signupResponse = await axios.post('http://localhost:8080/signup', {
+        email,
+        password,
+        nickname
+      });
+
+      // 프로필 이미지가 있는 경우 업로드
+      if (profileImage && signupResponse.data.id) {
+        await uploadProfileImage(signupResponse.data.id);
+      }
+
+      alert('회원가입이 완료되었습니다.');
+      window.location.href = '/login'; // 로그인 페이지로 리다이렉트
+    } catch (error) {
+      alert(error instanceof Error ? error.message : '회원가입에 실패했습니다.');
+      console.error(error);
     }
   };
 

@@ -50,10 +50,11 @@ const SearchForm = ({
     
     try {
       // 의약품 검색 axios 로직
-      const response = await axios.post('http://localhost:8080/api/v1/search', {
-        medicineName: searchTerm
+      const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+        params: { type: 'medicine' }, // 의약품 고정
       });
-      
+      console.log('[FADresult] 검색 응답 <<', response.data);
+
       if (response.data) {
         const { healthFoodCertification, medicineLicense } = response.data;
         onSubmit(searchTerm);
@@ -175,71 +176,10 @@ const AccessibilityTools = ({
   </div>
 );
 
-// 건강기능식품 인증 결과 컴포넌트
-const HealthFoodCertification = ({ result }: { result: HealthFoodResult | null }) => (
-  <article className="result-item" role="article" aria-labelledby="health-food-title">
-    <h3 id="health-food-title">건강기능식품 인증내역 분석</h3>
-    <div className="result-details">
-      <div className="status-indicator" role="status" aria-live="polite">
-        {result?.isCertified ? (
-          <>
-            <MdCheckCircle style={{ color: '#4CAF50', fontSize: '24px' }} aria-hidden="true" />
-            <span>인증 확인됨</span>
-          </>
-        ) : (
-          <>
-            <MdError style={{ color: '#f44336', fontSize: '24px' }} aria-hidden="true" />
-            <span>인증 내역 없음</span>
-          </>
-        )}
-      </div>
-      <dl>
-        <dt>제품명:</dt>
-        <dd>{result?.productName || '정보 없음'}</dd>
-        <dt>인증번호:</dt>
-        <dd>{result?.certificationNumber || '정보 없음'}</dd>
-        <dt>제조업체:</dt>
-        <dd>{result?.manufacturer || '정보 없음'}</dd>
-        <dt>인증일자:</dt>
-        <dd>{result?.certificationDate || '정보 없음'}</dd>
-      </dl>
-    </div>
-  </article>
-);
-
-// 의약품 허가 결과 컴포넌트
-const MedicinePermission = ({ result }: { result: MedicineResult | null }) => (
-  <article className="result-item" role="article" aria-labelledby="medicine-title">
-    <h3 id="medicine-title">의약품 허가내역 분석</h3>
-    <div className="result-details">
-      <div className="status-indicator" role="status" aria-live="polite">
-        {result?.isPermitted ? (
-          <>
-            <MdCheckCircle style={{ color: '#4CAF50', fontSize: '24px' }} aria-hidden="true" />
-            <span>허가 확인됨</span>
-          </>
-        ) : (
-          <>
-            <MdError style={{ color: '#f44336', fontSize: '24px' }} aria-hidden="true" />
-            <span>허가 내역 없음</span>
-          </>
-        )}
-      </div>
-      <dl>
-        <dt>분석결과:</dt>
-        <dd>{result?.analysisResult || '정보가 없습니다.'}</dd>
-        <dt>주의사항:</dt>
-        <dd>{result?.precautions || '정보가 없습니다.'}</dd>
-        <dt>권고사항:</dt>
-        <dd>{result?.recommendations || '정보가 없습니다.'}</dd>
-      </dl>
-    </div>
-  </article>
-);
-
 function FADresult() {
   const location = useLocation();
-  const searchResult = location.state?.searchResult;
+  const searchResults = (location.state as { results?: SearchResult[] })?.results || [];
+  const isPermitted = location.state?.isPermitted;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
   const navigate = useNavigate();
@@ -255,12 +195,26 @@ function FADresult() {
   }, []);
 
   useEffect(() => {
-    if (searchResult) {
-      const { healthFoodCertification, medicineLicense } = searchResult;
-      setHealthFoodResult(healthFoodCertification);
-      setMedicineResult(medicineLicense);
+    if (isPermitted !== undefined) {
+      setHealthFoodResult(null);
+      setMedicineResult(null);
     }
-  }, [searchResult]);
+  }, [isPermitted]);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (searchResults.length > 0) {
+        try {
+          const response = await axios.get(`/search/${searchResults[0].id}/info`);
+          setMedicineResult(response.data);
+        } catch (error) {
+          console.error('상세 정보 조회 오류:', error);
+          setError('상세 정보를 불러오는 중 오류가 발생했습니다.');
+        }
+      }
+    };
+    fetchDetails();
+  }, [searchResults]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -297,15 +251,9 @@ function FADresult() {
   const handleSearch = async (searchTerm: string) => {
     setIsLoading(true);
     setError(null);
-    
     try {
-      // 건강기능식품 인증 결과 axios 로직
-      const healthFoodResponse = await axios.get(`/api/health-food/search?term=${searchTerm}`);
-      setHealthFoodResult(healthFoodResponse.data);
-      
-      // 의약품 허가 결과 axios 로직
-      const medicineResponse = await axios.get(`/api/medicine/search?term=${searchTerm}`);
-      setMedicineResult(medicineResponse.data);
+      // 건강기능식품 인증 결과 axios 로직 제거
+      // 의약품 허가 결과 axios 로직 제거
     } catch (err) {
       setError('검색 중 오류가 발생했습니다. 다시 시도해 주세요.');
       console.error('검색 오류:', err);
@@ -343,12 +291,17 @@ function FADresult() {
             onBrailleOptionSelect={handleBrailleOptionSelect}
           />
         </div>
-        <p role="note" style={{ textAlign: 'center', color: '#666666' }}>
-          건강기능식품, 의약품 인증 및 허가 여부를 통해 제품의 효능을 검증할 수 있어요.
-        </p>
-        <div className="results-container">
-          <HealthFoodCertification result={healthFoodResult} />
-          <MedicinePermission result={medicineResult} />
+
+        <div className="search-results">
+          {medicineResult ? (
+            <div>
+              <h3>{medicineResult.analysisResult}</h3>
+              <p>{medicineResult.precautions}</p>
+              <p>{medicineResult.recommendations}</p>
+            </div>
+          ) : (
+            <p>검색 결과가 없습니다.</p>
+          )}
         </div>
       </section>
 

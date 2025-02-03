@@ -8,6 +8,8 @@ import axios from 'axios';
 
 // 검색 결과 인터페이스
 interface SearchResult {
+  id: number;
+  productName: string;
   isDeceptive: boolean;
   confidence: number;
   details: string;
@@ -32,15 +34,15 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
 
     setIsLoading(true);
     try {
-      // 광고 분석 API 호출(테스트 전)
-      const response = await axios.post('http://localhost:8080/api/v1/search', {
-        medicineName: adContent
+      //의약품 검색 API 호출(테스트 전)
+      const response = await axios.get(`http://localhost:8080/search/${adContent.trim()}`, {
+        params: { type: 'medicine' }, // 의약품 고정
       });
       
-      // 검색 결과를 state로 저장하고 결과 페이지로 이동
+      // 검색 결과를 FADresult 페이지로 이동
       navigate('/FADresult', { 
         state: { 
-          searchResult: response.data 
+          results: response.data.map((item: SearchResult) => ({ id: item.id, productName: item.productName, details: item.details })) 
         }
       });
       
