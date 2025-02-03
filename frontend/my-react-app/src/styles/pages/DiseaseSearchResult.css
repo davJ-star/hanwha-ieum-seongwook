@@ -139,7 +139,6 @@
 .result-item h3 {
   color: #007bff;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #007bff;
   padding-bottom: 0.5rem;
 }
 
@@ -206,4 +205,13 @@
   flex-direction: column;
   gap: 10px;
   z-index: 1000;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+}
+
+.results-list li {
+  border: none;
 }
