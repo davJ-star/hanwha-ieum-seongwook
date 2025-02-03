@@ -151,12 +151,6 @@ const AccessibilityTools = ({
       aria-label="텍스트 음성 변환"
       tabIndex={0}
     />
-    <SignLanguageIcon 
-      className="icon"
-      role="button"
-      aria-label="수어 번역"
-      tabIndex={0}
-    />
     <div className="braille-dropdown">
       <FaBraille 
         className="icon" 
