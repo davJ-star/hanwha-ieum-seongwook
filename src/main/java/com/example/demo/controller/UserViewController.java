@@ -157,25 +157,23 @@ public class UserViewController {
                     .body("정보 수정 중 오류가 발생했습니다.");
         }
     }
-    @PostMapping("/{id}/mypage/profile-image")
-    public String updateProfileImage(@PathVariable Long id,
+
+    @PostMapping("mypage/profile-image")
+    public ResponseEntity<String> updateProfileImage(
                                      @AuthenticationPrincipal User user,
-                                     @RequestParam("image") MultipartFile file,
-                                     RedirectAttributes redirectAttributes) {
-        if (!user.getId().equals(id)) {
-            return "redirect:/";
-        }
+                                     @RequestParam("image") MultipartFile file) {
+
 
         try {
             userService.updateProfileImage(user.getEmail(), file);
-            redirectAttributes.addFlashAttribute("message", "프로필 이미지가 업데이트되었습니다.");
+            return ResponseEntity.ok("정보가 수정되었습니다.");
         } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("error", "이미지 업로드에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("정보 수정 중 오류가 발생했습니다.");
         }
-        return "redirect:/" + id + "/mypage";
     }
 
-    @PostMapping("/{id}/mypage/password")
+    @PostMapping("/mypage/password")
     public ResponseEntity<String> updatePassword(
             @AuthenticationPrincipal User user,
             @RequestParam String currentPassword,
