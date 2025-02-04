@@ -126,12 +126,7 @@ const PersonalInfoSection = ({
   <section className="section" aria-labelledby="personalInfoTitle">
     <h3 id="personalInfoTitle">개인정보 수정</h3>
     <div role="form">
-      <InputField
-        id="nameLabel"
-        label="이름"
-        value={name}
-        onChange={onNameChange}
-      />
+
       <label id="emailLabel">
         이메일
         <div className="input-group">
