@@ -1,8 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Enum.Role;
 import com.example.demo.component.FileUploadUtil;
-import com.example.demo.config.S3Config;
 import com.example.demo.dto.*;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
@@ -11,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -107,4 +104,11 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    @Transactional
+    public void updateUserEmail(String email, String s) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        user.updateEmail(s);
+    }
 }

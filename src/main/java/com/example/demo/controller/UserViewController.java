@@ -173,6 +173,23 @@ public class UserViewController {
         }
     }
 
+    @PostMapping("/mypage/email")
+    public ResponseEntity<String> emailChange(@AuthenticationPrincipal User user,
+                                              @RequestParam("email") String email) {
+        try {
+            // 이메일 인증 상태 확인
+            if (!emailVerificationService.isEmailVerified(email)) {
+                Map<String, Object> response = new HashMap<>();
+                return ResponseEntity.ok("이메일 인증이 필요합니다.");
+            }
+            userService.updateUserEmail(user.getEmail(),email);
+            return ResponseEntity.ok("이메일 인증이 완료 되었습니다.");
+
+        } catch (Exception e) {
+            return ResponseEntity.ok("이메일 인증 중 오류가 발생햇습니다.");
+        }
+    }
+
     @PostMapping("/mypage/password")
     public ResponseEntity<String> updatePassword(
             @AuthenticationPrincipal User user,

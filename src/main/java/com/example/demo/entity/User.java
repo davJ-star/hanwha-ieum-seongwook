@@ -40,6 +40,8 @@ public class User implements UserDetails {
         this.profileImage = profileImage;
     }
 
+    public void updateEmail(String email){this.email = email; }
+
     public void update(String name) {
         this.name = name;
     }
