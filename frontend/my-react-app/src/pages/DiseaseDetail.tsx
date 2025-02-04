@@ -10,6 +10,7 @@ import { handleBrailleClick, handleBrailleRevert } from '../utils/accessibilityH
 import { speakText } from '../utils/accessibilityHandleTTS';
 import { HanBraille } from '../utils/HanBraille';
 import { Braille } from '../utils/Braille';
+import EasyModal from '../components/EasyModal';
 
 /**
  * 백엔드 응답 구조 예시
@@ -43,6 +44,8 @@ function DiseaseDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showBrailleOptions, setShowBrailleOptions] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [easyExplanation, setEasyExplanation] = useState('');
 
   useEffect(() => {
     const fetchDiseaseDetail = async () => {
@@ -138,6 +141,29 @@ function DiseaseDetail() {
     setShowBrailleOptions(false);
   };
 
+  const handleEasyExplanationClick = async () => {
+    if (!id) {
+      alert('질병 ID가 없습니다.');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`http://13.124.88.193:8080/api/health/search/${id}/info/openai`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log('OpenAI API 응답:', response.data);
+      setEasyExplanation(response.data.simplified_text);
+      setIsModalOpen(true);
+    } catch (err) {
+      const errorObj = err as AxiosError;
+      console.error('[DiseaseDetail] 쉬운 설명 오류:', errorObj);
+      alert('쉬운 설명을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
+
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>에러: {error}</div>;
   if (!diseaseData) return <div>데이터가 없습니다.</div>;
@@ -188,6 +214,14 @@ function DiseaseDetail() {
                 </div>
               )}
             </div>
+            <button
+              className="easy-explanation-button"
+              onClick={handleEasyExplanationClick}
+              role="button"
+              aria-label="쉬운 설명"
+            >
+              쉬운 설명
+            </button>
           </div>
 
           <div className="result-details">
@@ -202,6 +236,11 @@ function DiseaseDetail() {
         </div>
       </section>
       <AccessibilityModal isOpen={false} onClose={() => {}} />
+      <EasyModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        content={easyExplanation}
+      />
     </Layout>
   );
 }
