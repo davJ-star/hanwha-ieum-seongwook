@@ -1,47 +1,22 @@
 // Mypage.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import { FaPlus, FaMinus, FaUpload } from 'react-icons/fa';
 import '../styles/pages/Mypage.css';
 import axios from 'axios';
 
-// 백엔드 enum과 일치하는 타입 정의
-enum DosageUnit {
-  MG = 'MG',
-  MCG = 'MCG',
-  G = 'G',
-  ML = 'ML',
-  TABLET = 'TABLET',
-  PERCENT = 'PERCENT'
-}
-
-enum MedicationCycle {
-  DAILY = 'DAILY',
-  WEEKLY = 'WEEKLY'
-}
-
-enum DayOfWeek {
-  MONDAY = 'MONDAY',
-  TUESDAY = 'TUESDAY',
-  WEDNESDAY = 'WEDNESDAY',
-  THURSDAY = 'THURSDAY',
-  FRIDAY = 'FRIDAY',
-  SATURDAY = 'SATURDAY',
-  SUNDAY = 'SUNDAY'
-}
-
 interface MedicationItem {
   id: string;
   name: string;
-  dosage: number;
-  unit: DosageUnit;
-  frequency: MedicationCycle;
+  dosage: string;
+  unit: 'MG' | 'MCG' | 'G' | 'ML' | 'TABLET' | 'PERCENT';
+  frequency: 'DAILY' | 'WEEKLY';
   time: {
-    hour: number;
-    minute: number;
+    hour: string;
+    minute: string;
   };
-  weekday?: DayOfWeek;
+  weekday?: string;
 }
 
 interface MedicationSearchModalProps {
@@ -124,7 +99,6 @@ const MedicationSearchModal: React.FC<MedicationSearchModalProps> = ({ isOpen, o
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
   const [medications, setMedications] = useState<MedicationItem[]>(() => {
     const savedMedications = localStorage.getItem('medications');
     return savedMedications ? JSON.parse(savedMedications) : [];
@@ -186,63 +160,31 @@ const Mypage = () => {
     }
   };
 
-  const handleMedicationSubmit = async (medication: MedicationItem) => {
-    try {
-      if (!medication.name || !medication.dosage || medication.dosage <= 0) {
-        alert('약 이름과 유효한 복용량을 입력해주세요.');
-        return;
-      }
-
-      const requestData = {
-        drugName: medication.name,
-        dosage: medication.dosage,
-        unit: medication.unit,
-        cycle: medication.frequency,
-        ...(medication.frequency === MedicationCycle.WEEKLY && {
-          dayOfWeek: medication.weekday
-        }),
-        hour: medication.time.hour,
-        minute: medication.time.minute
-      };
-
-      const response = await axios.post(
-        `http://localhost:8080/${id}/mypage/medication`,
-        requestData,
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      if (response.status === 200) {
-        alert('복용약이 추가되었습니다.');
-        await setMedicationReminder(medication);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error:', error.response?.data);
-        alert(error.response?.data || '복용약 추가에 실패했습니다.');
-      } else {
-        console.error('Unexpected error:', error);
-        alert('예기치 않은 오류가 발생했습니다.');
-      }
-    }
+  const convertToDayOfWeek = (weekday: string): string => {
+    const dayMap: { [key: string]: string } = {
+      '월요일': 'MONDAY',
+      '화요일': 'TUESDAY',
+      '수요일': 'WEDNESDAY',
+      '목요일': 'THURSDAY',
+      '금요일': 'FRIDAY',
+      '토요일': 'SATURDAY',
+      '일요일': 'SUNDAY'
+    };
+    return dayMap[weekday];
   };
 
   const setMedicationReminder = async (medication: MedicationItem) => {
     try {
       const requestData = {
         drugName: medication.name,
-        dosage: medication.dosage,
-        unit: medication.unit,
-        cycle: medication.frequency,
-        ...(medication.frequency === MedicationCycle.WEEKLY && {
-          dayOfWeek: medication.weekday
+        dosage: parseFloat(medication.dosage),
+        unit: medication.unit.toUpperCase(),
+        cycle: medication.frequency.toUpperCase(),
+        ...(medication.frequency === 'WEEKLY' && {
+          dayOfWeek: convertToDayOfWeek(medication.weekday!)
         }),
-        hour: medication.time.hour,
-        minute: medication.time.minute
+        hour: parseInt(medication.time.hour),
+        minute: parseInt(medication.time.minute)
       };
 
       const response = await axios.post('http://localhost:8080/medication/reminder/set', requestData);
@@ -257,20 +199,120 @@ const Mypage = () => {
     }
   };
 
+  const fetchDrugDetail = async (drugId: string) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/search/${drugId}/info`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '약물 정보를 가져오는데 실패했습니다.');
+      }
+      return null;
+    }
+  };
+
+  const handleMedicationSubmit = async (medication: MedicationItem) => {
+    try {
+      console.log('전송할 의약품 정보:', medication);
+      const requestParams = {
+        drugId: medication.id,
+        drugName: medication.name,
+        dosage: medication.dosage,
+        unit: medication.unit,
+        cycle: medication.frequency.toUpperCase(),
+        ...(medication.frequency === 'WEEKLY' && {
+          dayOfWeek: convertToDayOfWeek(medication.weekday!)
+        }),
+        hour: medication.time.hour,
+        minute: medication.time.minute
+      };
+
+      const response = await axios.get('http://localhost:8080/{id}/mypage/medication', {
+        params: requestParams,
+        withCredentials: true
+      });
+
+      if (response.status === 200) {
+        await setMedicationReminder(medication);
+        alert('복용약이 추가되고 알람이 설정되었습니다.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '복용약 추가 및 알람 설정에 실패했습니다.');
+      }
+    }
+  };
+
   const handleAddToMyMedications = async (medication: MedicationItem) => {
     await handleMedicationSubmit(medication);
     navigate('/mypage');
   };
 
+  const handleSendToBackend = async () => {
+    try {
+      for (const medication of medications) {
+        if (!medication.name || !medication.dosage || !medication.unit || !medication.frequency || !medication.time) {
+          alert(`복용약 ${medication.name || '(이름 미입력)'} 의 정보가 완전하지 않습니다. 해당 약은 전송되지 않습니다.`);
+          continue;
+        }
+
+        const requestParams = {
+          drugId: medication.id,
+          drugName: medication.name,
+          dosage: medication.dosage,
+          unit: medication.unit,
+          cycle: medication.frequency.toUpperCase(),
+          ...(medication.frequency === 'WEEKLY' && {
+            dayOfWeek: convertToDayOfWeek(medication.weekday!)
+          }),
+          hour: medication.time.hour,
+          minute: medication.time.minute
+        };
+
+        const response = await axios.get('http://localhost:8080/{id}/mypage/medication', {
+          params: requestParams,
+          withCredentials: true
+        });
+
+        if (response.status === 200) {
+          await setMedicationReminder(medication);
+        }
+      }
+      alert('모든 복용약 정보가 백엔드로 전송되었습니다.');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || '복용약 정보 전송에 실패했습니다.');
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get('/*추후추가예정*/');
+        if (response.status === 200) {
+          setProfileImage(response.data.profileImage);
+          setNickname(response.data.nickname);
+          setTempProfileImage(response.data.profileImage);
+          setTempNickname(response.data.nickname);
+        }
+      } catch (error) {
+        console.error('프로필 정보 로드 실패:', error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
   const addMedication = () => {
     const newMed: MedicationItem = {
       id: Date.now().toString(),
       name: '',
-      dosage: 0,
-      unit: DosageUnit.MG,
-      frequency: MedicationCycle.DAILY,
-      time: { hour: 9, minute: 0 },
-      weekday: DayOfWeek.MONDAY
+      dosage: '',
+      unit: 'MG',
+      frequency: 'DAILY',
+      time: { hour: '09', minute: '00' },
+      weekday: '월요일'
     };
     setMedications([...medications, newMed]);
   };
@@ -282,7 +324,7 @@ const Mypage = () => {
   const handleMedicationSelect = async (medication: { id: string, name: string }) => {
     const updatedMedications = medications.map(med => {
       if (med.id === selectedMedicationId) {
-        return { ...med, name: medication.name };
+        return { ...med, id: medication.id, name: medication.name };
       }
       return med;
     });
@@ -297,57 +339,6 @@ const Mypage = () => {
   const handleSearchDrugClick = (medicationId: string) => {
     setSelectedMedicationId(medicationId);
     setIsSearchModalOpen(true);
-  };
-
-  const handleSendToBackend = async () => {
-    try {
-      for (const medication of medications) {
-        if (!medication.name || !medication.dosage || !medication.unit || !medication.frequency || !medication.time) {
-          alert(`복용약 ${medication.name || '(이름 미입력)'} 의 정보가 완전하지 않습니다. 해당 약은 전송되지 않습니다.`);
-          continue;
-        }
-
-        if (medication.frequency === MedicationCycle.WEEKLY && !medication.weekday) {
-          alert(`주간 복용 약물의 요일을 선택해주세요: ${medication.name}`);
-          continue;
-        }
-
-        const requestData = {
-          drugName: medication.name,
-          dosage: medication.dosage,
-          unit: medication.unit,
-          cycle: medication.frequency,
-          ...(medication.frequency === MedicationCycle.WEEKLY && {
-            dayOfWeek: medication.weekday
-          }),
-          hour: medication.time.hour,
-          minute: medication.time.minute
-        };
-
-        const response = await axios.post(
-          `http://localhost:8080/${id}/mypage/medication`, 
-          requestData,
-          {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-
-        if (response.status === 200) {
-          await setMedicationReminder(medication);
-        }
-      }
-      alert('모든 복용약 정보가 성공적으로 전송되었습니다.');
-    } catch (error) {
-      console.error('Error sending medication data:', error);
-      if (axios.isAxiosError(error)) {
-        alert(error.response?.data || '데이터 전송 중 오류가 발생했습니다.');
-      } else {
-        alert('예기치 않은 오류가 발생했습니다.');
-      }
-    }
   };
 
   return (
@@ -399,7 +390,7 @@ const Mypage = () => {
               <li key={med.id} className="medication-item" role="listitem">
                 <button
                   className="search-drug-button"
-                  onClick={() => handleSearchDrugClick(med.id)}
+    onClick={() => handleSearchDrugClick(med.id)}
                   aria-label="의약품 검색하기"
                 >
                   {med.name || '복용약 이름 추가'}
@@ -408,31 +399,31 @@ const Mypage = () => {
                 <div className="dosage-container">
                   <input
                     type="number"
-                    value={med.dosage}
+                    value={med.dosage ?? ''}
                     onChange={(e) => {
-                      const value = parseFloat(e.target.value) || 0;
-                      const updated = medications.map(m =>
-                        m.id === med.id ? { ...m, dosage: value } : m
+                      const updated = medications.map(m => 
+                        m.id === med.id ? { ...m, dosage: e.target.value } : m
                       );
                       setMedications(updated);
                     }}
-                    min="0"
-                    step="0.1"
                     aria-label="복용량"
                   />
                   <select
                     value={med.unit}
                     onChange={(e) => {
                       const updated = medications.map(m =>
-                        m.id === med.id ? { ...m, unit: e.target.value as DosageUnit } : m
+                        m.id === med.id ? { ...m, unit: e.target.value as MedicationItem['unit'] } : m
                       );
                       setMedications(updated);
                     }}
                     aria-label="복용 단위"
                   >
-                    {Object.values(DosageUnit).map((unit) => (
-                      <option key={unit} value={unit}>{unit.toLowerCase()}</option>
-                    ))}
+                    <option value="MG">mg</option>
+                    <option value="MCG">mcg</option>
+                    <option value="G">g</option>
+                    <option value="ML">ml</option>
+                    <option value="TABLET">정</option>
+                    <option value="PERCENT">%</option>
                   </select>
                 </div>
 
@@ -442,36 +433,29 @@ const Mypage = () => {
                       value={med.frequency}
                       onChange={(e) => {
                         const updated = medications.map(m =>
-                          m.id === med.id ? { ...m, frequency: e.target.value as MedicationCycle } : m
+                          m.id === med.id ? { ...m, frequency: e.target.value as 'DAILY' | 'WEEKLY' } : m
                         );
                         setMedications(updated);
                       }}
                       aria-label="복용 주기"
                     >
-                      <option value={MedicationCycle.DAILY}>매일</option>
-                      <option value={MedicationCycle.WEEKLY}>매주</option>
+                      <option value="DAILY">매일</option>
+                      <option value="WEEKLY">매주</option>
                     </select>
 
-                        value={med.frequency === MedicationCycle.WEEKLY && (
+                    {med.frequency === 'WEEKLY' && (
                       <select
-                        value={med.weekday}
+                        value={med.weekday ?? '월요일'}
                         onChange={(e) => {
                           const updated = medications.map(m =>
-                            m.id === med.id ? { ...m, weekday: e.target.value as DayOfWeek } : m
+                            m.id === med.id ? { ...m, weekday: e.target.value } : m
                           );
                           setMedications(updated);
                         }}
                         aria-label="요일 선택"
                       >
-                        {Object.entries(DayOfWeek).map(([key, value]) => (
-                          <option key={value} value={value}>
-                            {key === 'MONDAY' ? '월요일' :
-                             key === 'TUESDAY' ? '화요일' :
-                             key === 'WEDNESDAY' ? '수요일' :
-                             key === 'THURSDAY' ? '목요일' :
-                             key === 'FRIDAY' ? '금요일' :
-                             key === 'SATURDAY' ? '토요일' : '일요일'}
-                          </option>
+                        {['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map((day) => (
+                          <option key={day} value={day}>{day}</option>
                         ))}
                       </select>
                     )}
@@ -479,31 +463,35 @@ const Mypage = () => {
 
                   <div className="time-selector">
                     <select
-                      value={med.time.hour}
+                      value={med.time.hour ?? '09'}
                       onChange={(e) => {
                         const updated = medications.map(m =>
-                          m.id === med.id ? { ...m, time: { ...m.time, hour: parseInt(e.target.value) } } : m
+                          m.id === med.id ? { ...m, time: { ...m.time, hour: e.target.value } } : m
                         );
                         setMedications(updated);
                       }}
                       aria-label="시간"
                     >
                       {Array.from({ length: 24 }).map((_, i) => (
-                        <option key={i} value={i}>{i.toString().padStart(2, '0')}시</option>
+                        <option key={i} value={i.toString().padStart(2, '0')}>
+                          {i.toString().padStart(2, '0')}시
+                        </option>
                       ))}
                     </select>
                     <select
-                      value={med.time.minute}
+                      value={med.time.minute ?? '00'}
                       onChange={(e) => {
                         const updated = medications.map(m =>
-                          m.id === med.id ? { ...m, time: { ...m.time, minute: parseInt(e.target.value) } } : m
+                          m.id === med.id ? { ...m, time: { ...m.time, minute: e.target.value } } : m
                         );
                         setMedications(updated);
                       }}
                       aria-label="분"
                     >
                       {Array.from({ length: 60 }).map((_, i) => (
-                        <option key={i} value={i}>{i.toString().padStart(2, '0')}분</option>
+                        <option key={i} value={i.toString().padStart(2, '0')}>
+                          {i.toString().padStart(2, '0')}분
+                        </option>
                       ))}
                     </select>
                   </div>
