@@ -28,14 +28,18 @@
   display: flex;
   gap: 10px;
 }
-
 .input-group input {
-  color: #000000;
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  color: #ffffff !important; /* 입력 텍스트 색상을 흰색으로 변경 */
+  background-color: #000000 !important; /* 배경색 유지 */
+  border: 1px solid #ffffff !important; /* 테두리를 흰색으로 변경하여 가독성 향상 */
+}
+
+.input-group input::placeholder {
+  color: #cccccc !important; /* 플레이스홀더 색상을 밝은 회색으로 설정 */
+}
+
+.input-group input:focus {
+  outline: 2px solid #ffffff !important; /* 포커스 시 테두리를 강조 */
 }
 
 .input-group input:disabled {
