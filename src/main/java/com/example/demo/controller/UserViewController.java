@@ -148,22 +148,27 @@ public class UserViewController {
         return ResponseEntity.ok(response);
     }
     @PostMapping("/{id}/mypage/update")
-    public String updateUser(@PathVariable Long id,
-                             @AuthenticationPrincipal User user,
-                             @ModelAttribute UserUpdateRequest request,
-                             RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> updateUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            @RequestParam String name
+    ) {
         if (!user.getId().equals(id)) {
-            return "redirect:/mypage";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("접근 권한이 없습니다.");
         }
-        try {
-            userService.updateUser(user.getEmail(), request);
-            redirectAttributes.addFlashAttribute("message", "정보가 수정되었습니다.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "정보 수정 중 오류가 발생했습니다.");
-        }
-        return "redirect:/" + id + "/mypage";
-    }
 
+        try {
+            UserUpdateRequest request = new UserUpdateRequest();
+            request.setName(name);
+
+            userService.updateUser(user.getEmail(), request);
+            return ResponseEntity.ok("정보가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("정보 수정 중 오류가 발생했습니다.");
+        }
+    }
     @PostMapping("/{id}/mypage/profile-image")
     public String updateProfileImage(@PathVariable Long id,
                                      @AuthenticationPrincipal User user,
@@ -183,46 +188,59 @@ public class UserViewController {
     }
 
     @PostMapping("/{id}/mypage/password")
-    public String updatePassword(@PathVariable Long id,
-                                 @AuthenticationPrincipal User user,
-                                 @ModelAttribute PasswordUpdateRequest request,
-                                 RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> updatePassword(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword,
+            @RequestParam String newPasswordConfirm
+    ) {
         if (!user.getId().equals(id)) {
-            return "redirect:/";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("접근 권한이 없습니다.");
         }
 
         try {
+            PasswordUpdateRequest request = new PasswordUpdateRequest();
+            request.setCurrentPassword(currentPassword);
+            request.setNewPassword(newPassword);
+            request.setNewPasswordConfirm(newPasswordConfirm);
+
             userService.updatePassword(user.getEmail(), request);
-            redirectAttributes.addFlashAttribute("message", "비밀번호가 변경되었습니다.");
+            return ResponseEntity.ok("비밀번호가 변경되었습니다.");
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "비밀번호 변경 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("비밀번호 변경 중 오류가 발생했습니다.");
         }
-        return "redirect:/" + id + "/mypage";
     }
 
     @DeleteMapping("/{id}/mypage/delete")
-    public String deleteUser(@PathVariable Long id,
-                             @AuthenticationPrincipal User user,
-                             @ModelAttribute UserDeleteRequest request,
-                             HttpServletRequest httpRequest,
-                             RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> deleteUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            @RequestParam String password,
+            HttpServletRequest httpRequest
+    ) {
         if (!user.getId().equals(id)) {
-            return "redirect:/";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("접근 권한이 없습니다.");
         }
 
         try {
+            UserDeleteRequest request = new UserDeleteRequest();
+            request.setPassword(password);
+
             userService.deleteUser(user.getEmail(), request);
             SecurityContextHolder.clearContext();
             httpRequest.getSession().invalidate();
-            redirectAttributes.addFlashAttribute("message", "회원 탈퇴가 완료되었습니다.");
-            return "redirect:/login";
+            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/" + id + "/mypage";
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @PostMapping("/{id}/mypage/medication")
     public ResponseEntity<String> addMedication(
             @PathVariable Long id,
