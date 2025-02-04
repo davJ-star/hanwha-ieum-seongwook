@@ -58,3 +58,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+test {
+	systemProperties = System.properties
+	environment = System.getenv()
+}

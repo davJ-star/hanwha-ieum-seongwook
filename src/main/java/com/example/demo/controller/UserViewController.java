@@ -96,12 +96,8 @@ public class UserViewController {
         return ResponseEntity.ok(Collections.singletonMap("signup", signupData));
     }
 
-    @GetMapping("/mypage")
-    public String redirectToMyPage(@AuthenticationPrincipal User user) {
-        return "redirect:/" + user.getId() + "/mypage";
-    }
 
-    @GetMapping("/{id}/mypage")
+    @GetMapping("/mypage")
     public ResponseEntity<MyPageResponse> getMyPage(@PathVariable Long id, @AuthenticationPrincipal User user) {
         if (!user.getId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -147,16 +143,11 @@ public class UserViewController {
 
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/{id}/mypage/update")
+    @PostMapping("/mypage/update")
     public ResponseEntity<String> updateUser(
-            @PathVariable Long id,
             @AuthenticationPrincipal User user,
             @RequestParam String name
     ) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("접근 권한이 없습니다.");
-        }
 
         try {
             UserUpdateRequest request = new UserUpdateRequest();
@@ -241,16 +232,11 @@ public class UserViewController {
         }
     }
 
-    @PostMapping("/{id}/mypage/medication")
+    @PostMapping("/mypage/medication")
     public ResponseEntity<String> addMedication(
-            @PathVariable Long id,
             @AuthenticationPrincipal User user,
             @RequestBody @Valid MedicationRequest request  // RequestParam -> RequestBody로 변경
     ) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("접근 권한이 없습니다.");
-        }
 
         try {
             medicationService.addMedication(user.getEmail(), request);
