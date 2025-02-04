@@ -222,23 +222,25 @@ public class UserViewController {
             return "redirect:/" + id + "/mypage";
         }
     }
-
     @PostMapping("/{id}/mypage/medication")
-    public String addMedication(@PathVariable Long id,
-                                @AuthenticationPrincipal User user,
-                                @ModelAttribute MedicationRequest request,
-                                RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> addMedication(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            @RequestParam MedicationRequest request
+    ) {
         if (!user.getId().equals(id)) {
-            return "redirect:/";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("접근 권한이 없습니다.");
         }
 
         try {
             medicationService.addMedication(user.getEmail(), request);
-            redirectAttributes.addFlashAttribute("message", "복용약이 추가되었습니다.");
+            return ResponseEntity.ok()
+                    .body("복용약이 추가되었습니다.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body((e.getMessage()));
         }
-        return "redirect:/" + id + "/mypage";
     }
 
 
