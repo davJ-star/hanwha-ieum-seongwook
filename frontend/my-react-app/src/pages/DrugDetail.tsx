@@ -154,7 +154,7 @@ function DrugDetail() {
     }
 
     try {
-      const response = await axios.get(`http://13.125.219.74:8080/search/${id}/info/openai`, {
+      const response = await axios.get(`http://13.124.88.193:8080/search/${id}/info/openai`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
