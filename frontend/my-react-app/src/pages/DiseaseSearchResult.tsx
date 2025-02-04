@@ -82,7 +82,7 @@ function DiseaseSearchResult() {
       setLoading(true);
       console.log('[DiseaseSearchResult] 이미지 검색 요청 >>', file);
 
-      const response = await axios.post(`http://localhost:8080/ocr`, formData, {
+      const response = await axios.post(`http://13.124.88.193:8080/ocr`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('[DiseaseSearchResult] 이미지 검색 응답 <<', response.data);
