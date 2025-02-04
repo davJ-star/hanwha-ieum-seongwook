@@ -39,7 +39,6 @@ public class UserViewController {
     private final MedicationService medicationService;
     private final AuthenticationManager authenticationManager;
 
-
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> signup(@RequestBody SignupRequest request) {
         try {
@@ -98,10 +97,7 @@ public class UserViewController {
 
 
     @GetMapping("/mypage")
-    public ResponseEntity<MyPageResponse> getMyPage(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    public ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal User user) {
 
         MyPageResponse response = new MyPageResponse();
         MyPageResponse.MypageData mypageData = new MyPageResponse.MypageData();
@@ -143,6 +139,7 @@ public class UserViewController {
 
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/mypage/update")
     public ResponseEntity<String> updateUser(
             @AuthenticationPrincipal User user,
@@ -180,16 +177,11 @@ public class UserViewController {
 
     @PostMapping("/{id}/mypage/password")
     public ResponseEntity<String> updatePassword(
-            @PathVariable Long id,
             @AuthenticationPrincipal User user,
             @RequestParam String currentPassword,
             @RequestParam String newPassword,
             @RequestParam String newPasswordConfirm
     ) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("접근 권한이 없습니다.");
-        }
 
         try {
             PasswordUpdateRequest request = new PasswordUpdateRequest();
@@ -207,17 +199,12 @@ public class UserViewController {
         }
     }
 
-    @DeleteMapping("/{id}/mypage/delete")
+    @DeleteMapping("/mypage/delete")
     public ResponseEntity<String> deleteUser(
-            @PathVariable Long id,
             @AuthenticationPrincipal User user,
             @RequestParam String password,
             HttpServletRequest httpRequest
     ) {
-        if (!user.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("접근 권한이 없습니다.");
-        }
 
         try {
             UserDeleteRequest request = new UserDeleteRequest();
@@ -247,39 +234,4 @@ public class UserViewController {
                     .body(e.getMessage());
         }
     }
-
-
-//    @GetMapping("/{id}/mypage/password")
-//    public ResponseEntity<AccountResponse> getPasswordChangePage(@PathVariable Long id,
-//                                                                 @AuthenticationPrincipal User user) {
-//        if (!user.getId().equals(id)) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        }
-//
-//        AccountResponse response = new AccountResponse();
-//        AccountResponse.AccountData accountData = new AccountResponse.AccountData();
-//        AccountResponse.FieldsData fieldsData = new AccountResponse.FieldsData();
-//
-//        // User 정보 설정
-//        AccountResponse.UserData userData = new AccountResponse.UserData();
-//        userData.setId(user.getId());
-//        userData.setName(user.getName());
-//        userData.setEmail(user.getEmail());
-//        // emailVerificationCode는 optional이므로 필요한 경우에만 설정
-//
-//        // PasswordChange 정보 설정
-//        AccountResponse.PasswordChangeData passwordChangeData = new AccountResponse.PasswordChangeData();
-//        passwordChangeData.setCurrentPassword("");  // 빈 문자열로 초기화
-//        passwordChangeData.setNewPassword("");
-//        passwordChangeData.setNewPasswordConfirm("");
-//
-//        // Response 조합
-//        fieldsData.setUser(userData);
-//        fieldsData.setPasswordChange(passwordChangeData);
-//        accountData.setPath("src/main/resources/account.html");
-//        accountData.setFields(fieldsData);
-//        response.setAccount(accountData);
-//
-//        return ResponseEntity.ok(response);
-//    }
 }
