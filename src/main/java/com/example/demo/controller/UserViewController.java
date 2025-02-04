@@ -6,6 +6,7 @@ import com.example.demo.service.EmailVerificationService;
 import com.example.demo.service.MedicationService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -226,7 +227,7 @@ public class UserViewController {
     public ResponseEntity<String> addMedication(
             @PathVariable Long id,
             @AuthenticationPrincipal User user,
-            @RequestParam MedicationRequest request
+            @RequestBody @Valid MedicationRequest request  // RequestParam -> RequestBody로 변경
     ) {
         if (!user.getId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -239,7 +240,7 @@ public class UserViewController {
                     .body("복용약이 추가되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body((e.getMessage()));
+                    .body(e.getMessage());
         }
     }
 
