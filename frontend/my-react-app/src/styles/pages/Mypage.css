@@ -1,459 +1,25 @@
+/* 전체 페이지 스타일 */
 .mypage-container {
-  width: 100%;
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 20px;
-  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f4f6f8; /* 밝은 회색 배경 */
 }
 
 /* 프로필 섹션 */
 .profile-section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.profile-image-container {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.upload-button {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.upload-button:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.upload-button svg {
-  color: white;
-  width: 20px;
-  height: 20px;
-}
-
-.profile-input-container {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0 1rem;
-  box-sizing: border-box;
-}
-
-.nickname-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  text-align: center;
-  margin-top: 1rem;
-  color: #000000;
-}
-
-/* 복용약 관리 섹션 */
-.medications-section {
-  width: 100%;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.medications-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.add-medication-button {
-  margin-top: 1.5rem;
-  align-self: center;
-  background: none;
-  border: none;
-  color: #000000;
-  cursor: pointer;
-  padding: 8px 16px;
-  font-size: 1rem;
-}
-
-.add-medication-button:hover {
-  text-decoration: underline;
-}
-
-.add-button,
-.remove-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.remove-button {
-  width: 32px; /* 고정된 가로 길이 */
-  height: 32px; /* 정사각형 모양을 위한 높이 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  color: #dc3545;
-}
-
-.remove-button svg {
-  width: 16px; /* 아이콘 크기 조절 */
-  height: 16px;
-}
-
-
-.add-button {
-  color: #28a745;
-}
-
-/* .remove-button {
-  color: #dc3545;
-} */
-
-.medications-list {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.medication-item {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-sizing: border-box;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-}
-
-.search-drug-button {
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.dosage-container,
-.reminder-container {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.dosage-container input,
-.dosage-container select {
-  color: #000000;
-  background-color: #ffffff;
-}
-
-.reminder-container select {
-  color: #000000;
-  background-color: #ffffff;
-}
-
-.time-selector {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* 접근성을 위한 스타일 */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* 반응형 디자인 */
-@media screen and (min-width: 769px) {
-  .mypage-container {
-    margin: 3rem auto;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 3rem;
-  }
-
-  .profile-section {
-    width: auto;
-    align-items: flex-start;
-  }
-
-  .profile-input-container {
-    padding: 0;
-  }
-
-  .medications-section {
-    flex: 1;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .profile-section {
-    align-items: center;
-  }
-
-  .medication-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .dosage-container {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .reminder-container {
-    width: 100%;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 5px;
-  }
-
-  .reminder-container select {
-    min-width: auto;
-    flex-shrink: 0;
-  }
-
-  .time-selector {
-    flex-shrink: 0;
-    width: auto;
-  }
-
-  .search-drug-button {
-    width: 100%;
-  }
-}
-
-.profile-update-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #000000;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.profile-update-button:hover {
-  background-color: #0056b3;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
+  background: #ffffff;
   padding: 2rem;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.modal-content h2 {
-  margin-bottom: 1rem;
-}
-
-.modal-content form {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.modal-content input,
-.modal-content select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #000000;
-}
-
-.modal-content input {
-  flex: 1;
-}
-
-.modal-content button {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #000000;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.modal-content .close-button {
-  display: block;
-  margin: 1rem auto 0;
-  background-color: #f8f9fa;
-}
-
-.modal-content .search-results ul {
-  list-style: none;
-  padding: 0;
-}
-
-.modal-content .search-results li {
-  padding: 0.8rem;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.modal-content .search-results li:hover {
-  background-color: #f8f9fa;
-}
-
-.modal-content .search-results .manufacturer {
-  font-size: 0.9rem;
-  color: #666;
-  margin-left: 0.5rem;
-}
-
-.modal-content select {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.reminder-button {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-left: 10px;
-  font-size: 14px;
-}
-
-.reminder-button:hover {
-  background-color: #f0f0f0;
-}
-
-.reminder-button.active {
-  background-color: #4CAF50;
-  color: white;
-  border-color: #4CAF50;
-}
-
-.reminder-button.active:hover {
-  background-color: #45a049;
-}
-
-.reminder-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.frequency-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.time-selector {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-
-.send-reminder-button {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #000000;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  width: auto;
-  max-width: 150px;
-}
-
-.send-reminder-button:hover {.mypage-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.profile-section {
-  margin-bottom: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
 .profile-image-container {
   position: relative;
   width: 120px;
   height: 120px;
-  margin-bottom: 1rem;
+  margin: 0 auto;
 }
 
 .profile-image {
@@ -461,54 +27,67 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid #4a90e2; /* 메인 색상 */
 }
 
 .upload-button {
   position: absolute;
   bottom: 0;
   right: 0;
-  background: white;
-  border-radius: 50%;
+  background: #ffffff;
   padding: 0.5rem;
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-button:hover {
+  background: #e0e0e0;
 }
 
 .profile-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 400px;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .nickname-input {
+  width: 80%;
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
   font-size: 1rem;
+  text-align: center;
 }
 
+/* 버튼 스타일 */
 .profile-update-button {
   padding: 0.5rem 1rem;
   background-color: #4a90e2;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
 }
 
+.profile-update-button:hover {
+  background-color: #357ab8;
+}
+
+/* 복용약 관리 섹션 */
 .medications-section {
-  background: white;
-  border-radius: 8px;
+  background: #ffffff;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .medications-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .add-medication-button {
@@ -516,37 +95,35 @@
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
+.add-medication-button:hover {
+  background-color: #388e3c;
+}
+
+/* 복용약 리스트 */
 .medications-list {
   display: grid;
   gap: 1rem;
 }
 
 .medication-item {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 1rem;
   background: #f9f9f9;
-}
-
-.medication-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 5px solid #4a90e2; /* 강조 색상 */
 }
 
 .medication-name {
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: bold;
   color: #333;
 }
 
 .medication-details {
-  display: grid;
-  gap: 0.5rem;
   color: #666;
 }
 
@@ -557,7 +134,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -574,6 +151,7 @@
   overflow-y: auto;
 }
 
+/* 검색 스타일 */
 .search-container {
   display: flex;
   gap: 1rem;
@@ -583,8 +161,8 @@
 .search-container input {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
 }
 
 .search-results {
@@ -596,6 +174,7 @@
   padding: 1rem;
   border-bottom: 1px solid #eee;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .search-result-item:hover {
@@ -606,8 +185,9 @@
 .new-medication-form {
   margin-top: 2rem;
   padding: 1.5rem;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 .form-group {
@@ -623,9 +203,8 @@
 .form-group input,
 .form-group select {
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-right: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
 }
 
 /* 반응형 스타일 */
@@ -635,7 +214,7 @@
   }
   
   .profile-section {
-    flex-direction: column;
+    text-align: center;
   }
   
   .medications-header {
@@ -643,10 +222,124 @@
     gap: 1rem;
   }
 }
-  background-color: #0056b3;
-  color: #000000;
+/* 모달 전체 스타일 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 반투명한 어두운 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.mediName, .dosage-input {
-  color: #000;
+/* 모달 컨텐츠 박스 */
+.modal-content {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
 }
+
+/* 모달 제목 */
+.modal-content h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* 검색 입력창 스타일 */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: #f9f9f9;
+  padding: 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 입력 필드 */
+.search-container input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  color: #333;
+  background: #ffffff;
+  transition: border-color 0.3s;
+}
+
+.search-container input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+/* 검색 버튼 */
+.search-container button {
+  width: 100%;
+  padding: 0.7rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-container button:hover {
+  background: #0056b3;
+}
+
+/* 닫기 버튼 */
+.modal-content .close-button {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.7rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-content .close-button:hover {
+  background: #555;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 반응형 스타일 */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+  }
+}
+
