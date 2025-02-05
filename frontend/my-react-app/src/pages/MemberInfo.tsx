@@ -3,138 +3,295 @@ import "../styles/pages/MemberInfo.css";
 import axios from "axios";
 
 const MemberInfo = () => {
-  const [email, setEmail] = useState("hongildong@example.com");
-  const [emailCode, setEmailCode] = useState("");
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
+ const [email, setEmail] = useState("hongildong@example.com");
+ const [emailCode, setEmailCode] = useState("");
+ const [isEmailVerified, setIsEmailVerified] = useState(false);
+ const [currentPassword, setCurrentPassword] = useState("");
+ const [newPassword, setNewPassword] = useState("");
+ const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+ const [passwordError, setPasswordError] = useState("");
+ const [deletePassword, setDeletePassword] = useState("");
 
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+ const handleEmailVerify = async () => {
+   try {
+     const response = await axios.post("http://localhost:8080/api/email/send-verification", { email });
+     if (response.status === 200) {
+       alert("이메일로 인증번호가 발송되었습니다.");
+     }
+   } catch (error) {
+     alert("이메일 인증번호 발송 실패");
+   }
+ };
 
-  const [deletePassword, setDeletePassword] = useState("");
-  const [confirmDeletePassword, setConfirmDeletePassword] = useState("");
+ const handleEmailCodeVerify = async () => {
+   try {
+     const verifyResponse = await axios.post("http://localhost:8080/api/email/verify", { 
+       email, 
+       code: emailCode 
+     });
+     
+     if (verifyResponse.data.success) {
+       const changeResponse = await axios.post("http://localhost:8080/mypage/email", null, {
+         params: { email },
+         withCredentials: true
+       });
 
-  // 이메일 인증 요청
-  const handleEmailVerify = async () => {
-    try {
-      const response = await axios.post("/api/email/send-verification", { email });
-      if (response.status === 200) {
-        alert("이메일로 인증번호가 발송되었습니다.");
-      }
-    } catch (error) {
-      alert("이메일 인증번호 발송 실패");
-    }
-  };
+       if (changeResponse.data.includes("완료")) {
+         setIsEmailVerified(true);
+         alert("이메일이 변경되었습니다.");
+       } else {
+         alert(changeResponse.data);
+       }
+     } else {
+       alert("인증번호가 일치하지 않습니다.");
+     }
+   } catch (error) {
+     alert("이메일 인증에 실패했습니다.");
+   }
+ };
 
-  // 이메일 인증 확인
-  const handleEmailCodeVerify = async () => {
-    try {
-      const response = await axios.post("/api/email/verify", { email, verificationCode: emailCode });
-      if (response.status === 200) {
-        setIsEmailVerified(true);
-        alert("이메일이 성공적으로 인증되었습니다.");
-      }
-    } catch (error) {
-      alert("인증번호가 일치하지 않습니다.");
-    }
-  };
-
-  // 비밀번호 변경 요청
-  const handlePasswordChange = async () => {
-    if (newPassword !== confirmNewPassword) {
-      setPasswordError("새 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    if (newPassword.length < 8) {
-      setPasswordError("비밀번호는 8자 이상이어야 합니다.");
-      return;
-    }
-    try {
-      const response = await axios.post("/api/change-password", {
+ const handlePasswordChange = async () => {
+  if (newPassword.length < 8) {
+    setPasswordError("비밀번호는 8자 이상이어야 합니다.");
+    return;
+  }
+  if (newPassword !== newPasswordConfirm) {
+    setPasswordError("비밀번호가 일치하지 않습니다.");
+    return;
+  }
+  try {
+    const response = await axios.post("http://localhost:8080/mypage/password", null, {
+      params: {
         currentPassword,
         newPassword,
-      });
-      if (response.status === 200) {
-        alert("비밀번호가 변경되었습니다.");
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-        setPasswordError("");
-      }
-    } catch (error) {
-      alert("비밀번호 변경에 실패했습니다.");
+        newPasswordConfirm
+      },
+      withCredentials: true
+    });
+    
+    if (response.status === 200) {
+      alert("비밀번호가 변경되었습니다.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setPasswordError("");
     }
-  };
+  } catch (error) {
+    alert("비밀번호 변경에 실패했습니다.");
+  }
+};
 
-  // 회원 탈퇴 요청
-  const handleAccountDelete = async () => {
-    if (deletePassword !== confirmDeletePassword) {
-      alert("입력한 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
-    if (confirmDelete) {
-      try {
-        const response = await axios.post("/api/delete-account", { password: deletePassword });
-        if (response.status === 200) {
-          alert("회원 탈퇴가 완료되었습니다.");
-        }
-      } catch (error) {
-        alert("회원 탈퇴에 실패했습니다.");
-      }
-    }
-  };
+ const handleAccountDelete = async () => {
+   if (!deletePassword) {
+     alert("비밀번호를 입력해주세요.");
+     return;
+   }
 
-  return (
-    <div className="mypage-wrapper">
-      <h2>회원정보 수정</h2>
-      <p>이메일 주소를 수정하거나 비밀번호를 재설정할 수 있습니다.</p>
+   const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
+   if (confirmDelete) {
+     try {
+       const response = await axios.delete("http://localhost:8080/mypage/delete", {
+         params: { password: deletePassword },
+         withCredentials: true
+       });
 
-      {/* 이메일 인증 섹션 */}
-      <section className="section">
-        <h3>개인정보 수정</h3>
-        <label>이메일</label>
-        <div className="input-group">
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isEmailVerified} />
-          <button onClick={handleEmailVerify} className="black-button">인증</button>
-        </div>
-        <div className="input-group">
-          <input type="text" placeholder="인증번호 입력" value={emailCode} onChange={(e) => setEmailCode(e.target.value)} disabled={isEmailVerified} />
-          <button onClick={handleEmailCodeVerify} className="black-button">확인</button>
-        </div>
-      </section>
+       if (response.status === 200) {
+         alert("회원 탈퇴가 완료되었습니다.");
+         window.location.href = '/login';
+       }
+     } catch (error) {
+       alert("회원 탈퇴에 실패했습니다.");
+     }
+   }
+ };
 
-      {/* 비밀번호 변경 섹션 */}
-      <section className="section">
-        <h3>비밀번호 변경</h3>
-        <label>현재 비밀번호</label>
-        <div className="input-group">
-          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
-          <button className="black-button">확인</button>
-        </div>
-        <label>새 비밀번호</label>
-        <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="8자 이상 입력" />
-        <label>새 비밀번호 확인</label>
-        <input type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} placeholder="새 비밀번호 재입력" />
-        {passwordError && <p className="error-text">{passwordError}</p>}
-        <button onClick={handlePasswordChange} className="black-button">비밀번호 변경</button>
-      </section>
+ // JSX는 동일하게 유지
+ return (
+   <div className="mypage-wrapper">
+     <h2>회원정보 수정</h2>
+     <p>이메일 주소를 수정하거나 비밀번호를 재설정할 수 있습니다.</p>
 
-      {/* 회원 탈퇴 섹션 */}
-      <section className="section">
-        <h3>회원 탈퇴</h3>
-        <label>현재 비밀번호</label>
-        <input type="password" placeholder="현재 비밀번호 입력" value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)} />
-        <label>비밀번호 확인</label>
-        <input type="password" placeholder="비밀번호 재입력" value={confirmDeletePassword} onChange={(e) => setConfirmDeletePassword(e.target.value)} />
-        <button onClick={handleAccountDelete} className="delete-button">회원 탈퇴</button>
-      </section>
-    </div>
-  );
+     <section className="section">
+       <h3>개인정보 수정</h3>
+       <label>이메일</label>
+       <div className="input-group">
+         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isEmailVerified} />
+         <button onClick={handleEmailVerify} className="black-button">인증</button>
+       </div>
+       <div className="input-group">
+         <input type="text" placeholder="인증번호 입력" value={emailCode} onChange={(e) => setEmailCode(e.target.value)} disabled={isEmailVerified} />
+         <button onClick={handleEmailCodeVerify} className="black-button">확인</button>
+       </div>
+     </section>
+
+     <section className="section">
+       <h3>비밀번호 변경</h3>
+       <label>현재 비밀번호</label>
+       <div className="input-group">
+         <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+       </div>
+       <label>새 비밀번호</label>
+       <div className="input-group">
+         <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="8자 이상 입력" />
+       </div>
+       <label>새 비밀번호 확인</label>
+       <div className="input-group">
+         <input type="password" value={newPasswordConfirm} onChange={(e) => setNewPasswordConfirm(e.target.value)} placeholder="새 비밀번호 재입력" />
+       </div>
+       {passwordError && <p className="error-text">{passwordError}</p>}
+       <button onClick={handlePasswordChange} className="black-button">비밀번호 변경</button>
+     </section>
+
+     <section className="section">
+       <h3>회원 탈퇴</h3>
+       <label>현재 비밀번호</label>
+       <div className="input-group">
+         <input type="password" placeholder="현재 비밀번호 입력" value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)} />
+       </div>
+       <button onClick={handleAccountDelete} className="delete-button">회원 탈퇴</button>
+     </section>
+   </div>
+ );
 };
 
 export default MemberInfo;
+// import React, { useState } from "react";
+// import "../styles/pages/MemberInfo.css";
+// import axios from "axios";
+
+// const MemberInfo = () => {
+//   const [email, setEmail] = useState("hongildong@example.com");
+//   const [emailCode, setEmailCode] = useState("");
+//   const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+//   const [currentPassword, setCurrentPassword] = useState("");
+//   const [newPassword, setNewPassword] = useState("");
+//   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+//   const [passwordError, setPasswordError] = useState("");
+
+//   const [deletePassword, setDeletePassword] = useState("");
+//   const [confirmDeletePassword, setConfirmDeletePassword] = useState("");
+
+//   // 이메일 인증 요청
+//   const handleEmailVerify = async () => {
+//     try {
+//       const response = await axios.post("/api/email/send-verification", { email });
+//       if (response.status === 200) {
+//         alert("이메일로 인증번호가 발송되었습니다.");
+//       }
+//     } catch (error) {
+//       alert("이메일 인증번호 발송 실패");
+//     }
+//   };
+
+//   // 이메일 인증 확인
+//   const handleEmailCodeVerify = async () => {
+//     try {
+//       const response = await axios.post("/api/email/verify", { email, verificationCode: emailCode });
+//       if (response.status === 200) {
+//         setIsEmailVerified(true);
+//         alert("이메일이 성공적으로 인증되었습니다.");
+//       }
+//     } catch (error) {
+//       alert("인증번호가 일치하지 않습니다.");
+//     }
+//   };
+
+//   // 비밀번호 변경 요청
+//   const handlePasswordChange = async () => {
+//     if (newPassword !== confirmNewPassword) {
+//       setPasswordError("새 비밀번호가 일치하지 않습니다.");
+//       return;
+//     }
+//     if (newPassword.length < 8) {
+//       setPasswordError("비밀번호는 8자 이상이어야 합니다.");
+//       return;
+//     }
+//     try {
+//       const response = await axios.post("/api/change-password", {
+//         currentPassword,
+//         newPassword,
+//       });
+//       if (response.status === 200) {
+//         alert("비밀번호가 변경되었습니다.");
+//         setCurrentPassword("");
+//         setNewPassword("");
+//         setConfirmNewPassword("");
+//         setPasswordError("");
+//       }
+//     } catch (error) {
+//       alert("비밀번호 변경에 실패했습니다.");
+//     }
+//   };
+
+//   // 회원 탈퇴 요청
+//   const handleAccountDelete = async () => {
+//     if (deletePassword !== confirmDeletePassword) {
+//       alert("입력한 비밀번호가 일치하지 않습니다.");
+//       return;
+//     }
+//     const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
+//     if (confirmDelete) {
+//       try {
+//         const response = await axios.post("/api/delete-account", { password: deletePassword });
+//         if (response.status === 200) {
+//           alert("회원 탈퇴가 완료되었습니다.");
+//         }
+//       } catch (error) {
+//         alert("회원 탈퇴에 실패했습니다.");
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="mypage-wrapper">
+//       <h2>회원정보 수정</h2>
+//       <p>이메일 주소를 수정하거나 비밀번호를 재설정할 수 있습니다.</p>
+
+//       {/* 이메일 인증 섹션 */}
+//       <section className="section">
+//         <h3>개인정보 수정</h3>
+//         <label>이메일</label>
+//         <div className="input-group">
+//           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isEmailVerified} />
+//           <button onClick={handleEmailVerify} className="black-button">인증</button>
+//         </div>
+//         <div className="input-group">
+//           <input type="text" placeholder="인증번호 입력" value={emailCode} onChange={(e) => setEmailCode(e.target.value)} disabled={isEmailVerified} />
+//           <button onClick={handleEmailCodeVerify} className="black-button">확인</button>
+//         </div>
+//       </section>
+
+//       {/* 비밀번호 변경 섹션 */}
+//       <section className="section">
+//         <h3>비밀번호 변경</h3>
+//         <label>현재 비밀번호</label>
+//         <div className="input-group">
+//           <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+//           <button className="black-button">확인</button>
+//         </div>
+//         <label>새 비밀번호</label>
+//         <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="8자 이상 입력" />
+//         <label>새 비밀번호 확인</label>
+//         <input type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} placeholder="새 비밀번호 재입력" />
+//         {passwordError && <p className="error-text">{passwordError}</p>}
+//         <button onClick={handlePasswordChange} className="black-button">비밀번호 변경</button>
+//       </section>
+
+//       {/* 회원 탈퇴 섹션 */}
+//       <section className="section">
+//         <h3>회원 탈퇴</h3>
+//         <label>현재 비밀번호</label>
+//         <input type="password" placeholder="현재 비밀번호 입력" value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)} />
+//         <label>비밀번호 확인</label>
+//         <input type="password" placeholder="비밀번호 재입력" value={confirmDeletePassword} onChange={(e) => setConfirmDeletePassword(e.target.value)} />
+//         <button onClick={handleAccountDelete} className="delete-button">회원 탈퇴</button>
+//       </section>
+//     </div>
+//   );
+// };
+
+// export default MemberInfo;
 
 
 // import React, { useState } from "react";
