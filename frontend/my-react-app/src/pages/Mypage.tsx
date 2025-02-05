@@ -59,7 +59,7 @@ const Mypage = () => {
 
   const fetchMyPageData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/mypage', {
+      const response = await axios.get('http://13.124.88.193:8080/mypage', {
         withCredentials: true
       });
       
@@ -82,7 +82,7 @@ const Mypage = () => {
     if (!searchTerm.trim()) return;
     
     try {
-      const response = await axios.get(`http://localhost:8080/search/${searchTerm}`);
+      const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm}`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('약품 검색 실패:', error);
@@ -112,7 +112,7 @@ const Mypage = () => {
 
   const handleNameUpdate = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/mypage/update', 
+      const response = await axios.post('http://13.124.88.193:8080/mypage/update', 
         null, 
         { 
           params: { name: tempNickname },
@@ -145,7 +145,7 @@ const Mypage = () => {
       const formData = new FormData();
       formData.append('image', file, 'profile.jpg');
 
-      await axios.post('http://localhost:8080/mypage/profile-image', formData, {
+      await axios.post('http://13.124.88.193:8080/mypage/profile-image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });
@@ -174,7 +174,7 @@ const Mypage = () => {
         dayOfWeek: newMedication.frequency === 'weekly' ? newMedication.weekday?.toUpperCase() : null
       };
 
-      await axios.post('http://localhost:8080/mypage/medication', 
+      await axios.post('http://13.124.88.193:8080/mypage/medication', 
         medicationRequest,
         { withCredentials: true }
       );

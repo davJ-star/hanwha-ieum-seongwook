@@ -66,7 +66,7 @@ function DrugSearchResult() {
     }
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+      const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
         params: { type: 'medicine' },
       });
 
@@ -206,7 +206,7 @@ export default DrugSearchResult;
 //     }
 //     try {
 //       setLoading(true);
-//       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+//       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 //         params: { type: 'medicine' },
 //       });
 
@@ -347,7 +347,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 // //       if (Array.isArray(response.data)) {
@@ -470,7 +470,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 // //       if (Array.isArray(response.data)) {
@@ -595,7 +595,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 
@@ -710,7 +710,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 
@@ -822,7 +822,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 
@@ -931,7 +931,7 @@ export default DrugSearchResult;
 // //     }
 // //     try {
 // //       setLoading(true);
-// //       const response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// //       const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // //         params: { type: 'medicine' },
 // //       });
 

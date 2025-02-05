@@ -68,7 +68,7 @@ function DrugDetail() {
         //   "depositMethodQesitm": "...",
         //   "seQesitm": "..."
         // }
-        const response = await axios.get(`http://localhost:8080/search/${id}/info`, {
+        const response = await axios.get(`http://13.124.88.193:8080/search/${id}/info`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

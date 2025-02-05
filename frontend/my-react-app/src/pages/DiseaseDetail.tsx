@@ -57,7 +57,7 @@ function DiseaseDetail() {
         setLoading(true);
         console.log('[DiseaseDetail] 상세정보 요청 >>', { id });
 
-        const response = await axios.get<{ title: string; sections: { sectionName: string; content: string; }[] }>(`http://localhost:8080/api/health/search/${id}`, {
+        const response = await axios.get<{ title: string; sections: { sectionName: string; content: string; }[] }>(`http://13.124.88.193:8080/api/health/search/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

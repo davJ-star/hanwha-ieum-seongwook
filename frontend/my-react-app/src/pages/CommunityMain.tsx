@@ -261,7 +261,7 @@ const CommunityMain = () => {
   const navigate = useNavigate();
  
   const fetchCommunityData = (page: number = 0) => {
-    axios.get(`http://localhost:8080/community?page=${page}&size=9`)
+    axios.get(`http://13.124.88.193:8080/community?page=${page}&size=9`)
       .then(response => setCommunityData(response.data.home.fields))
       .catch(error => console.error('Error fetching community data:', error));
   };
@@ -272,7 +272,7 @@ const CommunityMain = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/community/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
+    axios.get(`http://13.124.88.193:8080/community/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
       .then(response => {
         console.log(response.data)
         setCommunityData(response.data)

@@ -258,7 +258,7 @@ const CommunityMain = () => {
   const fetchCommunityData = (page: number = 0) => {
     // 페이지 네이션 추가
     // 게시글 목록 조회 API 호출
-    axios.get(`http://localhost:8080/community/BRAIN?page=${page}&size=9`)
+    axios.get(`http://13.124.88.193:8080/community/BRAIN?page=${page}&size=9`)
       .then(response => setCommunityData(response.data.home.fields))
       .catch(error => console.error('Error fetching community data:', error));
   };
@@ -269,7 +269,7 @@ const CommunityMain = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/community/BRAIN/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
+    axios.get(`http://13.124.88.193:8080/community/BRAIN/search?keyword=${encodeURIComponent(keyword)}&page=${currentPage}&size=9`)
       .then(response => {
         const searchData = response.data.fields;
         if (searchData) {

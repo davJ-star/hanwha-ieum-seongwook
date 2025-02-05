@@ -211,7 +211,7 @@ const Signup = () => {
 
  const handleSendCode = async () => {
    try {
-     await axios.post('http://localhost:8080/api/email/send-verification', { email });
+     await axios.post('http://13.124.88.193:8080/api/email/send-verification', { email });
      alert('인증코드가 발송되었습니다.');
    } catch (error) {
      alert('인증코드 발송에 실패했습니다.');
@@ -220,7 +220,7 @@ const Signup = () => {
 
  const handleVerifyCode = async () => {
   try {
-    const response = await axios.post('http://localhost:8080/api/email/verify', { 
+    const response = await axios.post('http://13.124.88.193:8080/api/email/verify', { 
       email,
       code: verificationCode
     });
@@ -250,7 +250,7 @@ const Signup = () => {
    }
 
    try {
-     const response = await axios.post('http://localhost:8080/signup', {
+     const response = await axios.post('http://13.124.88.193:8080/signup', {
        email,
        password,
        verificationCode,

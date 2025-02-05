@@ -62,12 +62,12 @@ const Home = () => {
       let response;
       if (searchType === 'medicine') {
         response = await axios.get(
-          `http://localhost:8080/search/${searchTerm.trim()}`,
+          `http://13.124.88.193:8080/search/${searchTerm.trim()}`,
           { params: { type: searchType } }
         );
       } else if (searchType === 'disease') {
         response = await axios.get(
-          `http://localhost:8080/api/health/search`,
+          `http://13.124.88.193:8080/api/health/search`,
           { params: { keyword: searchTerm.trim(), type: 'disease' } }
         );
       }
@@ -215,12 +215,12 @@ export default Home;
 //       let response;
 //       if (searchType === 'medicine') {
 //         response = await axios.get(
-//           `http://localhost:8080/search/${searchTerm.trim()}`,
+//           `http://13.124.88.193:8080/search/${searchTerm.trim()}`,
 //           { params: { type: searchType } }
 //         );
 //       } else if (searchType === 'disease') {
 //         response = await axios.get(
-//           `http://localhost:8080/api/health/search`,
+//           `http://13.124.88.193:8080/api/health/search`,
 //           { params: { keyword: searchTerm.trim(), type: 'disease' } }
 //         );
 //       }
@@ -359,12 +359,12 @@ export default Home;
 // //       let response;
 // //       if (searchType === 'medicine') {
 // //         response = await axios.get(
-// //           `http://localhost:8080/search/${searchTerm.trim()}`,
+// //           `http://13.124.88.193:8080/search/${searchTerm.trim()}`,
 // //           { params: { type: searchType } }
 // //         );
 // //       } else if (searchType === 'disease') {
 // //         response = await axios.get(
-// //           `http://localhost:8080/api/health/search`,
+// //           `http://13.124.88.193:8080/api/health/search`,
 // //           { params: { keyword: searchTerm.trim(), type: 'disease' } }
 // //         );
 // //       }
@@ -498,11 +498,11 @@ export default Home;
 // // //     try {
 // // //       let response;
 // // //       if (searchType === 'medicine') {
-// // //         response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// // //         response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // // //           params: { type: searchType },
 // // //         });
 // // //       } else if (searchType === 'disease') {
-// // //         response = await axios.get(`http://localhost:8080/api/health/search?keyword=${searchTerm.trim()}`, {
+// // //         response = await axios.get(`http://13.124.88.193:8080/api/health/search?keyword=${searchTerm.trim()}`, {
 // // //           params: { type: 'disease' },
 // // //         });
 // // //       }
@@ -638,11 +638,11 @@ export default Home;
 // // //     try {
 // // //       let response;
 // // //       if (searchType === 'medicine') {
-// // //         response = await axios.get(`http://localhost:8080/search/${searchTerm.trim()}`, {
+// // //         response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm.trim()}`, {
 // // //           params: { type: searchType },
 // // //         });
 // // //       } else if (searchType === 'disease') {
-// // //         response = await axios.get(`http://localhost:8080/api/health/search?keyword=${searchTerm.trim()}`, {
+// // //         response = await axios.get(`http://13.124.88.193:8080/api/health/search?keyword=${searchTerm.trim()}`, {
 // // //           params: { type: 'disease' },
 // // //         });
 // // //       }

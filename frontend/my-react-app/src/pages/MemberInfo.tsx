@@ -14,7 +14,7 @@ const MemberInfo = () => {
 
  const handleEmailVerify = async () => {
    try {
-     const response = await axios.post("http://localhost:8080/api/email/send-verification", { email });
+     const response = await axios.post("http://13.124.88.193:8080/api/email/send-verification", { email });
      if (response.status === 200) {
        alert("이메일로 인증번호가 발송되었습니다.");
      }
@@ -25,13 +25,13 @@ const MemberInfo = () => {
 
  const handleEmailCodeVerify = async () => {
    try {
-     const verifyResponse = await axios.post("http://localhost:8080/api/email/verify", { 
+     const verifyResponse = await axios.post("http://13.124.88.193:8080/api/email/verify", { 
        email, 
        code: emailCode 
      });
      
      if (verifyResponse.data.success) {
-       const changeResponse = await axios.post("http://localhost:8080/mypage/email", null, {
+       const changeResponse = await axios.post("http://13.124.88.193:8080/mypage/email", null, {
          params: { email },
          withCredentials: true
        });
@@ -60,7 +60,7 @@ const MemberInfo = () => {
     return;
   }
   try {
-    const response = await axios.post("http://localhost:8080/mypage/password", null, {
+    const response = await axios.post("http://13.124.88.193:8080/mypage/password", null, {
       params: {
         currentPassword,
         newPassword,
@@ -90,7 +90,7 @@ const MemberInfo = () => {
    const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
    if (confirmDelete) {
      try {
-       const response = await axios.delete("http://localhost:8080/mypage/delete", {
+       const response = await axios.delete("http://13.124.88.193:8080/mypage/delete", {
          params: { password: deletePassword },
          withCredentials: true
        });

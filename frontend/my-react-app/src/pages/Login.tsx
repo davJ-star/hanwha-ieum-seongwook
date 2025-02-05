@@ -157,7 +157,7 @@ function Login() {
     }
     try {
       const response = await axios.post(
-        'http://localhost:8080/login',
+        'http://13.124.88.193:8080/login',
         { username, password },
         { withCredentials: true }
       );
@@ -366,7 +366,7 @@ export default Login;
 //     }
 //     try {
 //       const response = await axios.post(
-//         'http://localhost:8080/login',
+//         'http://13.124.88.193:8080/login',
 //         { username, password },
 //         { withCredentials: true }
 //       );

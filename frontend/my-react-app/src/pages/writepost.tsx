@@ -235,7 +235,7 @@ const WritePost = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:8080/community/write',
+        'http://13.124.88.193:8080/community/write',
         payload,
         { withCredentials: true }
       );

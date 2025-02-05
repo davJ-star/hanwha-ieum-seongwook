@@ -54,7 +54,7 @@ function DiseaseSearchResult() {
       console.log('[DiseaseSearchResult] 검색 요청 >>', searchTerm);
 
       // 백엔드 검색 API 호출
-      const response = await axios.get(`http://localhost:8080/api/health/search?keyword=${searchTerm.trim()}`, {
+      const response = await axios.get(`http://13.124.88.193:8080/api/health/search?keyword=${searchTerm.trim()}`, {
         params: { type: 'disease' }, // 질병 고정
       });
       console.log('[DiseaseSearchResult] 검색 응답 <<', response.data);

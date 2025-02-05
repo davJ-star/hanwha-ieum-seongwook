@@ -122,7 +122,7 @@ const FADsearch = () => {
     try {
       console.log('[FADsearch] 허위광고 -> 의약품 검색 요청 >>', { searchTerm });
       // 입력된 광고 내용을 의약품 검색 API에 전달 (type은 'medicine' 고정)
-      const response = await axios.get(`http://localhost:8080/search/${searchTerm}`, {
+      const response = await axios.get(`http://13.124.88.193:8080/search/${searchTerm}`, {
         params: { type: 'medicine' },
       });
       console.log('[FADsearch] 의약품 검색 응답 <<', response.data);
